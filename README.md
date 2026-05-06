@@ -6,60 +6,71 @@ Aplicacion Android nativa para contabilizar piezas de sushi y comida japonesa co
 
 ## Descripcion
 
-**Sushi Tracker** es una app disenada para los amantes del sushi que quieren llevar un registro de cuantas piezas consumen en cada visita a un restaurante japones. La app permite:
+**Sushi Tracker** es una app interactiva disenada para los amantes del sushi que quieren no solo llevar un registro exhaustivo de cuantās piezas consumen, sino tambien controlar sus estadisticas nutricionales, conseguir logros y compartir sus récords sociales. La app permite:
 
 - Contar piezas por tipo con un simple tap (sumar) o long-press (restar)
 - Guardar sesiones con fecha y nombre del restaurante
-- Ver el historial completo de todas las visitas
-- Analizar estadisticas por periodo (semana, mes, ano, total)
+- Crear piezas de sushi personalizadas (con nombre, emoji, kcals, arroz y cantidad de salmón)
+- Gestionar un perfil multidioma (español, inglés, francés e italiano) y multitema (Dark, Light, Salmon)
+- Exportar y compartir una captura nativa atractiva de tus sesiones para Stories en redes sociales
+- Sistema lúdico de logros con notificaciones pop-up animadas y sonido
+- Analizar estadisticas por periodo (semana, mes, ano, total) e información curiosa como las calorías aproximadas, gramos de arroz y salmones enteros consumidos.
 
 ---
 
 ## Pantallas
 
 ### 1. Splash Screen
-Pantalla de bienvenida con el logo de la app y animacion de entrada. Duracion: 2.5 segundos.
+Pantalla de bienvenida con el logo de la app y animacion de entrada.
 
 ### 2. Home Screen (Pantalla Principal)
-Menu principal con tres botones:
+Menu principal con cuatro botones e interacciones clave:
 - **Comenzar Sesion**: Inicia una nueva sesion de conteo
 - **Historial**: Accede al historial
-- **Estadisticas**: Consulta estadisticas acumuladas
+- **Estadisticas**: Consulta estadisticas acumuladas y récords nutricionales
+- **Logros**: Consulta qué retos has superado
+- Además cuenta con enlace rápido a **Configuración**
 
 ### 3. Counter Screen (Contador)
-Flujo de 3 fases:
-1. **Fase 1 - Restaurante**: Ingresar el nombre del restaurante
-2. **Fase 2 - Conteo**: Cuadricula con 12 tipos de piezas. Tap para sumar, long-press 5 segundos para restar
-3. **Fase 3 - Confirmacion**: Resumen y guardar la sesion
+Flujo dinámico:
+1. **Fase 1 - Restaurante**: Ingresar el nombre del restaurante (autocapitalizado)
+2. **Fase 2 - Conteo**: Cuadricula con los tipos de piezas integradas y tus piezas personalizadas. Tap para sumar, long-press para restar
+3. **Fase 3 - Confirmacion y Compartir**: Resumen de totales, opción instantánea para generar la captura de pantalla (`ShareSessionAsImage`) y botón para guardar la sesion de manera persistente.
 
 ### 4. History Screen (Historial)
-Dos tabs:
-- **Historial**: Lista cronologica de todas las sesiones (fecha, restaurante, total piezas). Al pulsar una sesion se abre el detalle
+- Lista cronologica inteligente que muestra totales e íconos destcando macro-nutrientes clave (Kcal consumidas, arroces y tipo de salmones).
+- Al pulsar permite expandir el total desgajado, así como borrar o re-compartir la sesión al momento, reconectando con los datos históricos y recalculando los logros automáticamente.
 
-### 5. Session Detail Screen (Detalle)
-Desglose de una sesion mostrando cada tipo de pieza y la cantidad consumida.
+### 5. Stats Screen (Estadisticas)
+- Filtros temporales (Todos, Ano, Mes, Semana).
+- Sección interactiva de `Curiosidades` con estimación calórica (Kcal), total de gramos de arroz ingeridos y el equivalente en salmones enteros consumidos en relación a los cortes/láminas.
 
-### 6. Stats Screen (Estadisticas)
-Filtros temporales (Todos, Ano, Mes, Semana) y lista de todos los tipos de piezas con el total consumido en ese periodo, mas el gran total.
+### 6. Achievements Screen
+- Visor de trofeos y retos disponibles desbloqueados de forma local según varíen tus estadísticas.
+
+### 7. Settings Screen
+- Sección de personalización de temas (Dark, Light, Salmon).
+- Selección de idioma on-the-fly.
+- Gestión CRUD de **Piezas Personalizadas** para añadir nuevos elementos adaptados a tu dieta, con asignación calórica y nutricional.
+- Borrado completo de datos.
 
 ---
 
 ## Tipos de Piezas Incluidas
 
-| ID | Nombre | Descripcion |
-|---|---|---|
-| nigiri | Nigiri | Arroz prensado con pescado encima |
-| sashimi | Sashimi | Loncha de pescado crudo |
-| maki | Maki | Rollo con alga por fuera |
-| uramaki | Uramaki | Rollo con arroz por fuera |
-| gunkan | Gunkan | "Barco" de arroz envuelto con alga |
-| temaki | Temaki | Cono de alga relleno |
-| gyoza | Gyoza | Empanadilla japonesa |
-| tempura | Tempura | Langostino rebozado |
-| california | California Roll | Rollo con cangrejo y aguacate |
-| dragon | Dragon Roll | Rollo con anguila y aguacate |
-| edamame | Edamame | Vainas de soja |
-| takoyaki | Takoyaki | Bolitas de pulpo |
+| ID | Nombre | Descripcion | Kcal Base | Salmón / Arroz |
+|---|---|---|---|---|
+| nigiri | Nigiri | Arroz prensado con pescado encima | 50 | 1 lámina / 10g |
+| sashimi | Sashimi | Loncha de pescado crudo | 35 | 1 lámina / 0g  |
+| maki | Maki | Rollo con alga por fuera | 40 | 0 láminas / 15g |
+| uramaki | Uramaki | Rollo con arroz por fuera | 45 | 0 láminas / 15g |
+| gunkan | Gunkan | "Barco" de arroz envuelto con alga | 60 | 0 láminas / 15g |
+| temaki | Temaki | Cono de alga relleno | 100 | 0 láminas / 30g |
+| gyoza | Gyoza | Empanadilla japonesa | 45 | 0 láminas / 0g  |
+| tempura | Tempura | Langostino rebozado | 60 | 0 láminas / 0g |
+| edamame | Edamame | Vainas de soja | 15 | 0 láminas / 0g |
+| takoyaki| Takoyaki | Bolitas de pulpo | 55 | 0 láminas / 0g |
+* Y un máximo de *12 piezas personalizables* extras por el usuario.
 
 ---
 
@@ -68,7 +79,9 @@ Filtros temporales (Todos, Ano, Mes, Semana) y lista de todos los tipos de pieza
 - **Lenguaje**: Kotlin
 - **UI Framework**: Jetpack Compose
 - **Navegacion**: Navigation Compose
-- **Persistencia**: SharedPreferences + Gson
+- **Android Nativas**: `FileProvider` con Intents y `Canvas/Bitmap` render generator, `RingtoneManager`
+- **Estados Reactivos**: StateFlow / MutableSharedFlow inyectados a `GlobalAchievementNotifier` para animaciones y UI global
+- **Persistencia**: SharedPreferences + Gson para estado del usuario, ajustes y almacenamiento de historial
 - **Minimo SDK**: 26 (Android 8.0)
 - **Target SDK**: 34 (Android 14)
 

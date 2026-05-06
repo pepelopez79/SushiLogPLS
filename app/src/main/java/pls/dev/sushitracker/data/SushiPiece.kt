@@ -39,3 +39,21 @@ fun getPieceName(id: String, customPieces: List<CustomPiece> = emptyList()): Str
     if (id.startsWith("custom_")) return "Pieza eliminada"
     return id.replaceFirstChar { it.uppercase() }
 }
+
+fun getPieceKcal(id: String, customPieces: List<CustomPiece> = emptyList()): Int {
+    SUSHI_PIECES.find { it.id == id }?.let { return it.kcal }
+    customPieces.find { it.id == id }?.let { return it.kcal }
+    return 0
+}
+
+fun getPieceSalmonCount(id: String, customPieces: List<CustomPiece> = emptyList()): Int {
+    SUSHI_PIECES.find { it.id == id }?.let { return it.salmonCount }
+    customPieces.find { it.id == id }?.let { return it.salmonCount }
+    return 0
+}
+
+fun getPieceRiceGrams(id: String, customPieces: List<CustomPiece> = emptyList()): Int {
+    SUSHI_PIECES.find { it.id == id }?.let { return it.riceGrams }
+    customPieces.find { it.id == id }?.let { return it.riceGrams }
+    return 0
+}

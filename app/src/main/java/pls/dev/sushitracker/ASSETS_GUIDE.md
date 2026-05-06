@@ -7,36 +7,39 @@
  * 
  * app/src/main/
  * ├── java/pls/dev/sushitracker/
- * │   ├── data/
- * │   │   ├── Achievement.kt
- * │   │   ├── AchievementManager.kt
- * │   │   ├── SushiPiece.kt
- * │   │   ├── SessionRecord.kt
- * │   │   └── SessionStorage.kt
- * │   ├── ui/
- * │   │   ├── theme/
- * │   │   │   ├── Color.kt
- * │   │   │   ├── Type.kt
- * │   │   │   ├── ThemeColors.kt
- * │   │   │   └── Theme.kt
- * │   │   ├── screens/
- * │   │   │   ├── AchievementsScreen.kt
- * │   │   │   ├── SplashScreen.kt
- * │   │   │   ├── HomeScreen.kt
- * │   │   │   ├── CounterScreen.kt
- * │   │   │   ├── HistoryScreen.kt
- * │   │   │   ├── SettingsScreen.kt
- * │   │   │   ├── SessionDetailScreen.kt
- * │   │   │   └── StatsScreen.kt
+ *     │   ├── data/
+ *     │   │   ├── Achievement.kt
+ *     │   │   ├── AchievementManager.kt
+ *     │   │   ├── AppSettings.kt
+ *     │   │   ├── SessionRecord.kt
+ *     │   │   ├── SessionStorage.kt
+ *     │   │   └── SushiPiece.kt
+ *     │   ├── ui/
+ *     │   │   ├── theme/
+ *     │   │   │   ├── Color.kt
+ *     │   │   │   ├── Theme.kt
+ *     │   │   │   ├── ThemeColors.kt
+ *     │   │   │   └── Type.kt
+ *     │   │   ├── screens/
+ *     │   │   │   ├── AchievementsScreen.kt
+ *     │   │   │   ├── CounterScreen.kt
+ *     │   │   │   ├── HistoryScreen.kt
+ *     │   │   │   ├── HomeScreen.kt
+ *     │   │   │   ├── SessionDetailScreen.kt
+ *     │   │   │   ├── SettingsScreen.kt
+ *     │   │   │   ├── ShareUtils.kt
+ *     │   │   │   ├── SplashScreen.kt
+ *     │   │   │   └── StatsScreen.kt
  * │   │   ├── components/
  * │   │   │   ├── CustomPieceCounterItem.kt
  * │   │   │   └── PieceCounterItem.kt
  * │   │   └── navigation/
  * │   │       └── NavGraph.kt
- * │   ├── AGENT.md
- * │   ├── ASSETS_GUIDE.md
- * │   └── MainActivity.kt
- * └── res/
+ *     │   ├── AGENT.md
+ *     │   ├── ASSETS_GUIDE.md
+ *     │   └── MainActivity.kt
+ *     ├── AndroidManifest.xml (Incluye FileProvider para exportar imágenes)
+ *     └── res/
  *     ├── drawable/
  *     │   ├── nigiri.jpg
  *     │   ├── sashimi.jpg

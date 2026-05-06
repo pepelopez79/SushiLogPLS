@@ -37,16 +37,17 @@ La aplicacion sigue una arquitectura simple basada en:
 │               UI Layer                   │
 │  ┌─────────────────────────────────────┐│
 │  │           Screens                   ││
-│  │  Splash, Home, Counter, History,   ││
-│  │  SessionDetail, Stats              ││
+│  │  Splash, Home, Counter, History,    ││
+│  │  SessionDetail, Stats, Settings,    ││
+│  │  Achievements                       ││
 │  └─────────────────────────────────────┘│
 │  ┌─────────────────────────────────────┐│
 │  │         Components                  ││
-│  │    PieceCounterItem, TabRow        ││
+│  │    PieceCounterItem, CustomPiece... ││
 │  └─────────────────────────────────────┘│
 │  ┌─────────────────────────────────────┐│
-│  │           Theme                     ││
-│  │    Color, Type, Theme              ││
+│  │           Theme & Utils             ││
+│  │    Color, Type, Theme, ShareUtils   ││
 │  └─────────────────────────────────────┘│
 └─────────────────────────────────────────┘
                     │
@@ -61,11 +62,13 @@ La aplicacion sigue una arquitectura simple basada en:
 │             Data Layer                  │
 │  ┌─────────────────────────────────────┐│
 │  │           Models                    ││
-│  │   SushiPiece, SessionRecord        ││
+│  │   SushiPiece, SessionRecord,        ││
+│  │   Achievement, AppSettings          ││
 │  └─────────────────────────────────────┘│
 │  ┌─────────────────────────────────────┐│
-│  │          Storage                    ││
-│  │       SessionStorage               ││
+│  │          Storage / Managers         ││
+│  │   SessionStorage, AppSettingsManager││
+│  │   AchievementManager                ││
 │  └─────────────────────────────────────┘│
 └─────────────────────────────────────────┘
 ```
@@ -83,6 +86,8 @@ sealed class Screen(val route: String) {
     data object Counter : Screen("counter")
     data object History : Screen("history")
     data object Stats : Screen("stats")
+    data object Settings : Screen("settings")
+    data object Achievements : Screen("achievements")
 }
 ```
 
@@ -99,9 +104,9 @@ sealed class Screen(val route: String) {
               │     └────┬─────┘     │
               │          │           │
               ▼          ▼           ▼
-        ┌──────────┐ ┌──────────┐ ┌──────────┐
-        │ Counter  │ │ History  │ │  Stats   │
-        └──────────┘ └────┬─────┘ └──────────┘
+        ┌──────────┐ ┌──────────┐ ┌───────────────┐
+        │ Counter  │ │ History  │ │Stats/Logros...│
+        └──────────┘ └────┬─────┘ └───────────────┘
                           │
                           ▼
                    ┌────────────┐
@@ -162,13 +167,17 @@ sealed class Screen(val route: String) {
 
 ### SushiPiece
 
-Representa un tipo de pieza de sushi disponible para contar.
+Representa un tipo de pieza de sushi disponible para contar. Contiene información nutricional base.
 
 ```kotlin
 data class SushiPiece(
     val id: String,       // Identificador unico: "nigiri", "sashimi", etc.
     val name: String,     // Nombre para mostrar: "Nigiri", "Sashimi", etc.
-    val imageRes: Int     // Recurso drawable: R.drawable.nigiri
+    val imageRes: Int,    // Recurso drawable: R.drawable.nigiri
+    val emoji: String,    // Emoji visual
+    val kcal: Int = 0,    // Kcalorías base de la pieza
+    val salmonCount: Int = 0, // Láminas/cortes de salmón que lleva
+    val riceGrams: Int = 0    // Miligramos de arroz de la pieza
 )
 ```
 
@@ -216,27 +225,19 @@ data class StatsResult(
 
 ## Sistema de Persistencia
 
-### SessionStorage
+### SharedPreferences Managers
 
-Clase encargada de gestionar el almacenamiento de sesiones usando SharedPreferences.
+Para la gestión de datos se emplean distintos administradores para aislar responsabilidades:
 
-**Archivo**: `data/SessionStorage.kt`
+1. **SessionStorage**: Gestiona el almacenamiento de las sesiones conformadas por el usuario. (`"sushi_tracker_sessions"`)
+2. **AppSettingsManager**: Administra el `AppLanguage`, el `AppTheme` y la personalización de `CustomPieces`. (`"sushi_app_settings"`)
+3. **AchievementManager**: Gestiona el progreso, bloqueo y desbloqueo de los logros y récords locales. (`"sushi_achievements"`)
 
-**Metodos principales**:
+**Archivos**: `data/SessionStorage.kt`, `data/AppSettings.kt`, `data/AchievementManager.kt`.
 
-| Metodo | Descripcion |
-|--------|-------------|
-| `getSessions()` | Obtiene todas las sesiones guardadas |
-| `saveSession(session)` | Guarda una nueva sesion (al inicio de la lista) |
-| `getSessionById(id)` | Busca una sesion por su ID |
-| `getRanking(limit)` | Obtiene las N sesiones con mas piezas |
-| `getStats(filter)` | Calcula estadisticas por periodo |
+Formato general de almacenamiento: JSON serializado con Gson.
 
-**Formato de almacenamiento**: JSON serializado con Gson.
-
-**Clave SharedPreferences**: `"sushi_tracker_sessions"` / `"sessions"`
-
-### Ejemplo de datos almacenados
+**Ejemplo de datos almacenados**
 
 ```json
 [
@@ -419,34 +420,42 @@ fun getRanking(limit: Int = 10): List<SessionRecord> {
 ## Estructura de Archivos
 
 ```
-app/src/main/java/com/tuapp/sushitracker/
+app/src/main/java/pls/dev/sushitracker/
 │
-├── MainActivity.kt                    # Entry point
+├── MainActivity.kt                    # Entry point + GlobalAchievementNotifier
 │
 ├── data/
-│   ├── SushiPiece.kt                 # Modelo + lista SUSHI_PIECES
+│   ├── AppSettings.kt                # Modelos y manager de preferencias
+│   ├── Achievement.kt                # Modelos de logros
+│   ├── AchievementManager.kt         # Sistema validador de logros
+│   ├── SushiPiece.kt                 # Modelo + lista SUSHI_PIECES extendida
 │   ├── SessionRecord.kt              # Modelo de sesion guardada
-│   └── SessionStorage.kt             # Persistencia SharedPreferences
+│   └── SessionStorage.kt             # Persistencia SharedPreferences de dietas
 │
 └── ui/
     ├── theme/
     │   ├── Color.kt                  # Paleta de colores
+    │   ├── ThemeColors.kt            # Contenedor Multi-tema
     │   ├── Type.kt                   # Tipografia
-    │   └── Theme.kt                  # MaterialTheme wrapper
+    │   └── Theme.kt                  # MaterialTheme y Local SushiColors
     │
     ├── screens/
+    │   ├── AchievementsScreen.kt     # Pantalla visualizadora de Logros
     │   ├── SplashScreen.kt           # Splash animado
     │   ├── HomeScreen.kt             # Menu principal
-    │   ├── CounterScreen.kt          # Contador (3 fases)
-    │   ├── HistoryScreen.kt          # Historial + Ranking tabs
-    │   ├── SessionDetailScreen.kt    # Detalle de sesion
-    │   └── StatsScreen.kt            # Estadisticas con filtros
+    │   ├── CounterScreen.kt          # Contador interactivo y validador
+    │   ├── HistoryScreen.kt          # Historial de sesiones
+    │   ├── SessionDetailScreen.kt    # Detalle extendido
+    │   ├── SettingsScreen.kt         # Idioma, temas y piezas customizadas
+    │   ├── ShareUtils.kt             # Helper de Canvas UI gen export
+    │   └── StatsScreen.kt            # Estadisticas y curiosidades calóricas
     │
     ├── components/
-    │   └── PieceCounterItem.kt       # Item de pieza con long-press
+    │   ├── PieceCounterItem.kt       # Item base
+    │   └── CustomPieceCounterItem.kt # Item adaptado a usuario
     │
     └── navigation/
-        └── NavGraph.kt               # Definicion de rutas
+        └── NavGraph.kt               # Definicion de rutas tipadas
 ```
 
 ---
@@ -510,33 +519,18 @@ dependencies {
 ## Posibles Mejoras Futuras
 
 1. **Backup en la nube**: Sincronizacion con Firebase/Supabase
-2. **Graficos**: Charts de consumo mensual/semanal
-3. **Widgets**: Widget de Android con acceso rapido
-4. **Notificaciones**: Recordatorio semanal de estadisticas o notificar logros completados
+2. **Graficos**: Charts de consumo mensual/semanal visuales en Stats
+3. **Widgets**: Widget de Android con acceso rapido a estadísticas vitales
 
 ---
 
 ## Notas de Implementacion
 
-### Long-Press con Progreso
+### Multilenguaje y Multitema (`AppTheme` / `AppLanguage`)
+La app implementa soporte multi-lenguaje directo en tiempo de runtime sin recargar Activity, inyectando un objeto de strings genérico (`AppStrings.getStrings(AppLanguage)`). Para los temas, se emplea el CompositionLocal a través del wrapper de `Theme.kt`, propagando objetos custom `SushiColors`.
 
-El componente `PieceCounterItem` implementa un patron de long-press con feedback visual:
+### Notificaciones Push de Logros in-app
+`GlobalAchievementNotifier` usa localmente `MutableSharedFlow` para desencadenar que la interfaz principal en el `setContent` detecte nuevos logros cumplidos. Cuando así sucede y se notifica, salta un `AnimatedVisibility` overlay superior, sumado al uso de `RingtoneManager` en Android nativo para reproducir el sonido predeterminado del sistema.
 
-1. Al detectar `onLongPress`, inicia un `LaunchedEffect`
-2. Loop que actualiza `progress` de 0f a 1f en 5000ms
-3. `Canvas` dibuja arco circular proporcional a `progress`
-4. Si `progress >= 1f`, ejecuta `onDecrement()` y resetea
-5. Si se suelta antes, `DisposableEffect` cancela y resetea
-
-### Formato de Fechas
-
-- **Almacenamiento**: ISO 8601 (`LocalDateTime.now().toString()`)
-- **Display**: `dd/MM/yyyy` para fechas, `dd/MM/yyyy HH:mm` si se necesita hora
-
-### IDs de Sesion
-
-Generados con `UUID.randomUUID().toString()` para unicidad garantizada.
-
----
-
-*Documento generado para el proyecto Sushi Tracker - Android Native App*
+### Generador de Imágenes Canvas Nativo (`ShareUtils.kt`)
+Para exportar el final de sesiones y subirlas a Instagram/WhatsApp Stories se evita dependencias grandes mediante instanciar `Canvas(Bitmap.createBitmap)` en Android que dibuja figuras (RectF), proyecta sombras nativas y acomoda el listado en base a medidas. El mismo empaqueta el JPG, y lo manda a compartir globalmente por el componente genérico en `AndroidManifest.xml`: `<provider ... FileProvider>`.

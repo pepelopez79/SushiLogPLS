@@ -279,17 +279,17 @@ fun StatsScreen(
                                     val pieceOpt = fullList.find { p -> p.id == id }
                                     (pieceOpt?.salmonCount ?: 0) * count
                                 }
-                                val wholeSalmons = salmonEst / 40
-                                if (wholeSalmons > 0) {
+                                val wholeSalmons = salmonEst / 40.0
+                                if (wholeSalmons >= 1.0) {
                                     CuriosityItem(
                                         "🐟",
-                                        strings.salmonApprox.format(wholeSalmons),
+                                        "Aprox. %.1f salmones enteros (%d cortes)".format(wholeSalmons, salmonEst),
                                         colors
                                     )
                                 } else if (salmonEst > 0) {
                                     CuriosityItem(
                                         "🐟",
-                                        "Aprox. %.1f salmones enteros".format(salmonEst / 40.0),
+                                        "$salmonEst cortes de salmón",
                                         colors
                                     )
                                 }

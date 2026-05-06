@@ -98,7 +98,7 @@ fun HistoryScreen(
                         currentLanguage = currentLanguage,
                         customPieces = customPieces,
                         onToggleExpand = { expandedSessionId = if (expandedSessionId == session.id) null else session.id },
-                        onShare = { shareSession(context, session, strings, currentLanguage, customPieces) },
+                        onShare = { pls.dev.sushitracker.ui.screens.shareSessionAsImage(context, session, strings, currentLanguage, colors, customPieces) },
                         onDelete = { showDeleteDialog = session }
                     )
                 }
@@ -118,7 +118,7 @@ fun HistoryScreen(
                     AchievementManager(context).syncAchievements()
                     sessions = sessionManager.getSessions().sortedByDescending { it.date }
                     showDeleteDialog = null
-                }) { Text(strings.delete, color = MaterialTheme.colorScheme.error) }
+                }) { Text(strings.delete, color = colors.onSurface) }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = null }) { Text(strings.cancel, color = colors.primary) }
@@ -142,7 +142,13 @@ private fun SessionHistoryCard(
 ) {
     val totalPieces = session.totalPieces
 
-    Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = colors.surface)) {
+    val totalKcal = session.pieces.entries.sumOf { getPieceKcal(it.key, customPieces) * it.value }
+    val totalRice = session.pieces.entries.sumOf { getPieceRiceGrams(it.key, customPieces) * it.value }
+    val totalSalmon = session.pieces.entries.sumOf { getPieceSalmonCount(it.key, customPieces) * it.value }
+
+    val cardColor = colors.surface
+
+    Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = cardColor)) {
         Column {
             Row(
                 modifier = Modifier.fillMaxWidth().clickable(onClick = onToggleExpand).padding(16.dp),
@@ -151,7 +157,11 @@ private fun SessionHistoryCard(
             ) {
                 Box(
                     modifier = Modifier.size(48.dp).clip(CircleShape)
-                        .background(when { totalPieces >= 50 -> colors.primary.copy(alpha = 0.25f); totalPieces >= 30 -> colors.primary.copy(alpha = 0.15f); else -> colors.secondary }),
+                        .background(when { 
+                            totalPieces >= 50 -> colors.primary.copy(alpha = 0.25f)
+                            totalPieces >= 30 -> colors.primary.copy(alpha = 0.15f) 
+                            else -> colors.secondary 
+                        }),
                     contentAlignment = Alignment.Center
                 ) { Text("🍣", fontSize = 24.sp) }
 
@@ -159,12 +169,21 @@ private fun SessionHistoryCard(
                     Text(formatDateLocalized(session.date, currentLanguage), color = colors.onSurface, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                     Text(session.restaurant, color = colors.mutedForeground, fontSize = 12.sp)
                     Text(getRelativeDate(session.date, strings), color = colors.mutedForeground, fontSize = 11.sp)
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("🔥 $totalKcal kcal", color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+                        Text("🍚 ${totalRice}g", color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+                        Text("🐟 $totalSalmon cortes", color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+                    }
                 }
 
                 Column(horizontalAlignment = Alignment.End) {
                     Text(
                         text = totalPieces.toString(),
-                        color = when { totalPieces >= 50 -> colors.primary; totalPieces >= 30 -> colors.primary; else -> colors.onSurface },
+                        color = colors.onSurface,
                         fontSize = 24.sp, fontWeight = FontWeight.ExtraBold
                     )
                     Text(strings.pieces, color = colors.mutedForeground, fontSize = 11.sp)
@@ -242,33 +261,4 @@ private fun getRelativeDate(dateString: String, strings: AppStrings.Strings): St
             else       -> strings.monthsAgo.format(days / 30)
         }
     } catch (e: Exception) { "" }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-private fun shareSession(
-    context: android.content.Context,
-    session: SessionRecord,
-    strings: AppStrings.Strings,
-    language: AppLanguage,
-    customPieces: List<CustomPiece>
-) {
-    val text = buildString {
-        appendLine("🍣 ${strings.newSession}")
-        appendLine("📅 ${formatDateLocalized(session.date, language)}")
-        appendLine("🏠 ${session.restaurant}")
-        appendLine()
-        appendLine("${strings.total}: ${session.totalPieces} ${strings.pieces}")
-        appendLine()
-        session.pieces.filter { it.value > 0 }.forEach { (id, count) ->
-            appendLine("${getPieceEmoji(id, customPieces)} ${getPieceName(id, customPieces)}: $count")
-        }
-        appendLine()
-        appendLine("Sushi Tracker 🍣")
-    }
-    val intent = Intent(Intent.ACTION_SEND).apply {
-        type = "text/plain"
-        putExtra(Intent.EXTRA_SUBJECT, "Sushi Tracker - ${formatDateLocalized(session.date, language)}")
-        putExtra(Intent.EXTRA_TEXT, text)
-    }
-    context.startActivity(Intent.createChooser(intent, strings.share))
 }

@@ -7,8 +7,6 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.Typeface
-import android.text.Layout
-import android.text.StaticLayout
 import android.text.TextPaint
 import androidx.core.content.FileProvider
 import androidx.compose.ui.graphics.toArgb
@@ -21,6 +19,7 @@ import pls.dev.sushitracker.data.getPieceName
 import pls.dev.sushitracker.ui.theme.SushiColors
 import java.io.File
 import java.io.FileOutputStream
+import androidx.core.graphics.createBitmap
 
 fun shareSessionAsImage(
     context: Context,
@@ -30,22 +29,20 @@ fun shareSessionAsImage(
     colors: SushiColors,
     customPieces: List<CustomPiece>
 ) {
-    val bitmap = Bitmap.createBitmap(1080, 1920, Bitmap.Config.ARGB_8888)
+    val bitmap = createBitmap(1080, 1920)
     val canvas = Canvas(bitmap)
     
-    canvas.drawColor(colors.background.toArgb())
+    canvas.drawColor(colors.secondary.toArgb())
 
     val paint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
         color = colors.onBackground.toArgb()
-        textSize = 80f
+        textSize = 90f
         typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
         textAlign = Paint.Align.CENTER
     }
 
-    canvas.drawText(strings.newSession, 540f, 300f, paint)
-
-    paint.textSize = 50f
-    paint.typeface = Typeface.DEFAULT
+    paint.textSize = 45f
+    paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
     paint.color = colors.mutedForeground.toArgb()
     
     val dateText = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -54,33 +51,45 @@ fun shareSessionAsImage(
         session.date
     }
     
-    canvas.drawText("📅 $dateText", 540f, 420f, paint)
-    canvas.drawText("🏠 ${session.restaurant}", 540f, 500f, paint)
+    canvas.drawText("📅 $dateText", 540f, 380f, paint)
+    canvas.drawText("🏠 ${session.restaurant}", 540f, 460f, paint)
 
-    paint.textSize = 200f
-    paint.color = colors.primary.toArgb()
-    paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-    canvas.drawText("${session.totalPieces}", 540f, 850f, paint)
-    
-    paint.textSize = 60f
-    paint.color = colors.mutedForeground.toArgb()
-    paint.typeface = Typeface.DEFAULT
-    canvas.drawText(strings.pieces.uppercase(), 540f, 950f, paint)
-    
-    paint.textSize = 50f
-    paint.textAlign = Paint.Align.LEFT
-    paint.color = colors.onSurface.toArgb()
-    
-    val activePieces = session.pieces.filter { it.value > 0 }.toList()
-    var currentY = 1150f
-    val padding = 150f
-    
     val cardPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = colors.surface.toArgb()
+        setShadowLayer(40f, 0f, 20f, android.graphics.Color.argb(40, 0, 0, 0))
     }
     
-    val listRect = RectF(padding - 50f, currentY - 80f, 1080f - padding + 50f, currentY + (activePieces.size * 100f) + 20f)
-    canvas.drawRoundRect(listRect, 50f, 50f, cardPaint)
+    val activePieces = session.pieces.filter { it.value > 0 }.toList()
+    val topContentY = 560f
+    
+    val listHeight = activePieces.size * 110f
+    val mainCardBottom = topContentY + 450f + listHeight + 80f
+    
+    val mainCardRect = RectF(100f, topContentY, 980f, mainCardBottom)
+    canvas.drawRoundRect(mainCardRect, 80f, 80f, cardPaint)
+
+    paint.textSize = 240f
+    paint.textAlign = Paint.Align.CENTER
+    paint.color = colors.primary.toArgb()
+    paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+    canvas.drawText("${session.totalPieces}", 540f, topContentY + 280f, paint)
+    
+    paint.textSize = 50f
+    paint.color = colors.mutedForeground.toArgb()
+    paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+    canvas.drawText(strings.totalPiecesLabel.uppercase(), 540f, topContentY + 360f, paint)
+    
+    val borderPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = colors.border.toArgb()
+        strokeWidth = 4f
+    }
+    canvas.drawLine(180f, topContentY + 440f, 900f, topContentY + 440f, borderPaint)
+    
+    paint.textSize = 55f
+    paint.color = colors.onSurface.toArgb()
+    
+    var currentY = topContentY + 560f
+    val listPadding = 200f
     
     for ((id, count) in activePieces) {
         val emoji = getPieceEmoji(id, customPieces)
@@ -88,21 +97,22 @@ fun shareSessionAsImage(
         
         paint.textAlign = Paint.Align.LEFT
         paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-        canvas.drawText("$emoji  $name", padding, currentY, paint)
+        canvas.drawText("$emoji  $name", listPadding, currentY, paint)
         
         paint.textAlign = Paint.Align.RIGHT
         paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
         paint.color = colors.primary.toArgb()
-        canvas.drawText("$count", 1080f - padding, currentY, paint)
+        canvas.drawText("${count}x", 1080f - listPadding, currentY, paint)
         
         paint.color = colors.onSurface.toArgb()
-        currentY += 100f
+        currentY += 110f
     }
     
     paint.textAlign = Paint.Align.CENTER
-    paint.textSize = 40f
+    paint.textSize = 45f
     paint.color = colors.mutedForeground.toArgb()
-    canvas.drawText("Sushi Tracker 🍣", 540f, 1800f, paint)
+    paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+    canvas.drawText("Sushi Tracker 🍣", 540f, 1820f, paint)
 
     try {
         val cachePath = File(context.cacheDir, "images")
@@ -129,6 +139,3 @@ fun shareSessionAsImage(
         e.printStackTrace()
     }
 }
-
-
-
