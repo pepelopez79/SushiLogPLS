@@ -173,15 +173,18 @@ private fun SessionHistoryCard(
                 Column(modifier = Modifier.weight(1f)) {
                     Text(formatDateLocalized(session.date, currentLanguage), color = colors.onSurface, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                     Text(session.restaurant, color = colors.mutedForeground, fontSize = 12.sp)
-                    Text(getRelativeDate(session.date, strings), color = colors.mutedForeground, fontSize = 11.sp)
                     Spacer(modifier = Modifier.height(4.dp))
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text("🔥 ${strings.historyKcalLabel.format(totalKcal)}", color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
-                        Text("🍚 ${strings.historyRiceLabel.format(totalRice)}", color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
-                        Text("🐟 ${strings.historySalmonLabel.format(totalSalmon)}", color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+                        if (totalRice > 0) {
+                            Text("🍚 ${strings.historyRiceLabel.format(totalRice)}", color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+                        }
+                        if (totalSalmon > 0) {
+                            Text("🐟 ${strings.historySalmonLabel.format(totalSalmon)}", color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+                        }
                     }
                 }
 
@@ -249,21 +252,4 @@ internal fun formatDateLocalized(dateString: String, language: AppLanguage): Str
             AppLanguage.ITALIAN -> "${date.dayOfMonth} $month ${date.year}"
         }
     } catch (e: Exception) { dateString }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-private fun getRelativeDate(dateString: String, strings: AppStrings.Strings): String {
-    return try {
-        val date = try {
-            LocalDateTime.parse(dateString, DateTimeFormatter.ISO_DATE_TIME).toLocalDate()
-        } catch (e: Exception) { LocalDate.parse(dateString) }
-        val days = ChronoUnit.DAYS.between(date, LocalDate.now())
-        when {
-            days == 0L -> strings.today
-            days == 1L -> strings.yesterday
-            days < 7   -> strings.daysAgo.format(days)
-            days < 30  -> strings.weeksAgo.format(days / 7)
-            else       -> strings.monthsAgo.format(days / 30)
-        }
-    } catch (e: Exception) { "" }
 }

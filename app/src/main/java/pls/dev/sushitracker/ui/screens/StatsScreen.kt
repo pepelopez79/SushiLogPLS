@@ -145,15 +145,6 @@ fun StatsScreen(
                                 color = colors.mutedForeground,
                                 fontSize = 16.sp
                             )
-                            if (totalCalories > 0) {
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Text(
-                                    "🔥 $totalCalories kcal",
-                                    color = colors.primary.copy(alpha = 0.8f),
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
                         }
                     }
                 }

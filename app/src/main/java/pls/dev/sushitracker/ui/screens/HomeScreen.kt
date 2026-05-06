@@ -169,7 +169,7 @@ fun HomeScreen(
             ) {
                 DashboardCard(
                     title = strings.history,
-                    icon = Icons.Filled.DateRange,
+                    icon = Icons.Filled.List,
                     color = colors.surface,
                     iconColor = colors.primary,
                     textColor = colors.onSurface,
@@ -205,33 +205,6 @@ fun HomeScreen(
             }
             
             Spacer(modifier = Modifier.weight(1f))
-            
-            // Bottom quick stat / fun badge
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(32.dp))
-                        .background(colors.primary.copy(alpha = 0.1f))
-                        .padding(horizontal = 24.dp, vertical = 12.dp)
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text("🍚", fontSize = 16.sp)
-                        Text(
-                            strings.tagline,
-                            color = colors.primary,
-                            fontSize = 13.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-            }
         }
     }
 }
