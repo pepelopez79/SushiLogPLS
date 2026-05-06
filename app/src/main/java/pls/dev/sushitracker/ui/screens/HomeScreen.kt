@@ -2,6 +2,7 @@ package pls.dev.sushitracker.ui.screens
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,8 +14,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -32,114 +35,266 @@ fun HomeScreen(
     onOpenAchievements: () -> Unit,
     onOpenSettings: () -> Unit
 ) {
-    val infiniteTransition = rememberInfiniteTransition(label = "homeFloat")
-    val floatY by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = -10f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(3000, easing = EaseInOut),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "floatY"
-    )
-
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(colors.background)
     ) {
-        IconButton(
-            onClick = onOpenSettings,
+        // Modern giant watermark
+        Text(
+            text = "🍣",
+            fontSize = 300.sp,
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(16.dp)
-                .size(48.dp)
-                .clip(CircleShape)
-                .background(colors.secondary)
-        ) {
-            Icon(Icons.Filled.Settings, contentDescription = strings.settings, tint = colors.onSecondary, modifier = Modifier.size(24.dp))
-        }
+                .offset(x = 100.dp, y = (-80).dp)
+                .alpha(0.04f)
+        )
 
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp)
-                .align(Alignment.Center)
+                .fillMaxSize()
+                .padding(top = 64.dp, start = 24.dp, end = 24.dp, bottom = 24.dp)
         ) {
-            Text("SUSHI", color = colors.onBackground, fontSize = 48.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-1).sp, textAlign = TextAlign.Center)
-            Text("TRACKER", color = colors.onBackground, fontSize = 48.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-1).sp, textAlign = TextAlign.Center)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
+            ) {
+                Column {
+                    Text(
+                        "SUSHI",
+                        color = colors.onBackground,
+                        fontSize = 42.sp,
+                        fontWeight = FontWeight.Black,
+                        letterSpacing = (-2).sp
+                    )
+                    Text(
+                        "TRACKER",
+                        color = colors.primary,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        letterSpacing = 2.sp,
+                        modifier = Modifier.offset(y = (-8).dp)
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .size(52.dp)
+                        .shadow(12.dp, CircleShape)
+                        .clip(CircleShape)
+                        .background(colors.surface)
+                        .clickable(onClick = onOpenSettings),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(Icons.Filled.Settings, contentDescription = strings.settings, tint = colors.onSurface)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(48.dp))
+
+            // Main Hero Action
+            Card(
+                onClick = onStartCounter,
+                colors = CardDefaults.cardColors(containerColor = colors.primary),
+                shape = RoundedCornerShape(32.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(180.dp)
+            ) {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    // Decorative element inside card
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .offset(x = 20.dp, y = 20.dp)
+                            .size(140.dp)
+                            .clip(CircleShape)
+                            .background(colors.onPrimary.copy(alpha = 0.1f))
+                    )
+
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.CenterStart)
+                            .padding(32.dp)
+                    ) {
+                        Text(
+                            strings.begin.uppercase(),
+                            color = colors.onPrimary,
+                            fontSize = 32.sp,
+                            fontWeight = FontWeight.Black,
+                            letterSpacing = (-1).sp
+                        )
+                        Spacer(Modifier.height(4.dp))
+                        Text(
+                            strings.newSession,
+                            color = colors.onPrimary.copy(alpha = 0.8f),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .padding(end = 24.dp)
+                            .size(64.dp)
+                            .clip(CircleShape)
+                            .background(colors.onPrimary.copy(alpha = 0.2f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                            contentDescription = null,
+                            tint = colors.onPrimary,
+                            modifier = Modifier.size(36.dp)
+                        )
+                    }
+                }
+            }
 
             Spacer(modifier = Modifier.height(40.dp))
+            Text(
+                strings.explore.uppercase(),
+                color = colors.mutedForeground,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.ExtraBold,
+                letterSpacing = 2.sp
+            )
+            Spacer(modifier = Modifier.height(16.dp))
 
-            Box(
-                modifier = Modifier.offset(y = floatY.dp).padding(bottom = 40.dp),
-                contentAlignment = Alignment.Center
+            // Dashboard Grid
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Box(modifier = Modifier.offset(x = (-10).dp, y = (-10).dp).rotate(-20f).width(6.dp).height(112.dp).clip(CircleShape).background(colors.primary))
-                Box(modifier = Modifier.size(100.dp).offset(x = 5.dp, y = 20.dp).clip(CircleShape), contentAlignment = Alignment.Center) {
-                    Text(text = "🍣", fontSize = 40.sp)
+                DashboardCard(
+                    title = strings.history,
+                    icon = Icons.Filled.DateRange,
+                    color = colors.surface,
+                    iconColor = colors.primary,
+                    textColor = colors.onSurface,
+                    onClick = onOpenHistory,
+                    isMain = true,
+                    modifier = Modifier.weight(0.45f).height(160.dp)
+                )
+                Column(
+                    modifier = Modifier.weight(0.55f).height(160.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    DashboardCard(
+                        title = strings.stats,
+                        icon = Icons.Filled.Info,
+                        color = colors.surface,
+                        iconColor = colors.onSurface,
+                        textColor = colors.onSurface,
+                        onClick = onOpenStats,
+                        isMain = false,
+                        modifier = Modifier.weight(1f).fillMaxWidth()
+                    )
+                    DashboardCard(
+                        title = strings.achievements,
+                        icon = Icons.Filled.Star,
+                        color = colors.surface,
+                        iconColor = colors.onSurface,
+                        textColor = colors.onSurface,
+                        onClick = onOpenAchievements,
+                        isMain = false,
+                        modifier = Modifier.weight(1f).fillMaxWidth()
+                    )
                 }
-                Box(modifier = Modifier.offset(x = 12.dp, y = (-10).dp).rotate(20f).width(6.dp).height(112.dp).clip(CircleShape).background(colors.primary))
             }
-
-            Button(
-                onClick = onStartCounter,
-                colors = ButtonDefaults.buttonColors(containerColor = colors.primary, contentColor = colors.onPrimary),
-                shape = RoundedCornerShape(50),
-                modifier = Modifier.fillMaxWidth().height(56.dp),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp)
+            
+            Spacer(modifier = Modifier.weight(1f))
+            
+            // Bottom quick stat / fun badge
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(strings.begin, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                Spacer(modifier = Modifier.width(8.dp))
-                Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, modifier = Modifier.size(24.dp))
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(32.dp))
+                        .background(colors.primary.copy(alpha = 0.1f))
+                        .padding(horizontal = 24.dp, vertical = 12.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("🍚", fontSize = 16.sp)
+                        Text(
+                            strings.tagline,
+                            color = colors.primary,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
             }
+        }
+    }
+}
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = onOpenHistory,
-                colors = ButtonDefaults.buttonColors(containerColor = colors.secondary, contentColor = colors.onSecondary),
-                shape = RoundedCornerShape(50),
-                modifier = Modifier.fillMaxWidth().height(56.dp),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp)
+@Composable
+fun DashboardCard(
+    title: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    color: androidx.compose.ui.graphics.Color,
+    iconColor: androidx.compose.ui.graphics.Color,
+    textColor: androidx.compose.ui.graphics.Color,
+    onClick: () -> Unit,
+    isMain: Boolean,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        onClick = onClick,
+        colors = CardDefaults.cardColors(containerColor = color),
+        shape = RoundedCornerShape(28.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+        modifier = modifier
+    ) {
+        if (isMain) {
+            Column(
+                modifier = Modifier.fillMaxSize().padding(24.dp),
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Icon(Icons.Filled.Star, contentDescription = null, modifier = Modifier.size(20.dp))
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(strings.history, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Box(
+                    modifier = Modifier.size(48.dp).clip(CircleShape).background(iconColor.copy(alpha = 0.1f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(icon, contentDescription = null, tint = iconColor, modifier = Modifier.size(24.dp))
+                }
+                Text(
+                    title,
+                    color = textColor,
+                    fontSize = 18.sp, // Slightly lowered to fit longer words in spanish
+                    fontWeight = FontWeight.ExtraBold,
+                    lineHeight = 22.sp,
+                    maxLines = 2
+                )
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = onOpenStats,
-                colors = ButtonDefaults.buttonColors(containerColor = colors.secondary, contentColor = colors.onSecondary),
-                shape = RoundedCornerShape(50),
-                modifier = Modifier.fillMaxWidth().height(56.dp),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp)
+        } else {
+            Row(
+                modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Icon(Icons.Filled.Person, contentDescription = null, modifier = Modifier.size(20.dp))
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(strings.stats, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Box(
+                    modifier = Modifier.size(40.dp).clip(CircleShape).background(iconColor.copy(alpha = 0.1f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(icon, contentDescription = null, tint = iconColor, modifier = Modifier.size(20.dp))
+                }
+                Text(
+                    title,
+                    color = textColor,
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Black,
+                    maxLines = 1,
+                    modifier = Modifier.weight(1f) // Added weight to wrap text flexibly if needed
+                )
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = onOpenAchievements,
-                colors = ButtonDefaults.buttonColors(containerColor = colors.secondary, contentColor = colors.onSecondary),
-                shape = RoundedCornerShape(50),
-                modifier = Modifier.fillMaxWidth().height(56.dp),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp)
-            ) {
-                Icon(Icons.Filled.AccountBox, contentDescription = null, modifier = Modifier.size(20.dp))
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(strings.achievements, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Text(strings.tagline, color = colors.mutedForeground, fontSize = 14.sp, textAlign = TextAlign.Center)
         }
     }
 }

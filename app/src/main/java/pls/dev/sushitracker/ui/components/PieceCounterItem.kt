@@ -62,8 +62,8 @@ fun PieceCounterItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(4.dp, RoundedCornerShape(16.dp))
-            .clip(RoundedCornerShape(16.dp))
+            .shadow(12.dp, RoundedCornerShape(24.dp), spotColor = colors.primary.copy(alpha = 0.5f), ambientColor = colors.primary.copy(alpha = 0.2f))
+            .clip(RoundedCornerShape(24.dp))
             .background(if (isPressing) colors.secondary else colors.surface)
             .pointerInput(Unit) {
                 detectTapGestures(
@@ -132,7 +132,7 @@ fun PieceCounterItem(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     drawArc(
-                        color = Destructive,
+                        color = Color(0xFFEF4444),
                         startAngle = -90f,
                         sweepAngle = animatedProgress * 360f,
                         useCenter = false,
@@ -146,7 +146,7 @@ fun PieceCounterItem(
                     .size(40.dp)
                     .scale(animatedScale)
                     .clip(CircleShape)
-                    .background(Color.Transparent)
+                    .background(colors.primary.copy(alpha = 0.1f))
                     .then(
                         Modifier
                             .clip(CircleShape)
@@ -157,15 +157,15 @@ fun PieceCounterItem(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     drawCircle(
-                        color = Primary,
+                        color = colors.primary,
                         style = Stroke(width = 2.dp.toPx())
                     )
                 }
                 Text(
                     text = "$count",
-                    color = Primary,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
+                    color = colors.primary,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 18.sp
                 )
             }
         }

@@ -17,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -196,8 +197,8 @@ fun StatsScreen(
                 }
                 item {
                     Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(16.dp),
+                        modifier = Modifier.fillMaxWidth().shadow(4.dp, RoundedCornerShape(24.dp)),
+                        shape = RoundedCornerShape(24.dp),
                         colors = CardDefaults.cardColors(containerColor = colors.surface)
                     ) {
                         Column(
@@ -210,7 +211,7 @@ fun StatsScreen(
                                     PieceTypeRow(
                                         id = id,
                                         count = count,
-                                        maxCount = maxCount,
+                                        maxCount = maxPieces,
                                         colors = colors,
                                         strings = strings,
                                         customPieces = customPieces
@@ -309,7 +310,7 @@ private fun StatCard(
     icon: ImageVector, value: String, label: String, colors: SushiColors,
     modifier: Modifier = Modifier, iconTint: Color = colors.primary
 ) {
-    Card(modifier = modifier, shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = colors.surface)) {
+    Card(modifier = modifier.shadow(4.dp, RoundedCornerShape(24.dp)), shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = colors.surface)) {
         Column(modifier = Modifier.fillMaxWidth().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(imageVector = icon, contentDescription = null, tint = iconTint, modifier = Modifier.size(24.dp))
             Spacer(modifier = Modifier.height(8.dp))

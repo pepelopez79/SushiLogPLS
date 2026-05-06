@@ -94,7 +94,7 @@ object AppStrings {
         val customPieceRiceHint: String, val customPieceSalmonLabel: String, val historyKcalLabel: String,
         val historyRiceLabel: String, val historySalmonLabel: String, val statsWholeSalmon: String,
         val statsSalmonPieces: String, val shareActionTitle: String, val shareIntentText: String,
-        val shareWatermark: String, val rice: String, val kcal: String
+        val shareWatermark: String, val rice: String, val kcal: String, val explore: String
     )
 
     private val spanish = Strings(
@@ -102,7 +102,7 @@ object AppStrings {
         delete="Eliminar", share="Compartir", confirm="Confirmar", add="Añadir", edit="Editar", name="Nombre",
         begin="COMENZAR", history="HISTORIAL", stats="ESTADÍSTICAS", achievements="LOGROS", settings="Ajustes",
         darkTheme="Oscuro", lightTheme="Claro", salmonTheme="Salmón",
-        tagline="",
+        tagline="Hora de comer sushi",
         newSession="Nueva sesión", whereAreYouEating="¿Dónde estás comiendo?", restaurantName="Nombre del restaurante...",
         start="Empezar", endSession="TERMINAR SESIÓN", finishSession="¿Terminar sesión?",
         exitDialogTitle="¿Salir de la sesión?", exitDialogMessage="Si sales ahora perderás el progreso actual.",
@@ -148,7 +148,7 @@ object AppStrings {
         customPieceRiceHint="gramos", customPieceSalmonLabel="Salmón (cortes)", historyKcalLabel="%d kcal",
         historyRiceLabel="%dg", historySalmonLabel="%d cortes", statsWholeSalmon="Aprox. %.1f salmones enteros (%d cortes)",
         statsSalmonPieces="%d cortes de salmón", shareActionTitle="Compartir sesión", shareIntentText="🍣 ¡Mi sesión de Sushi en %s! \n#SushiTracker",
-        shareWatermark="Sushi Tracker 🍣", rice="Arroz", kcal="Kcal"
+        shareWatermark="Sushi Tracker 🍣", rice="Arroz", kcal="Kcal", explore="EXPLORA"
     )
 
     private val english = Strings(
@@ -156,7 +156,7 @@ object AppStrings {
         delete="Delete", share="Share", confirm="Confirm", add="Add", edit="Edit", name="Name",
         begin="START", history="HISTORY", stats="STATISTICS", achievements="ACHIEVEMENTS", settings="Settings",
         darkTheme="Dark", lightTheme="Light", salmonTheme="Salmon",
-        tagline="",
+        tagline="Sushi time!",
         newSession="New session", whereAreYouEating="Where are you eating?", restaurantName="Restaurant name...",
         start="Start", endSession="END SESSION", finishSession="End session?",
         exitDialogTitle="Exit session?", exitDialogMessage="If you leave now, you will lose your current progress.",
@@ -202,7 +202,7 @@ object AppStrings {
         customPieceRiceHint="grams", customPieceSalmonLabel="Salmon (cuts)", historyKcalLabel="%d kcal",
         historyRiceLabel="%dg", historySalmonLabel="%d cuts", statsWholeSalmon="Approx. %.1f whole salmons (%d cuts)",
         statsSalmonPieces="%d salmon cuts", shareActionTitle="Share session", shareIntentText="🍣 My Sushi session at %s! \n#SushiTracker",
-        shareWatermark="Sushi Tracker 🍣", rice="Rice", kcal="Kcal"
+        shareWatermark="Sushi Tracker 🍣", rice="Rice", kcal="Kcal", explore="EXPLORE"
     )
 
     private val french = Strings(
@@ -210,7 +210,7 @@ object AppStrings {
         delete="Supprimer", share="Partager", confirm="Confirmer", add="Ajouter", edit="Modifier", name="Nom",
         begin="COMMENCER", history="HISTORIQUE", stats="STATISTIQUES", achievements="SUCCÈS", settings="Paramètres",
         darkTheme="Sombre", lightTheme="Clair", salmonTheme="Saumon",
-        tagline="",
+        tagline="L'heure des sushis",
         newSession="Nouvelle session", whereAreYouEating="Où mangez-vous?", restaurantName="Nom du restaurant...",
         start="Démarrer", endSession="TERMINER LA SESSION", finishSession="Terminer la session?",
         exitDialogTitle="Quitter la session?", exitDialogMessage="Si vous partez maintenant, vous perdrez votre progression actuelle.",
@@ -256,7 +256,7 @@ object AppStrings {
         customPieceRiceHint="grammes", customPieceSalmonLabel="Saumon (coupes)", historyKcalLabel="%d kcal",
         historyRiceLabel="%dg", historySalmonLabel="%d tranches", statsWholeSalmon="Env. %.1f saumons entiers (%d coupes)",
         statsSalmonPieces="%d coupes de saumon", shareActionTitle="Partager la session", shareIntentText="🍣 Ma session de Sushi chez %s! \n#SushiTracker",
-        shareWatermark="Sushi Tracker 🍣", rice="Riz", kcal="Kcal"
+        shareWatermark="Sushi Tracker 🍣", rice="Riz", kcal="Kcal", explore="EXPLORER"
     )
 
     private val italian = Strings(
@@ -264,7 +264,7 @@ object AppStrings {
         delete="Elimina", share="Condividi", confirm="Conferma", add="Aggiungi", edit="Modifica", name="Nome",
         begin="INIZIA", history="STORICO", stats="STATISTICHE", achievements="OBIETTIVI", settings="Impostazioni",
         darkTheme="Scuro", lightTheme="Chiaro", salmonTheme="Salmone",
-        tagline="",
+        tagline="Ora del sushi",
         newSession="Nuova sessione", whereAreYouEating="Dove stai mangiando?", restaurantName="Nome del ristorante...",
         start="Inizia", endSession="TERMINA SESSIONE", finishSession="Terminare la sessione?",
         exitDialogTitle="Uscire dalla sessione?", exitDialogMessage="Se esci ora, perderai i progressi attuali.",
@@ -310,7 +310,7 @@ object AppStrings {
         customPieceRiceHint="grammi", customPieceSalmonLabel="Salmone (tagli)", historyKcalLabel="%d kcal",
         historyRiceLabel="%dg", historySalmonLabel="%d tagli", statsWholeSalmon="Circa %.1f salmoni interi (%d tagli)",
         statsSalmonPieces="%d tagli di salmone", shareActionTitle="Condividi sessione", shareIntentText="🍣 La mia sessione di Sushi al %s! \n#SushiTracker",
-        shareWatermark="Sushi Tracker 🍣", rice="Riso", kcal="Kcal"
+        shareWatermark="Sushi Tracker 🍣", rice="Riso", kcal="Kcal", explore="ESPLORA"
     )
 
     fun get(language: AppLanguage): Strings = when (language) {
@@ -369,8 +369,8 @@ class AppSettingsManager(context: Context) {
     private val gson = Gson()
 
     fun getTheme(): AppTheme {
-        val themeId = prefs.getString("theme", AppTheme.DARK.id) ?: AppTheme.DARK.id
-        return AppTheme.entries.find { it.id == themeId } ?: AppTheme.DARK
+        val themeId = prefs.getString("theme", AppTheme.SALMON.id) ?: AppTheme.SALMON.id
+        return AppTheme.entries.find { it.id == themeId } ?: AppTheme.SALMON
     }
 
     fun setTheme(theme: AppTheme) {
