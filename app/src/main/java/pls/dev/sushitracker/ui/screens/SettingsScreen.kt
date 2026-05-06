@@ -194,6 +194,7 @@ fun SettingsScreen(
             confirmButton = {
                 TextButton(onClick = {
                     sessionManager.deleteAllSessions()
+                    AchievementManager(context).clearAchievements()
                     showResetDialog = false
                     Toast.makeText(context, strings.dataDeleted, Toast.LENGTH_SHORT).show()
                 }) { Text(strings.deleteAllConfirmBtn, color = MaterialTheme.colorScheme.error) }
@@ -234,6 +235,9 @@ private fun CustomPiecesDialog(
 ) {
     var newName by remember { mutableStateOf("") }
     var newEmoji by remember { mutableStateOf("🍣") }
+    var newKcal by remember { mutableStateOf("") }
+    var newSalmonCount by remember { mutableStateOf("") }
+    var newRiceGrams by remember { mutableStateOf("") }
     var showNameError by remember { mutableStateOf(false) }
     var deleteTarget by remember { mutableStateOf<CustomPiece?>(null) }
     val emojiOptions = remember {
@@ -320,9 +324,52 @@ private fun CustomPiecesDialog(
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true
                     )
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedTextField(
+                            value = newKcal,
+                            onValueChange = { newKcal = it.filter { char -> char.isDigit() } },
+                            placeholder = { Text("Kcal", color = colors.mutedForeground, fontSize = 12.sp) },
+                            keyboardOptions = KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Number),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = colors.primary, unfocusedBorderColor = colors.border,
+                                cursorColor = colors.primary, focusedTextColor = colors.onSurface, unfocusedTextColor = colors.onSurface
+                            ),
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier.weight(1f),
+                            singleLine = true
+                        )
+                        OutlinedTextField(
+                            value = newSalmonCount,
+                            onValueChange = { newSalmonCount = it.filter { char -> char.isDigit() } },
+                            placeholder = { Text("Salmón", color = colors.mutedForeground, fontSize = 12.sp) },
+                            keyboardOptions = KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Number),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = colors.primary, unfocusedBorderColor = colors.border,
+                                cursorColor = colors.primary, focusedTextColor = colors.onSurface, unfocusedTextColor = colors.onSurface
+                            ),
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier.weight(1f),
+                            singleLine = true
+                        )
+                        OutlinedTextField(
+                            value = newRiceGrams,
+                            onValueChange = { newRiceGrams = it.filter { char -> char.isDigit() } },
+                            placeholder = { Text("Arroz", color = colors.mutedForeground, fontSize = 12.sp) },
+                            keyboardOptions = KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Number),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = colors.primary, unfocusedBorderColor = colors.border,
+                                cursorColor = colors.primary, focusedTextColor = colors.onSurface, unfocusedTextColor = colors.onSurface
+                            ),
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier.weight(1f),
+                            singleLine = true
+                        )
+                    }
 
                     FlowRow(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                         horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally),
                         verticalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
@@ -350,9 +397,19 @@ private fun CustomPiecesDialog(
                             if (newName.isBlank()) {
                                 showNameError = true
                             } else {
-                                onAdd(CustomPiece(id = "custom_${UUID.randomUUID()}", name = newName.trim(), emoji = newEmoji))
+                                onAdd(CustomPiece(
+                                    id = "custom_${UUID.randomUUID()}", 
+                                    name = newName.trim(), 
+                                    emoji = newEmoji,
+                                    kcal = newKcal.toIntOrNull() ?: 0,
+                                    salmonCount = newSalmonCount.toIntOrNull() ?: 0,
+                                    riceGrams = newRiceGrams.toIntOrNull() ?: 0
+                                ))
                                 newName = ""
                                 newEmoji = "🍣"
+                                newKcal = ""
+                                newSalmonCount = ""
+                                newRiceGrams = ""
                                 showNameError = false
                             }
                         },

@@ -118,6 +118,11 @@ fun StatsScreen(
                 contentPadding = PaddingValues(bottom = 24.dp)
             ) {
                 item {
+                    val fullList = SUSHI_PIECES + customPieces.map { SushiPiece(it.id, it.name, 0, it.emoji, it.kcal, it.salmonCount, it.riceGrams) }
+                    val totalCalories = stats.pieceStats.entries.sumOf { (id, count) ->
+                        val pieceOpt = fullList.find { p -> p.id == id }
+                        (pieceOpt?.kcal ?: 0) * count
+                    }
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(20.dp),
@@ -139,6 +144,15 @@ fun StatsScreen(
                                 color = colors.mutedForeground,
                                 fontSize = 16.sp
                             )
+                            if (totalCalories > 0) {
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    "🔥 $totalCalories kcal",
+                                    color = colors.primary.copy(alpha = 0.8f),
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
                         }
                     }
                 }
@@ -224,9 +238,23 @@ fun StatsScreen(
                                 modifier = Modifier.padding(16.dp),
                                 verticalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
+                                val fullList = SUSHI_PIECES + customPieces.map { SushiPiece(it.id, it.name, 0, it.emoji, it.kcal, it.salmonCount, it.riceGrams) }
+                                
+                                val totalCalories = stats.pieceStats.entries.sumOf { (id, count) ->
+                                    val pieceOpt = fullList.find { p -> p.id == id }
+                                    (pieceOpt?.kcal ?: 0) * count
+                                }
+                                if (totalCalories > 0) {
+                                    CuriosityItem(
+                                        "🔥",
+                                        strings.caloriesApprox.format(totalCalories),
+                                        colors
+                                    )
+                                }
+                                
                                 val riceGrams = stats.pieceStats.entries.sumOf { (id, count) ->
-                                    val weight = RICE_WEIGHTS[id] ?: 18
-                                    weight * count
+                                    val pieceOpt = fullList.find { p -> p.id == id }
+                                    (pieceOpt?.riceGrams ?: 0) * count
                                 }
                                 if (riceGrams > 0) {
                                     CuriosityItem(
@@ -247,12 +275,24 @@ fun StatsScreen(
                                         colors
                                     )
                                 }
-                                val salmonEst = (stats.pieceStats["nigiri"] ?: 0) / 2
-                                if (salmonEst > 0) CuriosityItem(
-                                    "🐟",
-                                    strings.salmonApprox.format(salmonEst),
-                                    colors
-                                )
+                                val salmonEst = stats.pieceStats.entries.sumOf { (id, count) ->
+                                    val pieceOpt = fullList.find { p -> p.id == id }
+                                    (pieceOpt?.salmonCount ?: 0) * count
+                                }
+                                val wholeSalmons = salmonEst / 40
+                                if (wholeSalmons > 0) {
+                                    CuriosityItem(
+                                        "🐟",
+                                        strings.salmonApprox.format(wholeSalmons),
+                                        colors
+                                    )
+                                } else if (salmonEst > 0) {
+                                    CuriosityItem(
+                                        "🐟",
+                                        "Aprox. %.1f salmones enteros".format(salmonEst / 40.0),
+                                        colors
+                                    )
+                                }
                             }
                         }
                     }

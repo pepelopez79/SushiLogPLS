@@ -112,4 +112,23 @@ class AchievementManager(context: Context) {
             )
         }
     }
+
+    fun syncAchievements() {
+        val currentUnlocked = getUnlockedIds().toMutableSet()
+        val validUnlocked = mutableSetOf<String>()
+        val sessions = sessionStorage.getSessions()
+
+        saveUnlockedIds(emptySet())
+        for (achievement in ACHIEVEMENTS) {
+            val progress = getProgress(achievement)
+            if (progress.current >= progress.target) {
+                validUnlocked.add(achievement.id)
+            }
+        }
+        saveUnlockedIds(validUnlocked)
+    }
+
+    fun clearAchievements() {
+        saveUnlockedIds(emptySet())
+    }
 }

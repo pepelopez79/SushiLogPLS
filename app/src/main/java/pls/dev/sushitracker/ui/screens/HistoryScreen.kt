@@ -115,7 +115,8 @@ fun HistoryScreen(
             confirmButton = {
                 TextButton(onClick = {
                     sessionManager.deleteSession(session.id)
-                    sessions = sessionManager.getSessions()
+                    AchievementManager(context).syncAchievements()
+                    sessions = sessionManager.getSessions().sortedByDescending { it.date }
                     showDeleteDialog = null
                 }) { Text(strings.delete, color = MaterialTheme.colorScheme.error) }
             },

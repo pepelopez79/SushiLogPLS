@@ -61,6 +61,7 @@ object AppStrings {
         val totalPiecesLabel: String, val sessionCount: String,
         val average: String, val record: String, val breakdown: String,
         val curiosities: String, val riceApprox: String, val favoritePiece: String, val salmonApprox: String,
+        val caloriesApprox: String,
         val achievementsTitle: String, val achievementsUnlocked: String, val unlocked: String,
         val achTotal100Title: String, val achTotal500Title: String,
         val achTotal1000Title: String, val achTotal5000Title: String,
@@ -108,7 +109,8 @@ object AppStrings {
         statsTitle="Estadísticas", noData="Sin datos", noDataDesc="Completa sesiones para\nver tus estadísticas",
         totalPiecesLabel="piezas totales", sessionCount="Sesiones", average="Promedio", record="Récord",
         breakdown="Desglose por tipo", curiosities="Curiosidades",
-        riceApprox="Has comido aprox. %dg de arroz", favoritePiece="Tu favorito es el/la %s", salmonApprox="Aproximadamente %d piezas de salmón",
+        riceApprox="Has comido aprox. %dg de arroz", favoritePiece="Tu favorito es el/la %s", salmonApprox="Aproximadamente %d salmones enteros",
+        caloriesApprox="Has consumido unas %d kcal",
         achievementsTitle="Logros", achievementsUnlocked="logros completados", unlocked="Desbloqueado",
         achTotal100Title="Principiante", achTotal500Title="Aficionado", achTotal1000Title="Experto", achTotal5000Title="Maestro Sushi",
         achSession30Title="Buen apetito", achSession50Title="Hambre voraz", achSession100Title="Máquina de comer",
@@ -156,7 +158,8 @@ object AppStrings {
         statsTitle="Statistics", noData="No data", noDataDesc="Complete sessions to\nsee your statistics",
         totalPiecesLabel="total pieces", sessionCount="Sessions", average="Average", record="Record",
         breakdown="Breakdown by type", curiosities="Fun facts",
-        riceApprox="You've eaten approx. %dg of rice", favoritePiece="Your favourite is %s", salmonApprox="Approximately %d salmon pieces",
+        riceApprox="You've eaten approx. %dg of rice", favoritePiece="Your favourite is %s", salmonApprox="Approximately %d whole salmons",
+        caloriesApprox="You've consumed about %d kcal",
         achievementsTitle="Achievements", achievementsUnlocked="achievements completed", unlocked="Unlocked",
         achTotal100Title="Beginner", achTotal500Title="Enthusiast", achTotal1000Title="Expert", achTotal5000Title="Sushi Master",
         achSession30Title="Good appetite", achSession50Title="Ravenous", achSession100Title="Eating machine",
@@ -204,7 +207,8 @@ object AppStrings {
         statsTitle="Statistiques", noData="Pas de données", noDataDesc="Terminez des sessions pour\nvoir vos statistiques",
         totalPiecesLabel="pièces au total", sessionCount="Sessions", average="Moyenne", record="Record",
         breakdown="Répartition par type", curiosities="Anecdotes",
-        riceApprox="Vous avez mangé environ %dg de riz", favoritePiece="Votre favori est le %s", salmonApprox="Environ %d pièces de saumon",
+        riceApprox="Vous avez mangé environ %dg de riz", favoritePiece="Votre favori est le %s", salmonApprox="Environ %d saumons entiers",
+        caloriesApprox="Vous avez consommé environ %d kcal",
         achievementsTitle="Succès", achievementsUnlocked="succès complétés", unlocked="Débloqué",
         achTotal100Title="Débutant", achTotal500Title="Passionné", achTotal1000Title="Expert", achTotal5000Title="Maître Sushi",
         achSession30Title="Bon appétit", achSession50Title="Grand appétit", achSession100Title="Machine à manger",
@@ -252,7 +256,8 @@ object AppStrings {
         statsTitle="Statistiche", noData="Nessun dato", noDataDesc="Completa le sessioni per\nvedere le tue statistiche",
         totalPiecesLabel="pezzi totali", sessionCount="Sessioni", average="Media", record="Record",
         breakdown="Ripartizione per tipo", curiosities="Curiosità",
-        riceApprox="Hai mangiato circa %dg di riso", favoritePiece="Il tuo preferito è il %s", salmonApprox="Circa %d pezzi di salmone",
+        riceApprox="Hai mangiato circa %dg di riso", favoritePiece="Il tuo preferito è il %s", salmonApprox="Circa %d salmoni interi",
+        caloriesApprox="Hai consumato circa %d kcal",
         achievementsTitle="Obiettivi", achievementsUnlocked="obiettivi completati", unlocked="Sbloccato",
         achTotal100Title="Principiante", achTotal500Title="Appassionato", achTotal1000Title="Esperto", achTotal5000Title="Maestro del Sushi",
         achSession30Title="Buon appetito", achSession50Title="Grande fame", achSession100Title="Macchina da mangiare",
@@ -326,7 +331,10 @@ object AppStrings {
 data class CustomPiece(
     val id: String,
     val name: String,
-    val emoji: String = "🍣"
+    val emoji: String = "🍣",
+    val kcal: Int = 0,
+    val salmonCount: Int = 0,
+    val riceGrams: Int = 0
 )
 
 class AppSettingsManager(context: Context) {

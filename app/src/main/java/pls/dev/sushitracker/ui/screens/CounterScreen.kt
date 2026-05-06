@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -145,7 +146,11 @@ fun CounterScreen(
 
                         OutlinedTextField(
                             value = restaurant,
-                            onValueChange = { restaurant = it },
+                            onValueChange = {
+                                restaurant = it.replaceFirstChar { char ->
+                                    if (char.isLowerCase()) char.titlecase(java.util.Locale.getDefault()) else char.toString()
+                                }
+                            },
                             placeholder = {
                                 Text(
                                     strings.restaurantName,
@@ -182,6 +187,7 @@ fun CounterScreen(
                             ) { Text(strings.cancel, fontWeight = FontWeight.Bold) }
                             Button(
                                 onClick = { phase = CounterPhase.COUNTING },
+                                enabled = restaurant.isNotBlank(),
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = colors.primary,
                                     contentColor = colors.onPrimary
@@ -318,6 +324,7 @@ fun CounterScreen(
                 ) {
                     Button(
                         onClick = { phase = CounterPhase.CONFIRM_SAVE },
+                        enabled = totalPieces > 0,
                         colors = ButtonDefaults.buttonColors(
                             containerColor = colors.secondary,
                             contentColor = colors.onSecondary
@@ -371,6 +378,34 @@ fun CounterScreen(
                             fontWeight = FontWeight.ExtraBold
                         )
                         Text(strings.totalPieces, color = colors.mutedForeground, fontSize = 14.sp)
+                        
+                        val sessionRecord = remember {
+                            SessionRecord(
+                                id = UUID.randomUUID().toString(),
+                                date = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME),
+                                restaurant = restaurant.ifEmpty { strings.noName },
+                                pieces = counts,
+                                totalPieces = totalPieces
+                            )
+                        }
+                        
+                        Spacer(modifier = Modifier.height(16.dp))
+                        OutlinedButton(
+                            onClick = {
+                                val currentLang = AppSettingsManager(context).getLanguage()
+                                pls.dev.sushitracker.ui.screens.shareSessionAsImage(
+                                    context, sessionRecord, strings, currentLang, colors, customPieces
+                                )
+                            },
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier.fillMaxWidth().height(48.dp),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = colors.primary)
+                        ) {
+                            Icon(Icons.Filled.Share, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(strings.share, fontWeight = FontWeight.Bold)
+                        }
+
                         Spacer(modifier = Modifier.height(24.dp))
 
                         Row(
@@ -390,15 +425,9 @@ fun CounterScreen(
                             ) { Text(strings.continueStr, fontWeight = FontWeight.Bold) }
                             Button(
                                 onClick = {
-                                    val session = SessionRecord(
-                                        id = UUID.randomUUID().toString(),
-                                        date = LocalDateTime.now()
-                                            .format(DateTimeFormatter.ISO_DATE_TIME),
-                                        restaurant = restaurant.ifEmpty { strings.noName },
-                                        pieces = counts,
-                                        totalPieces = totalPieces
-                                    )
-                                    storage.saveSession(session)
+                                    storage.saveSession(sessionRecord)
+                                    val unlocked = AchievementManager(context).checkAndUnlockAll()
+                                    pls.dev.sushitracker.GlobalAchievementNotifier.notify(unlocked)
                                     onBack()
                                 },
                                 colors = ButtonDefaults.buttonColors(
