@@ -93,7 +93,7 @@ fun shareSessionAsImage(
     
     for ((id, count) in activePieces) {
         val emoji = getPieceEmoji(id, customPieces)
-        val name = getPieceName(id, customPieces)
+        val name = getPieceName(id, customPieces, strings)
         
         paint.textAlign = Paint.Align.LEFT
         paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
@@ -112,7 +112,7 @@ fun shareSessionAsImage(
     paint.textSize = 45f
     paint.color = colors.mutedForeground.toArgb()
     paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-    canvas.drawText("Sushi Tracker 🍣", 540f, 1820f, paint)
+    canvas.drawText(strings.shareWatermark, 540f, 1820f, paint)
 
     try {
         val cachePath = File(context.cacheDir, "images")
@@ -131,9 +131,9 @@ fun shareSessionAsImage(
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 setDataAndType(contentUri, context.contentResolver.getType(contentUri))
                 putExtra(Intent.EXTRA_STREAM, contentUri)
-                putExtra(Intent.EXTRA_TEXT, "🍣 Mi sesión de Sushi en ${session.restaurant}! \n#SushiTracker")
+                putExtra(Intent.EXTRA_TEXT, strings.shareIntentText.format(session.restaurant))
             }
-            context.startActivity(Intent.createChooser(shareIntent, "Compartir sesión"))
+            context.startActivity(Intent.createChooser(shareIntent, strings.shareActionTitle))
         }
     } catch (e: Exception) {
         e.printStackTrace()

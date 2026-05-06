@@ -174,9 +174,9 @@ private fun SessionHistoryCard(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("🔥 $totalKcal kcal", color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
-                        Text("🍚 ${totalRice}g", color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
-                        Text("🐟 $totalSalmon cortes", color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+                        Text("🔥 ${strings.historyKcalLabel.format(totalKcal)}", color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+                        Text("🍚 ${strings.historyRiceLabel.format(totalRice)}", color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+                        Text("🐟 ${strings.historySalmonLabel.format(totalSalmon)}", color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
                     }
                 }
 
@@ -203,7 +203,7 @@ private fun SessionHistoryCard(
                             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                                     Text(getPieceEmoji(id, customPieces), fontSize = 16.sp)
-                                    Text(getPieceName(id, customPieces), color = colors.onSurface, fontSize = 14.sp)
+                                    Text(getPieceName(id, customPieces, strings), color = colors.onSurface, fontSize = 14.sp)
                                 }
                                 Text("$count", color = colors.primary, fontSize = 14.sp, fontWeight = FontWeight.Bold)
                             }

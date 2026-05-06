@@ -330,8 +330,8 @@ private fun CustomPiecesDialog(
                         OutlinedTextField(
                             value = newKcal,
                             onValueChange = { newKcal = it.filter { char -> char.isDigit() } },
-                            label = { Text("Kcal", fontSize = 11.sp) },
-                            placeholder = { Text("aprox.", color = colors.mutedForeground, fontSize = 11.sp) },
+                            label = { Text(strings.kcal, fontSize = 11.sp) },
+                            placeholder = { Text(strings.customPieceKcalHint, color = colors.mutedForeground, fontSize = 11.sp) },
                             keyboardOptions = KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Number),
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedBorderColor = colors.primary, unfocusedBorderColor = colors.border,
@@ -344,8 +344,8 @@ private fun CustomPiecesDialog(
                         OutlinedTextField(
                             value = newSalmonCount,
                             onValueChange = { newSalmonCount = it.filter { char -> char.isDigit() } },
-                            label = { Text("Salmón", fontSize = 11.sp) },
-                            placeholder = { Text("cortes/láminas", color = colors.mutedForeground, fontSize = 11.sp) },
+                            label = { Text(strings.customPieceSalmonLabel, fontSize = 11.sp) },
+                            placeholder = { Text(strings.customPieceSalmonHint, color = colors.mutedForeground, fontSize = 11.sp) },
                             keyboardOptions = KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Number),
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedBorderColor = colors.primary, unfocusedBorderColor = colors.border,
@@ -358,8 +358,8 @@ private fun CustomPiecesDialog(
                         OutlinedTextField(
                             value = newRiceGrams,
                             onValueChange = { newRiceGrams = it.filter { char -> char.isDigit() } },
-                            label = { Text("Arroz", fontSize = 11.sp) },
-                            placeholder = { Text("gramos", color = colors.mutedForeground, fontSize = 11.sp) },
+                            label = { Text(strings.rice, fontSize = 11.sp) },
+                            placeholder = { Text(strings.customPieceRiceHint, color = colors.mutedForeground, fontSize = 11.sp) },
                             keyboardOptions = KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Number),
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedBorderColor = colors.primary, unfocusedBorderColor = colors.border,

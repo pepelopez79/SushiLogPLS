@@ -89,7 +89,12 @@ object AppStrings {
         val customPieces: String, val customPiecesSubtitle: String,
         val addCustomPiece: String, val customPieceName: String, val customPieceNameHint: String,
         val noPieceName: String, val deleteCustomPiece: String, val deleteCustomPieceConfirm: String,
-        val customPiecesManage: String, val customPiecesEmpty: String, val customPiecesLimit: String
+        val customPiecesManage: String, val customPiecesEmpty: String, val customPiecesLimit: String,
+        val deletedPiece: String, val customPieceKcalHint: String, val customPieceSalmonHint: String,
+        val customPieceRiceHint: String, val customPieceSalmonLabel: String, val historyKcalLabel: String,
+        val historyRiceLabel: String, val historySalmonLabel: String, val statsWholeSalmon: String,
+        val statsSalmonPieces: String, val shareActionTitle: String, val shareIntentText: String,
+        val shareWatermark: String, val rice: String, val kcal: String
     )
 
     private val spanish = Strings(
@@ -138,7 +143,12 @@ object AppStrings {
         noPieceName="El nombre no puede estar vacío", deleteCustomPiece="¿Eliminar pieza?",
         deleteCustomPieceConfirm="Se eliminará \"%s\" de tus piezas personalizadas.",
         customPiecesManage="Gestionar piezas personalizadas", customPiecesEmpty="No tienes piezas personalizadas aún",
-        customPiecesLimit="Límite de 12 piezas personalizadas alcanzado"
+        customPiecesLimit="Límite de 12 piezas personalizadas alcanzado",
+        deletedPiece="Pieza eliminada", customPieceKcalHint="aprox.", customPieceSalmonHint="cortes/láminas",
+        customPieceRiceHint="gramos", customPieceSalmonLabel="Salmón (cortes)", historyKcalLabel="%d kcal",
+        historyRiceLabel="%dg", historySalmonLabel="%d cortes", statsWholeSalmon="Aprox. %.1f salmones enteros (%d cortes)",
+        statsSalmonPieces="%d cortes de salmón", shareActionTitle="Compartir sesión", shareIntentText="🍣 ¡Mi sesión de Sushi en %s! \n#SushiTracker",
+        shareWatermark="Sushi Tracker 🍣", rice="Arroz", kcal="Kcal"
     )
 
     private val english = Strings(
@@ -187,7 +197,12 @@ object AppStrings {
         noPieceName="Name cannot be empty", deleteCustomPiece="Delete piece?",
         deleteCustomPieceConfirm="\"%s\" will be removed from your custom pieces.",
         customPiecesManage="Manage custom pieces", customPiecesEmpty="You have no custom pieces yet",
-        customPiecesLimit="Maximum limit of 12 custom pieces reached"
+        customPiecesLimit="Maximum limit of 12 custom pieces reached",
+        deletedPiece="Deleted piece", customPieceKcalHint="approx.", customPieceSalmonHint="cuts/slices",
+        customPieceRiceHint="grams", customPieceSalmonLabel="Salmon (cuts)", historyKcalLabel="%d kcal",
+        historyRiceLabel="%dg", historySalmonLabel="%d cuts", statsWholeSalmon="Approx. %.1f whole salmons (%d cuts)",
+        statsSalmonPieces="%d salmon cuts", shareActionTitle="Share session", shareIntentText="🍣 My Sushi session at %s! \n#SushiTracker",
+        shareWatermark="Sushi Tracker 🍣", rice="Rice", kcal="Kcal"
     )
 
     private val french = Strings(
@@ -236,7 +251,12 @@ object AppStrings {
         noPieceName="Le nom ne peut pas être vide", deleteCustomPiece="Supprimer la pièce?",
         deleteCustomPieceConfirm="\"%s\" sera supprimé de vos pièces personnalisées.",
         customPiecesManage="Gérer les pièces personnalisées", customPiecesEmpty="Vous n'avez pas encore de pièces personnalisées",
-        customPiecesLimit="Limite de 12 pièces personnalisées atteinte"
+        customPiecesLimit="Limite de 12 pièces personnalisées atteinte",
+        deletedPiece="Pièce supprimée", customPieceKcalHint="env.", customPieceSalmonHint="coupes/tranches",
+        customPieceRiceHint="grammes", customPieceSalmonLabel="Saumon (coupes)", historyKcalLabel="%d kcal",
+        historyRiceLabel="%dg", historySalmonLabel="%d tranches", statsWholeSalmon="Env. %.1f saumons entiers (%d coupes)",
+        statsSalmonPieces="%d coupes de saumon", shareActionTitle="Partager la session", shareIntentText="🍣 Ma session de Sushi chez %s! \n#SushiTracker",
+        shareWatermark="Sushi Tracker 🍣", rice="Riz", kcal="Kcal"
     )
 
     private val italian = Strings(
@@ -285,7 +305,12 @@ object AppStrings {
         noPieceName="Il nome non può essere vuoto", deleteCustomPiece="Eliminare il pezzo?",
         deleteCustomPieceConfirm="\"%s\" verrà rimosso dai tuoi pezzi personalizzati.",
         customPiecesManage="Gestisci pezzi personalizzati", customPiecesEmpty="Non hai ancora pezzi personalizzati",
-        customPiecesLimit="Limite di 12 pezzi personalizzati raggiunto"
+        customPiecesLimit="Limite di 12 pezzi personalizzati raggiunto",
+        deletedPiece="Pezzo eliminato", customPieceKcalHint="circa", customPieceSalmonHint="tagli/fette",
+        customPieceRiceHint="grammi", customPieceSalmonLabel="Salmone (tagli)", historyKcalLabel="%d kcal",
+        historyRiceLabel="%dg", historySalmonLabel="%d tagli", statsWholeSalmon="Circa %.1f salmoni interi (%d tagli)",
+        statsSalmonPieces="%d tagli di salmone", shareActionTitle="Condividi sessione", shareIntentText="🍣 La mia sessione di Sushi al %s! \n#SushiTracker",
+        shareWatermark="Sushi Tracker 🍣", rice="Riso", kcal="Kcal"
     )
 
     fun get(language: AppLanguage): Strings = when (language) {

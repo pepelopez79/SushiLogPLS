@@ -33,10 +33,10 @@ fun getPieceEmoji(id: String, customPieces: List<CustomPiece> = emptyList()): St
     return "🍣"
 }
 
-fun getPieceName(id: String, customPieces: List<CustomPiece> = emptyList()): String {
+fun getPieceName(id: String, customPieces: List<CustomPiece> = emptyList(), strings: AppStrings.Strings? = null): String {
     SUSHI_PIECES.find { it.id == id }?.let { return it.name }
     customPieces.find { it.id == id }?.let { return it.name }
-    if (id.startsWith("custom_")) return "Pieza eliminada"
+    if (id.startsWith("custom_")) return strings?.deletedPiece ?: "Pieza eliminada"
     return id.replaceFirstChar { it.uppercase() }
 }
 

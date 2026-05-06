@@ -13,4 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
-.copilot_diff_state
+/.idea/copilotDiffState.xml

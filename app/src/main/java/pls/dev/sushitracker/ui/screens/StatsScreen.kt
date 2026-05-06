@@ -210,8 +210,9 @@ fun StatsScreen(
                                     PieceTypeRow(
                                         id = id,
                                         count = count,
-                                        maxCount = maxPieces,
+                                        maxCount = maxCount,
                                         colors = colors,
+                                        strings = strings,
                                         customPieces = customPieces
                                     )
                                 }
@@ -264,16 +265,17 @@ fun StatsScreen(
                                     )
                                 }
                                 stats.pieceStats.maxByOrNull { it.value }?.let {
-                                    CuriosityItem(
-                                        getPieceEmoji(it.key, customPieces),
-                                        strings.favoritePiece.format(
-                                            getPieceName(
-                                                it.key,
-                                                customPieces
-                                            )
-                                        ),
-                                        colors
-                                    )
+                                        CuriosityItem(
+                                            getPieceEmoji(it.key, customPieces),
+                                            strings.favoritePiece.format(
+                                                getPieceName(
+                                                    it.key,
+                                                    customPieces,
+                                                    strings
+                                                )
+                                            ),
+                                            colors
+                                        )
                                 }
                                 val salmonEst = stats.pieceStats.entries.sumOf { (id, count) ->
                                     val pieceOpt = fullList.find { p -> p.id == id }
@@ -283,13 +285,13 @@ fun StatsScreen(
                                 if (wholeSalmons >= 1.0) {
                                     CuriosityItem(
                                         "🐟",
-                                        "Aprox. %.1f salmones enteros (%d cortes)".format(wholeSalmons, salmonEst),
+                                        strings.statsWholeSalmon.format(wholeSalmons, salmonEst),
                                         colors
                                     )
                                 } else if (salmonEst > 0) {
                                     CuriosityItem(
                                         "🐟",
-                                        "$salmonEst cortes de salmón",
+                                        strings.statsSalmonPieces.format(salmonEst),
                                         colors
                                     )
                                 }
@@ -319,14 +321,14 @@ private fun StatCard(
 
 @Composable
 private fun PieceTypeRow(
-    id: String, count: Int, maxCount: Int, colors: SushiColors,
+    id: String, count: Int, maxCount: Int, colors: SushiColors, strings: AppStrings.Strings,
     customPieces: List<CustomPiece> = emptyList()
 ) {
     Column {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                 Text(getPieceEmoji(id, customPieces), fontSize = 20.sp)
-                Text(getPieceName(id, customPieces), color = colors.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                Text(getPieceName(id, customPieces, strings), color = colors.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
             }
             Text(count.toString(), color = colors.primary, fontSize = 16.sp, fontWeight = FontWeight.Bold)
         }
