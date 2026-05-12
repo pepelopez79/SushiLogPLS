@@ -1,0 +1,28 @@
+package pls.dev.sushitracker
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.junit.Assert.*
+import pls.dev.sushitracker.data.*
+@RunWith(RobolectricTestRunner::class)
+class AndroidSessionTest {
+    private lateinit var context: Context
+    private lateinit var sessionStorage: SessionStorage
+    @Before
+    fun setup() {
+        context = ApplicationProvider.getApplicationContext()
+        sessionStorage = SessionStorage(context)
+        sessionStorage.deleteAllSessions()
+    }
+    @Test
+    fun testSavingAndDeleting() {
+        val record = SessionRecord("T1", "2026-05-12T12:00:00", "Place", emptyMap(), 0)
+        sessionStorage.saveSession(record)
+        assertEquals(1, sessionStorage.getSessions().size)
+        sessionStorage.deleteSession("T1")
+        assertEquals(0, sessionStorage.getSessions().size)
+    }
+} android.content.Context

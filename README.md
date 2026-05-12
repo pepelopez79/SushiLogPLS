@@ -105,7 +105,7 @@ File > New > New Project > Empty Activity (Compose)
 
 Configuracion:
 - Name: `SushiTracker`
-- Package: `com.tuapp.sushitracker`
+- Package: `pls.dev.sushitracker`
 - Language: Kotlin
 - Minimum SDK: API 26
 
@@ -132,7 +132,7 @@ implementation("androidx.compose.animation:animation")
 Estructura de carpetas:
 
 ```
-app/src/main/java/com/tuapp/sushitracker/
+app/src/main/java/pls.dev.sushitracker/
 ├── data/
 │   ├── SushiPiece.kt
 │   ├── SessionRecord.kt
