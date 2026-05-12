@@ -100,12 +100,12 @@ fun CounterScreen(
             },
             confirmButton = {
                 TextButton(onClick = onBack) {
-                    Text(strings.exit, color = colors.primary)
+                    Text(strings.exit, color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showExitDialog = false }) {
-                    Text(strings.continueStr, color = colors.mutedForeground)
+                    Text(strings.continueStr, color = colors.primary)
                 }
             }
         )

@@ -119,7 +119,7 @@ fun HistoryScreen(
                     AchievementManager(context).syncAchievements()
                     sessions = sessionManager.getSessions().sortedByDescending { it.date }
                     showDeleteDialog = null
-                }) { Text(strings.delete, color = colors.onSurface) }
+                }) { Text(strings.delete, color = MaterialTheme.colorScheme.error) }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = null }) { Text(strings.cancel, color = colors.primary) }
@@ -162,11 +162,7 @@ private fun SessionHistoryCard(
             ) {
                 Box(
                     modifier = Modifier.size(48.dp).clip(CircleShape)
-                        .background(when { 
-                            totalPieces >= 50 -> colors.primary.copy(alpha = 0.25f)
-                            totalPieces >= 30 -> colors.primary.copy(alpha = 0.15f) 
-                            else -> colors.secondary 
-                        }),
+                        .background(colors.secondary),
                     contentAlignment = Alignment.Center
                 ) { Text("🍣", fontSize = 24.sp) }
 

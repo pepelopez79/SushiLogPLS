@@ -20,11 +20,11 @@ data class SushiColors(
 )
 
 val DarkThemeColors = SushiColors(
-    background = Color(0xFF1B2838),      // Deep Navy Blue
-    surface = Color(0xFF2A3A4A),         // Elevated surface
-    primary = Color(0xFF4ECDC4),         // Mint Green/Teal playful
+    background = Color(0xFF1B2838),
+    surface = Color(0xFF2A3A4A),
+    primary = Color(0xFF4ECDC4),
     primaryDark = Color(0xFF2A9D8F),     
-    onPrimary = Color(0xFF1B2838),       // Deep Navy text on primary for contrast
+    onPrimary = Color(0xFF1B2838),
     secondary = Color(0xFF3D4D5C),       
     onSecondary = Color(0xFFFFFFFF),
     onBackground = Color(0xFFFFFFFF),
@@ -36,9 +36,9 @@ val DarkThemeColors = SushiColors(
 )
 
 val LightThemeColors = SushiColors(
-    background = Color(0xFFF5F7FA),      // Soft bluish-white
+    background = Color(0xFFF5F7FA),
     surface = Color(0xFFFFFFFF),         
-    primary = Color(0xFF4ECDC4),         // Mint Green/Teal
+    primary = Color(0xFF4ECDC4),
     primaryDark = Color(0xFF2A9D8F),
     onPrimary = Color(0xFFFFFFFF),       
     secondary = Color(0xFFE2E8F0),       
@@ -52,14 +52,14 @@ val LightThemeColors = SushiColors(
 )
 
 val SalmonThemeColors = SushiColors(
-    background = Color(0xFFFFF3F0),      // Soft Salmon Wash
-    surface = Color(0xFFFFFFFF),         // Pure White
-    primary = Color(0xFFFF6B57),         // Bright Salmon
+    background = Color(0xFFFFF3F0),
+    surface = Color(0xFFFFFFFF),
+    primary = Color(0xFFFF6B57),
     primaryDark = Color(0xFFE65542),
     onPrimary = Color(0xFFFFFFFF),
-    secondary = Color(0xFFFFE4DE),       // Light Salmon Base
-    onSecondary = Color(0xFFD64A35),     // Deep Salmon accent
-    onBackground = Color(0xFF4A3431),    // Warm dark brown
+    secondary = Color(0xFFFFE4DE),
+    onSecondary = Color(0xFFD64A35),
+    onBackground = Color(0xFF4A3431),
     onSurface = Color(0xFF4A3431),
     mutedForeground = Color(0xFFB58079),
     border = Color(0xFFFFD5CE),

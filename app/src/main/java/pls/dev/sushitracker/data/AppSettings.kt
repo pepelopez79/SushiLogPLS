@@ -94,7 +94,8 @@ object AppStrings {
         val customPieceRiceHint: String, val customPieceSalmonLabel: String, val historyKcalLabel: String,
         val historyRiceLabel: String, val historySalmonLabel: String, val statsWholeSalmon: String,
         val statsSalmonPieces: String, val shareActionTitle: String, val shareIntentText: String,
-        val shareWatermark: String, val rice: String, val kcal: String, val explore: String
+        val shareWatermark: String, val rice: String, val kcal: String, val explore: String,
+        val duplicatePieceName: String
     )
 
     private val spanish = Strings(
@@ -106,7 +107,7 @@ object AppStrings {
         newSession="Nueva sesión", whereAreYouEating="¿Dónde estás comiendo?", restaurantName="Nombre del restaurante...",
         start="Empezar", endSession="TERMINAR SESIÓN", finishSession="¿Terminar sesión?",
         exitDialogTitle="¿Salir de la sesión?", exitDialogMessage="Si sales ahora perderás el progreso actual.",
-        totalPieces="piezas en total", continueStr="Seguir", noName="Sin nombre", total="Total",
+        totalPieces="piezas en total", continueStr="Continuar", noName="Sin nombre", total="Total",
         historyTitle="Historial", noHistory="Sin historial", noHistoryDesc="Completa tu primera sesión\npara ver tu historial aquí",
         sessions="sesiones", session="sesión", pieces="piezas",
         deleteSession="¿Eliminar sesión?", deleteSessionConfirm="Se eliminará la sesión con %d piezas.",
@@ -148,7 +149,8 @@ object AppStrings {
         customPieceRiceHint="gramos", customPieceSalmonLabel="Salmón", historyKcalLabel="%d kcal",
         historyRiceLabel="%dg", historySalmonLabel="%d cortes", statsWholeSalmon="Aprox. %.1f salmones enteros (%d cortes)",
         statsSalmonPieces="%d cortes de salmón", shareActionTitle="Compartir sesión", shareIntentText="🍣 ¡Mi sesión de Sushi en %s! \n#SushiTracker",
-        shareWatermark="Sushi Tracker 🍣", rice="Arroz", kcal="Kcal", explore="EXPLORA"
+        shareWatermark="Sushi Tracker 🍣", rice="Arroz", kcal="Kcal", explore="EXPLORA",
+        duplicatePieceName="Ya existe una pieza con ese nombre"
     )
 
     private val english = Strings(
@@ -202,7 +204,8 @@ object AppStrings {
         customPieceRiceHint="grams", customPieceSalmonLabel="Salmon", historyKcalLabel="%d kcal",
         historyRiceLabel="%dg", historySalmonLabel="%d cuts", statsWholeSalmon="Approx. %.1f whole salmons (%d cuts)",
         statsSalmonPieces="%d salmon cuts", shareActionTitle="Share session", shareIntentText="🍣 My Sushi session at %s! \n#SushiTracker",
-        shareWatermark="Sushi Tracker 🍣", rice="Rice", kcal="Kcal", explore="EXPLORE"
+        shareWatermark="Sushi Tracker 🍣", rice="Rice", kcal="Kcal", explore="EXPLORE",
+        duplicatePieceName="A piece with this name already exists"
     )
 
     private val french = Strings(
@@ -256,7 +259,8 @@ object AppStrings {
         customPieceRiceHint="grammes", customPieceSalmonLabel="Saumon", historyKcalLabel="%d kcal",
         historyRiceLabel="%dg", historySalmonLabel="%d tranches", statsWholeSalmon="Env. %.1f saumons entiers (%d coupes)",
         statsSalmonPieces="%d coupes de saumon", shareActionTitle="Partager la session", shareIntentText="🍣 Ma session de Sushi chez %s! \n#SushiTracker",
-        shareWatermark="Sushi Tracker 🍣", rice="Riz", kcal="Kcal", explore="EXPLORER"
+        shareWatermark="Sushi Tracker 🍣", rice="Riz", kcal="Kcal", explore="EXPLORER",
+        duplicatePieceName="Une pièce avec ce nom existe déjà"
     )
 
     private val italian = Strings(
@@ -310,7 +314,8 @@ object AppStrings {
         customPieceRiceHint="grammi", customPieceSalmonLabel="Salmone", historyKcalLabel="%d kcal",
         historyRiceLabel="%dg", historySalmonLabel="%d tagli", statsWholeSalmon="Circa %.1f salmoni interi (%d tagli)",
         statsSalmonPieces="%d tagli di salmone", shareActionTitle="Condividi sessione", shareIntentText="🍣 La mia sessione di Sushi al %s! \n#SushiTracker",
-        shareWatermark="Sushi Tracker 🍣", rice="Riso", kcal="Kcal", explore="ESPLORA"
+        shareWatermark="Sushi Tracker 🍣", rice="Riso", kcal="Kcal", explore="ESPLORA",
+        duplicatePieceName="Esiste già un pezzo con questo nome"
     )
 
     fun get(language: AppLanguage): Strings = when (language) {
@@ -411,5 +416,14 @@ class AppSettingsManager(context: Context) {
         val current = getCustomPieces().toMutableList()
         current.removeAll { it.id == pieceId }
         saveCustomPieces(current)
+    }
+
+    fun updateCustomPiece(updated: CustomPiece) {
+        val current = getCustomPieces().toMutableList()
+        val index = current.indexOfFirst { it.id == updated.id }
+        if (index != -1) {
+            current[index] = updated
+            saveCustomPieces(current)
+        }
     }
 }

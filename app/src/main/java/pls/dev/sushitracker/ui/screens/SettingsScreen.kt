@@ -42,6 +42,7 @@ fun SettingsScreen(
     currentLanguage: AppLanguage,
     onThemeChange: (AppTheme) -> Unit,
     onLanguageChange: (AppLanguage) -> Unit,
+    onOpenCustomPieces: () -> Unit,
     onBack: () -> Unit
 ) {
     val context = LocalContext.current
@@ -49,8 +50,6 @@ fun SettingsScreen(
     val sessionManager = remember { SessionStorage(context) }
 
     var showResetDialog by remember { mutableStateOf(false) }
-    var showCustomPiecesDialog by remember { mutableStateOf(false) }
-    var customPieces by remember { mutableStateOf(settingsManager.getCustomPieces()) }
 
     Column(
         modifier = Modifier
@@ -150,7 +149,7 @@ fun SettingsScreen(
                             title = strings.customPiecesManage,
                             subtitle = strings.customPiecesSubtitle,
                             colors = colors,
-                            onClick = { showCustomPiecesDialog = true }
+                            onClick = onOpenCustomPieces
                         )
                         HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = colors.border)
                         SettingsItem(
@@ -201,263 +200,6 @@ fun SettingsScreen(
             },
             dismissButton = {
                 TextButton(onClick = { showResetDialog = false }) { Text(strings.cancel, color = colors.primary) }
-            }
-        )
-    }
-
-    if (showCustomPiecesDialog) {
-        CustomPiecesDialog(
-            colors = colors,
-            strings = strings,
-            pieces = customPieces,
-            onDismiss = { showCustomPiecesDialog = false },
-            onAdd = { piece ->
-                settingsManager.addCustomPiece(piece)
-                customPieces = settingsManager.getCustomPieces()
-            },
-            onDelete = { id ->
-                settingsManager.removeCustomPiece(id)
-                customPieces = settingsManager.getCustomPieces()
-            }
-        )
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun CustomPiecesDialog(
-    colors: SushiColors,
-    strings: AppStrings.Strings,
-    pieces: List<CustomPiece>,
-    onDismiss: () -> Unit,
-    onAdd: (CustomPiece) -> Unit,
-    onDelete: (String) -> Unit
-) {
-    var newName by remember { mutableStateOf("") }
-    var newEmoji by remember { mutableStateOf("🍣") }
-    var newKcal by remember { mutableStateOf("") }
-    var newSalmonCount by remember { mutableStateOf("") }
-    var newRiceGrams by remember { mutableStateOf("") }
-    var showNameError by remember { mutableStateOf(false) }
-    var deleteTarget by remember { mutableStateOf<CustomPiece?>(null) }
-    val emojiOptions = remember {
-        listOf( "🍣", "🍱", "🐟", "🍙", "🥟", "🍜", "🥗", "🍤", "🍢", "🍘", "🍵",
-            "🫔", "🥣", "🥡", "🫛", "🍚", "🥢", "🍲", "🍛", "🍶", "🍡")
-            .filter { android.graphics.Paint().hasGlyph(it) }
-    }
-
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        containerColor = colors.surface,
-        title = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(strings.customPiecesManage, color = colors.onSurface, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
-                Text("${pieces.size}/12", color = colors.mutedForeground, fontSize = 12.sp)
-            }
-        },
-        text = {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                if (pieces.isEmpty()) {
-                    Text(strings.customPiecesEmpty, color = colors.mutedForeground, fontSize = 13.sp)
-                } else {
-                    FlowRow(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        maxItemsInEachRow = if (pieces.size > 6) 2 else 1
-                    ) {
-                        pieces.forEach { piece ->
-                            val itemModifier = if (pieces.size > 6) Modifier.weight(1f) else Modifier.fillMaxWidth()
-                            Row(
-                                modifier = itemModifier
-                                    .clip(RoundedCornerShape(10.dp))
-                                    .background(colors.secondary)
-                                    .padding(horizontal = 8.dp, vertical = 6.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(piece.emoji, fontSize = 16.sp)
-                                Spacer(modifier = Modifier.width(6.dp))
-                                Text(
-                                    text = piece.name,
-                                    color = colors.onSurface,
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Medium,
-                                    modifier = Modifier.weight(1f),
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                                IconButton(onClick = { deleteTarget = piece }, modifier = Modifier.size(24.dp)) {
-                                    Icon(
-                                        Icons.Filled.Delete, contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.error, modifier = Modifier.size(14.dp)
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (pieces.size < 12) {
-                    HorizontalDivider(color = colors.border)
-                    OutlinedTextField(
-                        value = newName,
-                        onValueChange = {
-                            newName = it
-                            if (it.isNotBlank()) showNameError = false
-                        },
-                        placeholder = { Text(strings.customPieceNameHint, color = colors.mutedForeground) },
-                        isError = showNameError,
-                        supportingText = if (showNameError) {
-                            { Text(strings.noPieceName, color = MaterialTheme.colorScheme.error, fontSize = 12.sp) }
-                        } else null,
-                        keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = colors.primary,
-                            unfocusedBorderColor = colors.border,
-                            cursorColor = colors.primary,
-                            focusedTextColor = colors.onSurface,
-                            unfocusedTextColor = colors.onSurface,
-                            errorBorderColor = MaterialTheme.colorScheme.error,
-                            errorSupportingTextColor = MaterialTheme.colorScheme.error
-                        ),
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        OutlinedTextField(
-                            value = newKcal,
-                            onValueChange = { newKcal = it.filter { char -> char.isDigit() } },
-                            label = { Text(strings.kcal, fontSize = 11.sp) },
-                            placeholder = { Text(strings.customPieceKcalHint, color = colors.mutedForeground, fontSize = 11.sp) },
-                            keyboardOptions = KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Number),
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = colors.primary, unfocusedBorderColor = colors.border,
-                                cursorColor = colors.primary, focusedTextColor = colors.onSurface, unfocusedTextColor = colors.onSurface
-                            ),
-                            shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier.weight(1f),
-                            singleLine = true
-                        )
-                        OutlinedTextField(
-                            value = newSalmonCount,
-                            onValueChange = { newSalmonCount = it.filter { char -> char.isDigit() } },
-                            label = { Text(strings.customPieceSalmonLabel, fontSize = 11.sp) },
-                            placeholder = { Text(strings.customPieceSalmonHint, color = colors.mutedForeground, fontSize = 11.sp) },
-                            keyboardOptions = KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Number),
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = colors.primary, unfocusedBorderColor = colors.border,
-                                cursorColor = colors.primary, focusedTextColor = colors.onSurface, unfocusedTextColor = colors.onSurface
-                            ),
-                            shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier.weight(1f),
-                            singleLine = true
-                        )
-                        OutlinedTextField(
-                            value = newRiceGrams,
-                            onValueChange = { newRiceGrams = it.filter { char -> char.isDigit() } },
-                            label = { Text(strings.rice, fontSize = 11.sp) },
-                            placeholder = { Text(strings.customPieceRiceHint, color = colors.mutedForeground, fontSize = 11.sp) },
-                            keyboardOptions = KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Number),
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = colors.primary, unfocusedBorderColor = colors.border,
-                                cursorColor = colors.primary, focusedTextColor = colors.onSurface, unfocusedTextColor = colors.onSurface
-                            ),
-                            shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier.weight(1f),
-                            singleLine = true
-                        )
-                    }
-
-                    FlowRow(
-                        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally),
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        emojiOptions.forEach { emoji ->
-                            Box(
-                                modifier = Modifier
-                                    .size(32.dp)
-                                    .clip(CircleShape)
-                                    .background(if (newEmoji == emoji) colors.primary.copy(alpha = 0.25f) else colors.secondary)
-                                    .border(
-                                        if (newEmoji == emoji) 2.dp else 0.dp,
-                                        if (newEmoji == emoji) colors.primary else Color.Transparent,
-                                        CircleShape
-                                    )
-                                    .clickable { newEmoji = emoji },
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(emoji, fontSize = 16.sp)
-                            }
-                        }
-                    }
-
-                    Button(
-                        onClick = {
-                            if (newName.isBlank()) {
-                                showNameError = true
-                            } else {
-                                onAdd(CustomPiece(
-                                    id = "custom_${UUID.randomUUID()}", 
-                                    name = newName.trim(), 
-                                    emoji = newEmoji,
-                                    kcal = newKcal.toIntOrNull() ?: 0,
-                                    salmonCount = newSalmonCount.toIntOrNull() ?: 0,
-                                    riceGrams = newRiceGrams.toIntOrNull() ?: 0
-                                ))
-                                newName = ""
-                                newEmoji = "🍣"
-                                newKcal = ""
-                                newSalmonCount = ""
-                                newRiceGrams = ""
-                                showNameError = false
-                            }
-                        },
-                        colors = ButtonDefaults.buttonColors(containerColor = colors.primary, contentColor = colors.onPrimary),
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Icon(Icons.Filled.Add, contentDescription = null, modifier = Modifier.size(18.dp))
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(strings.addCustomPiece, fontWeight = FontWeight.Bold)
-                    }
-                } else {
-                    Text(
-                        strings.customPiecesLimit,
-                        color = colors.primary,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
-                    )
-                }
-            }
-        },
-        confirmButton = {},
-        dismissButton = { TextButton(onClick = onDismiss) { Text(strings.back, color = colors.mutedForeground) } }
-    )
-
-    deleteTarget?.let { piece ->
-        AlertDialog(
-            onDismissRequest = { deleteTarget = null },
-            containerColor = colors.surface,
-            title = { Text(strings.delete, color = colors.onSurface, fontWeight = FontWeight.Bold) },
-            text = { Text("${strings.delete} \"${piece.name}\"?", color = colors.mutedForeground) },
-            confirmButton = {
-                TextButton(onClick = {
-                    onDelete(piece.id)
-                    deleteTarget = null
-                }) {
-                    Text(strings.confirm, color = MaterialTheme.colorScheme.error)
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { deleteTarget = null }) {
-                    Text(strings.cancel, color = colors.primary)
-                }
             }
         )
     }

@@ -1,6 +1,5 @@
 package pls.dev.sushitracker.ui.screens
 
-import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,15 +10,12 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pls.dev.sushitracker.data.AppStrings
@@ -40,7 +36,7 @@ fun HomeScreen(
             .fillMaxSize()
             .background(colors.background)
     ) {
-        // Modern giant watermark
+        
         Text(
             text = "🍣",
             fontSize = 300.sp,
@@ -92,7 +88,7 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            // Main Hero Action
+            
             Card(
                 onClick = onStartCounter,
                 colors = CardDefaults.cardColors(containerColor = colors.primary),
@@ -103,7 +99,7 @@ fun HomeScreen(
                     .height(180.dp)
             ) {
                 Box(modifier = Modifier.fillMaxSize()) {
-                    // Decorative element inside card
+                    
                     Box(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
@@ -162,7 +158,7 @@ fun HomeScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Dashboard Grid
+            
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -171,7 +167,7 @@ fun HomeScreen(
                     title = strings.history,
                     icon = Icons.Filled.List,
                     color = colors.surface,
-                    iconColor = colors.primary,
+                    iconColor = colors.onSurface,
                     textColor = colors.onSurface,
                     onClick = onOpenHistory,
                     isMain = true,
@@ -241,7 +237,7 @@ fun DashboardCard(
                 Text(
                     title,
                     color = textColor,
-                    fontSize = 18.sp, // Slightly lowered to fit longer words in spanish
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.ExtraBold,
                     lineHeight = 22.sp,
                     maxLines = 2
@@ -265,7 +261,7 @@ fun DashboardCard(
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Black,
                     maxLines = 1,
-                    modifier = Modifier.weight(1f) // Added weight to wrap text flexibly if needed
+                    modifier = Modifier.weight(1f)
                 )
             }
         }

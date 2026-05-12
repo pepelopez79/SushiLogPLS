@@ -2,6 +2,11 @@ package pls.dev.sushitracker.ui.navigation
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -20,6 +25,7 @@ sealed class Screen(val route: String) {
     data object Stats : Screen("stats")
     data object Achievements : Screen("achievements")
     data object Settings : Screen("settings")
+    data object CustomPieces : Screen("custom_pieces")
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -35,7 +41,19 @@ fun SushiNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.Splash.route
+        startDestination = Screen.Splash.route,
+        enterTransition = {
+            fadeIn(animationSpec = tween(300)) + scaleIn(initialScale = 0.95f, animationSpec = tween(300))
+        },
+        exitTransition = {
+            fadeOut(animationSpec = tween(300)) + scaleOut(targetScale = 1.05f, animationSpec = tween(300))
+        },
+        popEnterTransition = {
+            fadeIn(animationSpec = tween(300)) + scaleIn(initialScale = 1.05f, animationSpec = tween(300))
+        },
+        popExitTransition = {
+            fadeOut(animationSpec = tween(300)) + scaleOut(targetScale = 0.95f, animationSpec = tween(300))
+        }
     ) {
         composable(Screen.Splash.route) {
             SplashScreen(
@@ -100,6 +118,15 @@ fun SushiNavGraph(
                 currentLanguage = currentLanguage,
                 onThemeChange = onThemeChange,
                 onLanguageChange = onLanguageChange,
+                onOpenCustomPieces = { navController.navigate(Screen.CustomPieces.route) },
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Screen.CustomPieces.route) {
+            CustomPiecesScreen(
+                colors = colors,
+                strings = strings,
                 onBack = { navController.popBackStack() }
             )
         }
