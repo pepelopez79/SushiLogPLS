@@ -1,8 +1,8 @@
 package pls.dev.sushitracker.ui.components
 
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -18,8 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -100,29 +98,34 @@ fun PieceCounterItem(
                     }
                 )
             }
-            .padding(12.dp),
+            .padding(horizontal = 14.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        horizontalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        Image(
-            painter = painterResource(id = piece.imageRes),
-            contentDescription = piece.name,
-            contentScale = ContentScale.Crop,
+        // ── Icono del plato ──────────────────────────────────────────────
+        Box(
             modifier = Modifier
-                .size(56.dp)
-                .clip(RoundedCornerShape(12.dp))
-        )
+                .size(48.dp)
+                .clip(CircleShape)
+                .background(colors.secondary),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(text = piece.emoji, fontSize = 24.sp)
+        }
 
-        Text(
-            text = piece.name.uppercase(),
-            color = colors.onSurface,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f)
-        )
+        // ── Nombre ───────────────────────────────────────────────────────
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = piece.name.uppercase(),
+                color = colors.onSurface,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
 
+        // ── Contador ─────────────────────────────────────────────────────
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier.size(48.dp)

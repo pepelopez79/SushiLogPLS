@@ -106,7 +106,7 @@ fun StatsScreen(
                 contentPadding = PaddingValues(bottom = 24.dp)
             ) {
                 item {
-                    val fullList = SUSHI_PIECES + customPieces.map { SushiPiece(it.id, it.name, 0, it.emoji, it.kcal, it.salmonCount, it.riceGrams) }
+                    val fullList = SUSHI_PIECES + customPieces.map { SushiPiece(id = it.id, name = it.name, emoji = it.emoji, kcal = it.kcal, salmonCount = it.salmonCount, riceGrams = it.riceGrams) }
                     val totalCalories = stats.pieceStats.entries.sumOf { (id, count) ->
                         val pieceOpt = fullList.find { p -> p.id == id }
                         (pieceOpt?.kcal ?: 0) * count
@@ -231,7 +231,7 @@ fun StatsScreen(
                                 modifier = Modifier.padding(16.dp),
                                 verticalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
-                                val fullList = SUSHI_PIECES + customPieces.map { SushiPiece(it.id, it.name, 0, it.emoji, it.kcal, it.salmonCount, it.riceGrams) }
+                                val fullList = SUSHI_PIECES + customPieces.map { SushiPiece(id = it.id, name = it.name, emoji = it.emoji, kcal = it.kcal, salmonCount = it.salmonCount, riceGrams = it.riceGrams) }
                                 
                                 val totalCalories = stats.pieceStats.entries.sumOf { (id, count) ->
                                     val pieceOpt = fullList.find { p -> p.id == id }

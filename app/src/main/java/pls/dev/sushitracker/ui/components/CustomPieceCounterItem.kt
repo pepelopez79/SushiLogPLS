@@ -84,12 +84,12 @@ fun CustomPieceCounterItem(
     ) {
         Box(
             modifier = Modifier
-                .size(56.dp)
-                .clip(RoundedCornerShape(12.dp))
+                .size(48.dp)
+                .clip(CircleShape)
                 .background(colors.secondary),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = piece.emoji, fontSize = 28.sp)
+            Text(text = piece.emoji, fontSize = 24.sp)
         }
 
         Text(
