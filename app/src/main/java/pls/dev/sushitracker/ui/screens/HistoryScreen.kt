@@ -109,6 +109,7 @@ fun HistoryScreen(
 
     showDeleteDialog?.let { session ->
         AlertDialog(
+            modifier = Modifier.shadow(8.dp, RoundedCornerShape(24.dp)),
             onDismissRequest = { showDeleteDialog = null },
             containerColor = colors.surface,
             title = { Text(strings.deleteSession, color = colors.onSurface, fontWeight = FontWeight.Bold) },
@@ -147,11 +148,14 @@ private fun SessionHistoryCard(
     val totalRice = session.pieces.entries.sumOf { getPieceRiceGrams(it.key, customPieces) * it.value }
     val totalSalmon = session.pieces.entries.sumOf { getPieceSalmonCount(it.key, customPieces) * it.value }
 
+    val mostConsumedPieceId = session.pieces.filter { it.value > 0 }.maxByOrNull { it.value }?.key
+    val mainEmoji = mostConsumedPieceId?.let { getPieceEmoji(it, customPieces) } ?: "🍣"
+
     val cardColor = colors.surface
 
     Card(
-        modifier = Modifier.fillMaxWidth().shadow(4.dp, RoundedCornerShape(24.dp)), 
-        shape = RoundedCornerShape(24.dp), 
+        modifier = Modifier.fillMaxWidth().shadow(4.dp, RoundedCornerShape(24.dp)),
+        shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = cardColor)
     ) {
         Column {
@@ -164,7 +168,7 @@ private fun SessionHistoryCard(
                     modifier = Modifier.size(48.dp).clip(CircleShape)
                         .background(colors.secondary),
                     contentAlignment = Alignment.Center
-                ) { Text("🍣", fontSize = 24.sp) }
+                ) { Text(mainEmoji, fontSize = 24.sp) }
 
                 Column(modifier = Modifier.weight(1f)) {
                     Text(formatDateLocalized(session.date, currentLanguage), color = colors.onSurface, fontSize = 16.sp, fontWeight = FontWeight.Bold)
@@ -213,16 +217,22 @@ private fun SessionHistoryCard(
                             }
                         }
                     }
-                    Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(bottom = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        OutlinedButton(onClick = onShare, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = colors.primary)) {
-                            Icon(Icons.Filled.Share, contentDescription = null, modifier = Modifier.size(16.dp))
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(strings.share, fontSize = 13.sp)
+                    Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(bottom = 16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Button(
+                            onClick = onDelete,
+                            modifier = Modifier.weight(1f).height(48.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error, contentColor = MaterialTheme.colorScheme.onError)
+                        ) {
+                            Text(strings.delete, fontWeight = FontWeight.Bold)
                         }
-                        OutlinedButton(onClick = onDelete, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp)) {
-                            Icon(Icons.Filled.Delete, contentDescription = null, modifier = Modifier.size(16.dp))
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(strings.delete, fontSize = 13.sp)
+                        Button(
+                            onClick = onShare,
+                            modifier = Modifier.weight(1f).height(48.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = colors.primary, contentColor = colors.onPrimary)
+                        ) {
+                            Text(strings.share, fontWeight = FontWeight.Bold)
                         }
                     }
                 }

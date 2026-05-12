@@ -15,11 +15,26 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -115,11 +130,7 @@ fun CustomPiecesScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {
-                AnimatedVisibility(
-                    visible = !isAddingNew,
-                    enter = expandVertically(),
-                    exit = shrinkVertically()
-                ) {
+                if (!isAddingNew) {
                     Button(
                         onClick = {
                             isAddingNew = true
@@ -144,13 +155,9 @@ fun CustomPiecesScreen(
                     }
                 }
 
-                AnimatedVisibility(
-                    visible = isAddingNew,
-                    enter = expandVertically(),
-                    exit = shrinkVertically()
-                ) {
+                if (isAddingNew) {
                     Card(
-                        modifier = Modifier.fillMaxWidth().padding(top = if (isAddingNew) 0.dp else 16.dp),
+                        modifier = Modifier.fillMaxWidth().padding(top = if (isAddingNew) 0.dp else 16.dp).shadow(4.dp, RoundedCornerShape(20.dp)),
                         shape = RoundedCornerShape(20.dp),
                         colors = CardDefaults.cardColors(containerColor = colors.surface)
                     ) {
@@ -211,8 +218,8 @@ fun CustomPiecesScreen(
 
             items(pieces) { piece ->
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
+                    modifier = Modifier.fillMaxWidth().shadow(4.dp, RoundedCornerShape(24.dp)),
+                    shape = RoundedCornerShape(24.dp),
                     colors = CardDefaults.cardColors(containerColor = colors.surface)
                 ) {
                     Column {
@@ -265,58 +272,64 @@ fun CustomPiecesScreen(
                                     CustomPieceDataChip(icon = "🍚", text = "${piece.riceGrams}g", colors = colors)
                                 }
                             }
+                            Icon(
+                                imageVector = if (editingPiece?.id == piece.id) androidx.compose.material.icons.Icons.Filled.KeyboardArrowUp else androidx.compose.material.icons.Icons.Filled.KeyboardArrowDown,
+                                contentDescription = null, tint = colors.mutedForeground, modifier = Modifier.size(24.dp)
+                            )
                         }
-
 
                         AnimatedVisibility(
                             visible = editingPiece?.id == piece.id,
                             enter = expandVertically(),
                             exit = shrinkVertically()
                         ) {
-                            Box(modifier = Modifier.padding(bottom = 16.dp, start = 16.dp, end = 16.dp)) {
-                                CustomPieceForm(
-                                    colors = colors,
-                                    strings = strings,
-                                    emojiOptions = emojiOptions,
-                                    newName = newName,
-                                    newEmoji = newEmoji,
-                                    newKcal = newKcal,
-                                    newSalmonCount = newSalmonCount,
-                                    newRiceGrams = newRiceGrams,
-                                    showNameError = showNameError,
-                                    showDuplicateError = showDuplicateError,
-                                    isEditing = true,
-                                    onNameChange = {
-                                        newName = it
-                                        if (it.isNotBlank()) showNameError = false
-                                        showDuplicateError = false
-                                    },
-                                    onEmojiChange = { newEmoji = it },
-                                    onKcalChange = { newKcal = it },
-                                    onSalmonChange = { newSalmonCount = it },
-                                    onRiceChange = { newRiceGrams = it },
-                                    onCancel = { editingPiece = null },
-                                    onDelete = { deleteTarget = piece },
-                                    onSave = {
-                                        val isDuplicate = pieces.any { it.name.trim().equals(newName.trim(), ignoreCase = true) && it.id != editingPiece?.id }
-                                        if (newName.isBlank()) {
-                                            showNameError = true
-                                        } else if (isDuplicate) {
-                                            showDuplicateError = true
-                                        } else {
-                                            settingsManager.updateCustomPiece(editingPiece!!.copy(
-                                                name = newName.trim(),
-                                                emoji = newEmoji,
-                                                kcal = newKcal,
-                                                salmonCount = newSalmonCount,
-                                                riceGrams = newRiceGrams
-                                            ))
-                                            pieces = settingsManager.getCustomPieces()
-                                            editingPiece = null
-                                        }
-                                    },
-                                    limitReached = false
-                                )
+                            Column {
+                                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = colors.border)
+                                Box(modifier = Modifier.padding(16.dp)) {
+                                    CustomPieceForm(
+                                        colors = colors,
+                                        strings = strings,
+                                        emojiOptions = emojiOptions,
+                                        newName = newName,
+                                        newEmoji = newEmoji,
+                                        newKcal = newKcal,
+                                        newSalmonCount = newSalmonCount,
+                                        newRiceGrams = newRiceGrams,
+                                        showNameError = showNameError,
+                                        showDuplicateError = showDuplicateError,
+                                        isEditing = true,
+                                        onNameChange = {
+                                            newName = it
+                                            if (it.isNotBlank()) showNameError = false
+                                            showDuplicateError = false
+                                        },
+                                        onEmojiChange = { newEmoji = it },
+                                        onKcalChange = { newKcal = it },
+                                        onSalmonChange = { newSalmonCount = it },
+                                        onRiceChange = { newRiceGrams = it },
+                                        onCancel = { editingPiece = null },
+                                        onDelete = { deleteTarget = piece },
+                                        onSave = {
+                                            val isDuplicate = pieces.any { it.name.trim().equals(newName.trim(), ignoreCase = true) && it.id != editingPiece?.id }
+                                            if (newName.isBlank()) {
+                                                showNameError = true
+                                            } else if (isDuplicate) {
+                                                showDuplicateError = true
+                                            } else {
+                                                settingsManager.updateCustomPiece(editingPiece!!.copy(
+                                                    name = newName.trim(),
+                                                    emoji = newEmoji,
+                                                    kcal = newKcal,
+                                                    salmonCount = newSalmonCount,
+                                                    riceGrams = newRiceGrams
+                                                ))
+                                                pieces = settingsManager.getCustomPieces()
+                                                editingPiece = null
+                                            }
+                                        },
+                                        limitReached = false
+                                    )
+                                }
                             }
                         }
                     }
@@ -328,6 +341,7 @@ fun CustomPiecesScreen(
     if (deleteTarget != null) {
         val piece = deleteTarget!!
         AlertDialog(
+            modifier = Modifier.shadow(8.dp, RoundedCornerShape(24.dp)),
             onDismissRequest = { deleteTarget = null },
             containerColor = colors.surface,
             title = { Text(strings.delete, color = colors.onSurface, fontWeight = FontWeight.Bold) },
@@ -356,15 +370,12 @@ fun CustomPiecesScreen(
 @Composable
 private fun CustomPieceDataChip(icon: String, text: String, colors: SushiColors) {
     Row(
-        modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
-            .background(colors.secondary)
-            .padding(horizontal = 6.dp, vertical = 2.dp),
+        modifier = Modifier.padding(end = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        Text(icon, fontSize = 10.sp)
-        Text(text, color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
+        Text(icon, fontSize = 12.sp)
+        Text(text, color = colors.mutedForeground, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
     }
 }
 
@@ -542,8 +553,8 @@ private fun CustomPieceForm(
                     Button(
                         onClick = if (isEditing && onDelete != null) { { onDelete() } } else onCancel,
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = if (isEditing) MaterialTheme.colorScheme.error.copy(alpha = 0.1f) else colors.secondary,
-                            contentColor = if (isEditing) MaterialTheme.colorScheme.error else colors.onSecondary
+                            containerColor = if (isEditing) MaterialTheme.colorScheme.error else colors.secondary,
+                            contentColor = if (isEditing) MaterialTheme.colorScheme.onError else colors.onSecondary
                         ),
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier

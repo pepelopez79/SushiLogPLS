@@ -54,8 +54,8 @@ fun CustomPieceCounterItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(4.dp, RoundedCornerShape(16.dp))
-            .clip(RoundedCornerShape(16.dp))
+            .shadow(4.dp, RoundedCornerShape(24.dp))
+            .clip(RoundedCornerShape(24.dp))
             .background(if (isPressing) colors.secondary else colors.surface)
             .pointerInput(Unit) {
                 detectTapGestures(

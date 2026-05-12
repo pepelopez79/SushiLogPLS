@@ -32,15 +32,34 @@ fun shareSessionAsImage(
     val bitmap = createBitmap(1080, 1920)
     val canvas = Canvas(bitmap)
     
-    canvas.drawColor(colors.secondary.toArgb())
+    val bgPaint = Paint().apply { color = colors.background.toArgb() }
+    canvas.drawRect(0f, 0f, 1080f, 1920f, bgPaint)
+
+    val decorPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = colors.primary.toArgb()
+        alpha = 15
+    }
+    canvas.drawCircle(80f, 200f, 400f, decorPaint)
+    canvas.drawCircle(950f, 1700f, 500f, decorPaint)
 
     val paint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
         color = colors.onBackground.toArgb()
-        textSize = 90f
+        textSize = 100f
         typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
         textAlign = Paint.Align.CENTER
+        setShadowLayer(15f, 0f, 10f, android.graphics.Color.argb(40, 0, 0, 0))
     }
+    canvas.drawText("SUSHI", 540f, 200f, paint)
 
+    paint.apply {
+        color = colors.primary.toArgb()
+        textSize = 60f
+        letterSpacing = 0.2f
+    }
+    canvas.drawText("TRACKER", 540f, 280f, paint)
+
+    paint.clearShadowLayer()
+    paint.letterSpacing = 0f
     paint.textSize = 45f
     paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
     paint.color = colors.mutedForeground.toArgb()
@@ -51,20 +70,34 @@ fun shareSessionAsImage(
         session.date
     }
     
-    canvas.drawText("📅 $dateText", 540f, 380f, paint)
-    canvas.drawText("🏠 ${session.restaurant}", 540f, 460f, paint)
+    canvas.drawText("📅 $dateText", 540f, 360f, paint)
+    paint.color = colors.onBackground.toArgb()
+    paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+    canvas.drawText("🏠 ${session.restaurant}", 540f, 440f, paint)
 
     val cardPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = colors.surface.toArgb()
         setShadowLayer(40f, 0f, 20f, android.graphics.Color.argb(40, 0, 0, 0))
     }
     
-    val activePieces = session.pieces.filter { it.value > 0 }.toList()
-    val topContentY = 560f
-    
-    val listHeight = activePieces.size * 110f
+    val sortedPieces = session.pieces.filter { it.value > 0 }.toList().sortedByDescending { it.second }
+    val displayPieces = mutableListOf<Pair<String, Int>>()
+
+    if (sortedPieces.size > 5) {
+        displayPieces.addAll(sortedPieces.take(5))
+        val restSum = sortedPieces.drop(5).sumOf { it.second }
+        if (restSum > 0) {
+            displayPieces.add(Pair("rest_others", restSum))
+        }
+    } else {
+        displayPieces.addAll(sortedPieces)
+    }
+
+    val topContentY = 540f
+
+    val listHeight = displayPieces.size * 110f
     val mainCardBottom = topContentY + 450f + listHeight + 80f
-    
+
     val mainCardRect = RectF(100f, topContentY, 980f, mainCardBottom)
     canvas.drawRoundRect(mainCardRect, 80f, 80f, cardPaint)
 
@@ -91,10 +124,10 @@ fun shareSessionAsImage(
     var currentY = topContentY + 560f
     val listPadding = 200f
     
-    for ((id, count) in activePieces) {
-        val emoji = getPieceEmoji(id, customPieces)
-        val name = getPieceName(id, customPieces, strings)
-        
+    for ((id, count) in displayPieces) {
+        val emoji = if (id == "rest_others") "🍱" else getPieceEmoji(id, customPieces)
+        val name = if (id == "rest_others") strings.others else getPieceName(id, customPieces, strings)
+
         paint.textAlign = Paint.Align.LEFT
         paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
         canvas.drawText("$emoji  $name", listPadding, currentY, paint)

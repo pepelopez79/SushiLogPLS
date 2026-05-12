@@ -128,8 +128,7 @@ class MainActivity : ComponentActivity() {
                                 Card(
                                     shape = RoundedCornerShape(16.dp),
                                     colors = CardDefaults.cardColors(containerColor = colors.primary),
-                                    elevation = CardDefaults.cardElevation(8.dp)
-                                ) {
+                                    ) {
                                     Row(
                                         modifier = Modifier.padding(16.dp),
                                         verticalAlignment = Alignment.CenterVertically,

@@ -76,7 +76,7 @@ fun HomeScreen(
                 Box(
                     modifier = Modifier
                         .size(52.dp)
-                        .shadow(12.dp, CircleShape)
+                        .shadow(4.dp, CircleShape)
                         .clip(CircleShape)
                         .background(colors.surface)
                         .clickable(onClick = onOpenSettings),
@@ -93,10 +93,10 @@ fun HomeScreen(
                 onClick = onStartCounter,
                 colors = CardDefaults.cardColors(containerColor = colors.primary),
                 shape = RoundedCornerShape(32.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(180.dp)
+                    .shadow(12.dp, RoundedCornerShape(32.dp))
             ) {
                 Box(modifier = Modifier.fillMaxSize()) {
                     
@@ -220,8 +220,7 @@ fun DashboardCard(
         onClick = onClick,
         colors = CardDefaults.cardColors(containerColor = color),
         shape = RoundedCornerShape(28.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        modifier = modifier
+        modifier = modifier.shadow(4.dp, RoundedCornerShape(28.dp))
     ) {
         if (isMain) {
             Column(

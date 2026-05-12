@@ -20,6 +20,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -91,7 +92,7 @@ fun SettingsScreen(
             item {
                 SectionLabel(strings.appearance, colors)
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().shadow(4.dp, RoundedCornerShape(16.dp)),
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(containerColor = colors.surface)
                 ) {
@@ -117,7 +118,7 @@ fun SettingsScreen(
             item {
                 SectionLabel(strings.language, colors)
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().shadow(4.dp, RoundedCornerShape(16.dp)),
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(containerColor = colors.surface)
                 ) {
@@ -139,7 +140,7 @@ fun SettingsScreen(
 
             item {
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().shadow(4.dp, RoundedCornerShape(16.dp)),
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(containerColor = colors.surface)
                 ) {
@@ -167,7 +168,7 @@ fun SettingsScreen(
             item {
                 SectionLabel(strings.information, colors)
                 Card(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().shadow(4.dp, RoundedCornerShape(16.dp)),
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(containerColor = colors.surface)
                 ) {
@@ -186,6 +187,7 @@ fun SettingsScreen(
 
     if (showResetDialog) {
         AlertDialog(
+            modifier = Modifier.shadow(8.dp, RoundedCornerShape(24.dp)),
             onDismissRequest = { showResetDialog = false },
             containerColor = colors.surface,
             title = { Text(strings.deleteAllConfirmTitle, color = colors.onSurface, fontWeight = FontWeight.Bold) },
@@ -232,13 +234,13 @@ private fun ThemeOption(
             .padding(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.height(10.dp))
         Box(
             modifier = Modifier.size(40.dp).clip(CircleShape).background(themeColors.background).border(1.dp, themeColors.border, CircleShape),
             contentAlignment = Alignment.Center
         ) {
             Box(modifier = Modifier.size(20.dp).clip(CircleShape).background(themeColors.primary))
         }
-        Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = when (theme) { AppTheme.DARK -> strings.darkTheme; AppTheme.SALMON -> strings.salmonTheme; AppTheme.LIGHT -> strings.lightTheme },
             color = if (isSelected) colors.primary else colors.onSurface,

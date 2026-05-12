@@ -43,19 +43,6 @@ fun StatsScreen(
     val settingsManager = remember { AppSettingsManager(context) }
     val customPieces = remember { settingsManager.getCustomPieces() }
     var stats by remember { mutableStateOf(sessionManager.getStats(StatsFilter.ALL)) }
-    val RICE_WEIGHTS = mapOf(
-        "nigiri" to 18,
-        "maki" to 15,
-        "onigiri" to 80,
-        "uramaki" to 25,
-        "gunkan" to 20,
-        "temaki" to 45,
-        "sashimi" to 0,
-        "gyoza" to 0,
-        "tempura" to 0,
-        "edamame" to 0,
-        "takoyaki" to 0
-    )
 
     Column(modifier = Modifier.fillMaxSize().background(colors.background)) {
         Row(
@@ -197,8 +184,11 @@ fun StatsScreen(
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             val maxPieces = stats.pieceStats.values.maxOrNull() ?: 1
-                            stats.pieceStats.entries.sortedByDescending { it.value }
-                                .forEach { (id, count) ->
+                            val sortedStats = stats.pieceStats.entries.sortedByDescending { it.value }
+                            val top5 = sortedStats.take(5)
+                            val others = sortedStats.drop(5)
+
+                            top5.forEach { (id, count) ->
                                     PieceTypeRow(
                                         id = id,
                                         count = count,
@@ -208,6 +198,16 @@ fun StatsScreen(
                                         customPieces = customPieces
                                     )
                                 }
+
+                            if (others.isNotEmpty()) {
+                                val othersTotal = others.sumOf { it.value }
+                                PieceTypeRowOthers(
+                                    count = othersTotal,
+                                    maxCount = maxPieces,
+                                    colors = colors,
+                                    label = strings.others
+                                )
+                            }
                         }
                     }
                 }
@@ -223,7 +223,7 @@ fun StatsScreen(
                     }
                     item {
                         Card(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth().shadow(4.dp, RoundedCornerShape(16.dp)),
                             shape = RoundedCornerShape(16.dp),
                             colors = CardDefaults.cardColors(containerColor = colors.surface)
                         ) {
@@ -321,6 +321,25 @@ private fun PieceTypeRow(
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                 Text(getPieceEmoji(id, customPieces), fontSize = 20.sp)
                 Text(getPieceName(id, customPieces, strings), color = colors.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+            }
+            Text(count.toString(), color = colors.primary, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+        Box(modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)).background(colors.secondary)) {
+            Box(modifier = Modifier.fillMaxWidth(count.toFloat() / maxCount).fillMaxHeight().clip(RoundedCornerShape(3.dp)).background(colors.primary))
+        }
+    }
+}
+
+@Composable
+private fun PieceTypeRowOthers(
+    count: Int, maxCount: Int, colors: SushiColors, label: String
+) {
+    Column {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                Text("🍱", fontSize = 20.sp)
+                Text(label, color = colors.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
             }
             Text(count.toString(), color = colors.primary, fontSize = 16.sp, fontWeight = FontWeight.Bold)
         }

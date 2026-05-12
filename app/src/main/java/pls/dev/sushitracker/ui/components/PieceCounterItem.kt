@@ -62,7 +62,7 @@ fun PieceCounterItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(12.dp, RoundedCornerShape(24.dp), spotColor = colors.primary.copy(alpha = 0.5f), ambientColor = colors.primary.copy(alpha = 0.2f))
+            .shadow(4.dp, RoundedCornerShape(24.dp))
             .clip(RoundedCornerShape(24.dp))
             .background(if (isPressing) colors.secondary else colors.surface)
             .pointerInput(Unit) {
