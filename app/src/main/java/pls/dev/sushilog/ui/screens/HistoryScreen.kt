@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -80,7 +81,7 @@ fun HistoryScreen(
             Box(modifier = Modifier.fillMaxSize().padding(32.dp), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     Icon(
-                        painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.delete),
+                        painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.history),
                         contentDescription = null,
                         tint = androidx.compose.ui.graphics.Color.Unspecified,
                         modifier = Modifier.size(64.dp)
@@ -179,12 +180,21 @@ private fun SessionHistoryCard(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("🔥 ${strings.historyKcalLabel.format(totalKcal)}", color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                            Icon(painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.kcal), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.size(14.dp))
+                            Text(strings.historyKcalLabel.format(totalKcal), color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+                        }
                         if (totalRice > 0) {
-                            Text("🍚 ${strings.historyRiceLabel.format(totalRice)}", color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                                Icon(painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.rice), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.size(14.dp))
+                                Text(strings.historyRiceLabel.format(totalRice), color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+                            }
                         }
                         if (totalSalmon > 0) {
-                            Text("🐟 ${if (totalSalmon == 1) strings.historySalmonLabelSingular.format(totalSalmon) else strings.historySalmonLabel.format(totalSalmon)}", color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                                Icon(painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.salmon), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.size(14.dp))
+                                Text(if (totalSalmon == 1) strings.historySalmonLabelSingular.format(totalSalmon) else strings.historySalmonLabel.format(totalSalmon), color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+                            }
                         }
                     }
                 }

@@ -108,13 +108,13 @@ fun CustomPieceCounterItem(
                 }
             }
             Box(
-                modifier = Modifier.size(40.dp).scale(animatedScale).clip(CircleShape),
+                modifier = Modifier.size(40.dp).scale(animatedScale).clip(CircleShape).background(colors.primary.copy(alpha = 0.1f)),
                 contentAlignment = Alignment.Center
             ) {
                 androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()) {
-                    drawCircle(color = Primary, style = Stroke(width = 2.dp.toPx()))
+                    drawCircle(color = colors.primary, style = Stroke(width = 2.dp.toPx()))
                 }
-                Text(text = "$count", color = Primary, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text(text = "$count", color = colors.primary, fontWeight = FontWeight.ExtraBold, fontSize = 18.sp)
             }
         }
     }

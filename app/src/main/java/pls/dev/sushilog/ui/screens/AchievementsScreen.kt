@@ -105,10 +105,10 @@ fun AchievementsScreen(
                     ) {
                         Text(
                             text = getCategoryLabel(category, strings),
-                            color = colors.onBackground,
-                            fontSize = 14.sp,
+                            color = colors.mutedForeground,
+                            fontSize = 13.sp,
                             fontWeight = FontWeight.ExtraBold,
-                            letterSpacing = 0.5.sp
+                            letterSpacing = 2.sp
                         )
                         Text(
                             text = "$categoryUnlocked/${itemsInCategory.size}",

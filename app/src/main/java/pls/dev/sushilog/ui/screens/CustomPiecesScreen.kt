@@ -72,7 +72,33 @@ fun CustomPiecesScreen(
     var deleteTarget by remember { mutableStateOf<CustomPiece?>(null) }
 
     val imageOptions = remember {
-        listOf(pls.dev.sushilog.R.drawable.nigiri, pls.dev.sushilog.R.drawable.sashimi, pls.dev.sushilog.R.drawable.onigiri, pls.dev.sushilog.R.drawable.gyoza, pls.dev.sushilog.R.drawable.shrimp, pls.dev.sushilog.R.drawable.uramaki, pls.dev.sushilog.R.drawable.gunkan, pls.dev.sushilog.R.drawable.edamame, pls.dev.sushilog.R.drawable.maki, pls.dev.sushilog.R.drawable.temaki, pls.dev.sushilog.R.drawable.takoyaki, pls.dev.sushilog.R.drawable.rice, pls.dev.sushilog.R.drawable.wasabi, pls.dev.sushilog.R.drawable.bowl, pls.dev.sushilog.R.drawable.mochis)
+        listOf(
+            pls.dev.sushilog.R.drawable.nigiri,
+            pls.dev.sushilog.R.drawable.nigiri2,
+            pls.dev.sushilog.R.drawable.nigiri3,
+            pls.dev.sushilog.R.drawable.nigiri4,
+            pls.dev.sushilog.R.drawable.sashimi,
+            pls.dev.sushilog.R.drawable.salmon,
+            pls.dev.sushilog.R.drawable.maki,
+            pls.dev.sushilog.R.drawable.maki2,
+            pls.dev.sushilog.R.drawable.uramaki,
+            pls.dev.sushilog.R.drawable.uramaki2,
+            pls.dev.sushilog.R.drawable.temaki,
+            pls.dev.sushilog.R.drawable.gunkan,
+            pls.dev.sushilog.R.drawable.gunkan2,
+            pls.dev.sushilog.R.drawable.onigiri,
+            pls.dev.sushilog.R.drawable.gyoza,
+            pls.dev.sushilog.R.drawable.shrimp,
+            pls.dev.sushilog.R.drawable.edamame,
+            pls.dev.sushilog.R.drawable.takoyaki,
+            pls.dev.sushilog.R.drawable.rice,
+            pls.dev.sushilog.R.drawable.mochis,
+            pls.dev.sushilog.R.drawable.bowl,
+            pls.dev.sushilog.R.drawable.bowl2,
+            pls.dev.sushilog.R.drawable.bowl3,
+            pls.dev.sushilog.R.drawable.wasabi,
+            pls.dev.sushilog.R.drawable.soja
+        )
     }
 
     Column(
@@ -169,8 +195,9 @@ fun CustomPiecesScreen(
                             showDuplicateError = showDuplicateError,
                             isEditing = false,
                             onNameChange = {
-                                newName = it
-                                if (it.isNotBlank()) showNameError = false
+                                val capitalized = it.replaceFirstChar { c -> c.uppercase() }
+                                newName = capitalized
+                                if (capitalized.isNotBlank()) showNameError = false
                                 showDuplicateError = false
                             },
                             onIconIdChange = { newIconId = it },
@@ -187,7 +214,7 @@ fun CustomPiecesScreen(
                                 } else {
                                     settingsManager.addCustomPiece(CustomPiece(
                                         id = "custom_${UUID.randomUUID()}",
-                                        name = newName.trim(),
+                                        name = newName.trim().replaceFirstChar { it.uppercase() },
                                         iconId = newIconId,
                                         kcal = newKcal,
                                         salmonCount = newSalmonCount,
@@ -254,12 +281,12 @@ fun CustomPiecesScreen(
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    CustomPieceDataChip(icon = "🔥", text = strings.historyKcalLabel.format(piece.kcal), colors = colors)
-                                    if (piece.salmonCount > 0) {
-                                        CustomPieceDataChip(icon = pls.dev.sushilog.R.drawable.sashimi, text = if (piece.salmonCount == 1) strings.historySalmonLabelSingular.format(piece.salmonCount) else strings.historySalmonLabel.format(piece.salmonCount), colors = colors)
-                                    }
+                                    CustomPieceDataChip(icon = pls.dev.sushilog.R.drawable.kcal, text = strings.historyKcalLabel.format(piece.kcal), colors = colors)
                                     if (piece.riceGrams > 0) {
-                                        CustomPieceDataChip(icon = "🍚", text = strings.historyRiceLabel.format(piece.riceGrams), colors = colors)
+                                        CustomPieceDataChip(icon = pls.dev.sushilog.R.drawable.rice, text = strings.historyRiceLabel.format(piece.riceGrams), colors = colors)
+                                    }
+                                    if (piece.salmonCount > 0) {
+                                        CustomPieceDataChip(icon = pls.dev.sushilog.R.drawable.salmon, text = if (piece.salmonCount == 1) strings.historySalmonLabelSingular.format(piece.salmonCount) else strings.historySalmonLabel.format(piece.salmonCount), colors = colors)
                                     }
                                 }
                             }
@@ -290,8 +317,9 @@ fun CustomPiecesScreen(
                                         showDuplicateError = showDuplicateError,
                                         isEditing = true,
                                         onNameChange = {
-                                            newName = it
-                                            if (it.isNotBlank()) showNameError = false
+                                            val capitalized = it.replaceFirstChar { c -> c.uppercase() }
+                                            newName = capitalized
+                                            if (capitalized.isNotBlank()) showNameError = false
                                             showDuplicateError = false
                                         },
                                         onIconIdChange = { newIconId = it },
@@ -308,7 +336,7 @@ fun CustomPiecesScreen(
                                                 showDuplicateError = true
                                             } else {
                                                 settingsManager.updateCustomPiece(editingPiece!!.copy(
-                                                    name = newName.trim(),
+                                                    name = newName.trim().replaceFirstChar { it.uppercase() },
                                                     iconId = newIconId,
                                                     kcal = newKcal,
                                                     salmonCount = newSalmonCount,
@@ -358,17 +386,6 @@ fun CustomPiecesScreen(
     }
 }
 
-@Composable
-private fun CustomPieceDataChip(icon: String, text: String, colors: SushiColors) {
-    Row(
-        modifier = Modifier.padding(end = 4.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        Text(icon, fontSize = 12.sp)
-        Text(text, color = colors.mutedForeground, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
-    }
-}
 
 @Composable
 private fun CustomPieceDataChip(icon: Int, text: String, colors: SushiColors) {

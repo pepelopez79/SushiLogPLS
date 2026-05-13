@@ -60,20 +60,11 @@ fun HomeScreen(
                 verticalAlignment = Alignment.Top
             ) {
                 Column {
-                    Text(
-                        "SUSHI",
-                        color = colors.onBackground,
-                        fontSize = 42.sp,
-                        fontWeight = FontWeight.Black,
-                        letterSpacing = (-2).sp
-                    )
-                    Text(
-                        "LOG",
-                        color = colors.primary,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        letterSpacing = 2.sp,
-                        modifier = Modifier.offset(y = (-8).dp)
+                    SushiLogTitle(
+                        colors = colors,
+                        sushiFontSize = 42,
+                        logFontSize = 24,
+                        style = 1
                     )
                 }
                 Box(

@@ -25,7 +25,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.launch
 import pls.dev.sushilog.data.*
 import pls.dev.sushilog.ui.theme.*
 
@@ -80,9 +79,9 @@ fun StatsScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     Icon(
-                        Icons.Filled.DateRange,
+                        androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.stats),
                         contentDescription = null,
-                        tint = colors.mutedForeground,
+                        tint = androidx.compose.ui.graphics.Color.Unspecified,
                         modifier = Modifier.size(64.dp)
                     )
                     Text(
@@ -141,35 +140,35 @@ fun StatsScreen(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         StatCard(
-                            Icons.Filled.DateRange,
-                            stats.sessionCount.toString(),
-                            if (stats.sessionCount == 1) strings.session.replaceFirstChar { if (it.isLowerCase()) it.titlecase(java.util.Locale.getDefault()) else it.toString() } else strings.sessionCount,
-                            colors,
+                            iconRes = pls.dev.sushilog.R.drawable.history,
+                            value = stats.sessionCount.toString(),
+                            label = if (stats.sessionCount == 1) strings.session.replaceFirstChar { if (it.isLowerCase()) it.titlecase(java.util.Locale.getDefault()) else it.toString() } else strings.sessionCount,
+                            colors = colors,
                             modifier = Modifier.weight(1f)
                         )
                         StatCard(
-                            Icons.Filled.Add,
-                            String.format("%.1f", stats.avgPerSession),
-                            strings.average,
-                            colors,
+                            iconRes = pls.dev.sushilog.R.drawable.nigiri,
+                            value = String.format("%.0f", stats.avgPerSession),
+                            label = strings.average,
+                            colors = colors,
                             modifier = Modifier.weight(1f)
                         )
                         StatCard(
-                            Icons.Filled.Add,
-                            stats.maxInSession.toString(),
-                            strings.record,
-                            colors,
-                            iconTint = colors.primary,
+                            iconRes = pls.dev.sushilog.R.drawable.stats,
+                            value = stats.maxInSession.toString(),
+                            label = strings.record,
+                            colors = colors,
                             modifier = Modifier.weight(1f)
                         )
                     }
                 }
                 item {
                     Text(
-                        strings.breakdown,
-                        color = colors.onBackground,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
+                        strings.breakdown.uppercase(),
+                        color = colors.mutedForeground,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        letterSpacing = 2.sp,
                         modifier = Modifier.padding(vertical = 8.dp)
                     )
                 }
@@ -214,10 +213,11 @@ fun StatsScreen(
                 if (stats.sessionCount > 0) {
                     item {
                         Text(
-                            strings.curiosities,
-                            color = colors.onBackground,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
+                            strings.curiosities.uppercase(),
+                            color = colors.mutedForeground,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            letterSpacing = 2.sp,
                             modifier = Modifier.padding(vertical = 8.dp)
                         )
                     }
@@ -239,7 +239,7 @@ fun StatsScreen(
                                 }
                                 if (totalCalories > 0) {
                                     CuriosityItem(
-                                        pls.dev.sushilog.R.drawable.stats,
+                                        pls.dev.sushilog.R.drawable.kcal,
                                         strings.caloriesApprox.format(totalCalories),
                                         colors
                                     )
@@ -276,13 +276,13 @@ fun StatsScreen(
                                 val wholeSalmons = salmonEst / 40.0
                                 if (wholeSalmons >= 1.0) {
                                     CuriosityItem(
-                                        pls.dev.sushilog.R.drawable.sashimi,
+                                        pls.dev.sushilog.R.drawable.salmon,
                                         strings.statsWholeSalmon.format(wholeSalmons, salmonEst),
                                         colors
                                     )
                                 } else if (salmonEst > 0) {
                                     CuriosityItem(
-                                        pls.dev.sushilog.R.drawable.sashimi,
+                                        pls.dev.sushilog.R.drawable.salmon,
                                         if (salmonEst == 1) strings.statsSalmonPiecesSingular.format(salmonEst) else strings.statsSalmonPieces.format(salmonEst),
                                         colors
                                     )
@@ -298,12 +298,12 @@ fun StatsScreen(
 
 @Composable
 private fun StatCard(
-    icon: ImageVector, value: String, label: String, colors: SushiColors,
-    modifier: Modifier = Modifier, iconTint: Color = colors.primary
+    iconRes: Int, value: String, label: String, colors: SushiColors,
+    modifier: Modifier = Modifier
 ) {
     Card(modifier = modifier.shadow(4.dp, RoundedCornerShape(24.dp)), shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = colors.surface)) {
         Column(modifier = Modifier.fillMaxWidth().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(imageVector = icon, contentDescription = null, tint = iconTint, modifier = Modifier.size(24.dp))
+            Icon(painter = androidx.compose.ui.res.painterResource(id = iconRes), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.size(28.dp))
             Spacer(modifier = Modifier.height(8.dp))
             Text(value, color = colors.onSurface, fontSize = 24.sp, fontWeight = FontWeight.ExtraBold)
             Text(label, color = colors.mutedForeground, fontSize = 12.sp)

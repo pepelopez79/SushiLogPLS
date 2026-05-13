@@ -2,6 +2,8 @@ package pls.dev.sushilog.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.ComponentName
+import android.content.pm.PackageManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import androidx.core.content.edit
@@ -11,6 +13,12 @@ enum class AppTheme(val id: String, val displayName: Map<AppLanguage, String>) {
     DARK("dark", mapOf(AppLanguage.SPANISH to "Oscuro", AppLanguage.ENGLISH to "Dark", AppLanguage.FRENCH to "Sombre", AppLanguage.ITALIAN to "Scuro")),
     LIGHT("light", mapOf(AppLanguage.SPANISH to "Claro", AppLanguage.ENGLISH to "Light", AppLanguage.FRENCH to "Clair", AppLanguage.ITALIAN to "Chiaro")),
     SALMON("salmon", mapOf(AppLanguage.SPANISH to "Salmón", AppLanguage.ENGLISH to "Salmon", AppLanguage.FRENCH to "Saumon", AppLanguage.ITALIAN to "Salmone"))
+}
+
+enum class AppLogo(val id: String, val iconRes: Int, val aliasName: String?) {
+    LOGO("logo", pls.dev.sushilog.R.drawable.logo, null),
+    LOGO2("logo2", pls.dev.sushilog.R.drawable.logo2, ".MainActivityLogo2"),
+    LOGO3("logo3", pls.dev.sushilog.R.drawable.logo3, ".MainActivityLogo3")
 }
 
 enum class AppLanguage(val code: String, val displayName: String, val flag: String, val flagRes: Int) {
@@ -96,7 +104,11 @@ object AppStrings {
         val statsSalmonPieces: String, val statsSalmonPiecesSingular: String, val shareActionTitle: String, val shareIntentText: String,
         val shareWatermark: String, val rice: String, val kcal: String, val explore: String,
         val catTrajectory: String, val catAccumulation: String, val catFeats: String, val catSpecialist: String, val catExplorer: String,
-        val duplicatePieceName: String
+        val duplicatePieceName: String,
+        val appLogo: String,
+        val logoChangeTitle: String,
+        val logoChangeMsg: String,
+        val logoChangeBtn: String
     )
 
     private val spanish = Strings(
@@ -141,7 +153,7 @@ object AppStrings {
         deleteAllConfirmMsg="Esta acción no se puede deshacer. Se eliminarán todas tus sesiones, estadísticas y logros.",
         deleteAllConfirmBtn="Borrar todo", dataDeleted="Datos eliminados",
         customPieces="Piezas personalizadas", customPiecesSubtitle="Añade tus propios tipos de sushi",
-        addCustomPiece="Añadir pieza", customPieceName="Nombre de la pieza", customPieceNameHint="Ej: ONIGIRI, FUTOMAKI...",
+        addCustomPiece="Añadir pieza", customPieceName="Nombre de la pieza", customPieceNameHint="Ej: Onigiri, Futomaki...",
         noPieceName="El nombre no puede estar vacío", deleteCustomPiece="¿Eliminar pieza?",
         deleteCustomPieceConfirm="Se eliminará \"%s\" de tus piezas personalizadas.",
         customPiecesManage="Gestionar piezas personalizadas", customPiecesEmpty="No tienes piezas personalizadas aún",
@@ -152,7 +164,11 @@ object AppStrings {
         statsSalmonPieces="%d cortes de salmón", statsSalmonPiecesSingular="%d corte de salmón", shareActionTitle="Compartir sesión", shareIntentText="🍣 ¡Mi sesión de Sushi en %s! \n#SushiLog",
         shareWatermark="Sushi Log 🍣", rice="Arroz", kcal="Kcal", explore="EXPLORA",
         catTrajectory="Trayectoria", catAccumulation="Acumulación", catFeats="Hazañas", catSpecialist="Especialista", catExplorer="Explorador",
-        duplicatePieceName="Ya existe una pieza con ese nombre"
+        duplicatePieceName="Ya existe una pieza con ese nombre",
+        appLogo="Logo de la app",
+        logoChangeTitle="¿Cambiar logo?",
+        logoChangeMsg="La aplicación se cerrará para aplicar el nuevo icono.",
+        logoChangeBtn="Cambiar"
     )
 
     private val english = Strings(
@@ -197,7 +213,7 @@ object AppStrings {
         deleteAllConfirmMsg="This action cannot be undone. All your sessions, statistics and achievements will be deleted.",
         deleteAllConfirmBtn="Delete all", dataDeleted="Data deleted",
         customPieces="Custom pieces", customPiecesSubtitle="Add your own sushi types",
-        addCustomPiece="Add piece", customPieceName="Piece name", customPieceNameHint="E.g: ONIGIRI, FUTOMAKI...",
+        addCustomPiece="Add piece", customPieceName="Piece name", customPieceNameHint="E.g: Onigiri, Futomaki...",
         noPieceName="Name cannot be empty", deleteCustomPiece="Delete piece?",
         deleteCustomPieceConfirm="\"%s\" will be removed from your custom pieces.",
         customPiecesManage="Manage custom pieces", customPiecesEmpty="You have no custom pieces yet",
@@ -208,7 +224,11 @@ object AppStrings {
         statsSalmonPieces="%d salmon cuts", statsSalmonPiecesSingular="%d salmon cut", shareActionTitle="Share session", shareIntentText="🍣 My Sushi session at %s! \n#SushiLog",
         shareWatermark="Sushi Log 🍣", rice="Rice", kcal="Kcal", explore="EXPLORE",
         catTrajectory="Trajectory", catAccumulation="Accumulation", catFeats="Feats", catSpecialist="Specialist", catExplorer="Explorer",
-        duplicatePieceName="A piece with this name already exists"
+        duplicatePieceName="A piece with this name already exists",
+        appLogo="App logo",
+        logoChangeTitle="Change logo?",
+        logoChangeMsg="The app will close to apply the new icon.",
+        logoChangeBtn="Change"
     )
 
     private val french = Strings(
@@ -253,7 +273,7 @@ object AppStrings {
         deleteAllConfirmMsg="Cette action est irréversible. Toutes vos sessions, statistiques et succès seront supprimés.",
         deleteAllConfirmBtn="Tout supprimer", dataDeleted="Données supprimées",
         customPieces="Pièces personnalisées", customPiecesSubtitle="Ajoutez vos propres types de sushi",
-        addCustomPiece="Ajouter une pièce", customPieceName="Nom de la pièce", customPieceNameHint="Ex: ONIGIRI, FUTOMAKI...",
+        addCustomPiece="Ajouter une pièce", customPieceName="Nom de la pièce", customPieceNameHint="Ex: Onigiri, Futomaki...",
         noPieceName="Le nom ne peut pas être vide", deleteCustomPiece="Supprimer la pièce?",
         deleteCustomPieceConfirm="\"%s\" sera supprimé de vos pièces personnalisées.",
         customPiecesManage="Gérer les pièces personnalisées", customPiecesEmpty="Vous n'avez pas encore de pièces personnalisées",
@@ -264,7 +284,11 @@ object AppStrings {
         statsSalmonPieces="%d coupes de saumon", statsSalmonPiecesSingular="%d coupe de saumon", shareActionTitle="Partager la session", shareIntentText="🍣 Ma session de Sushi chez %s! \n#SushiLog",
         shareWatermark="Sushi Log 🍣", rice="Riz", kcal="Kcal", explore="EXPLORER",
         catTrajectory="Parcours", catAccumulation="Accumulation", catFeats="Exploits", catSpecialist="Spécialiste", catExplorer="Explorateur",
-        duplicatePieceName="Une pièce avec ce nom existe déjà"
+        duplicatePieceName="Une pièce avec ce nom existe déjà",
+        appLogo="Logo de l'app",
+        logoChangeTitle="Changer le logo ?",
+        logoChangeMsg="L'application se fermera pour appliquer le nouveau icône.",
+        logoChangeBtn="Changer"
     )
 
     private val italian = Strings(
@@ -309,7 +333,7 @@ object AppStrings {
         deleteAllConfirmMsg="Questa azione è irreversibile. Tutte le tue sessioni, statistiche e obiettivi saranno eliminati.",
         deleteAllConfirmBtn="Elimina tutto", dataDeleted="Dati eliminati",
         customPieces="Pezzi personalizzati", customPiecesSubtitle="Aggiungi i tuoi tipi di sushi",
-        addCustomPiece="Aggiungi pezzo", customPieceName="Nome del pezzo", customPieceNameHint="Es: ONIGIRI, FUTOMAKI...",
+        addCustomPiece="Aggiungi pezzo", customPieceName="Nome del pezzo", customPieceNameHint="Es: Onigiri, Futomaki...",
         noPieceName="Il nome non può essere vuoto", deleteCustomPiece="Eliminare il pezzo?",
         deleteCustomPieceConfirm="\"%s\" verrà rimosso dai tuoi pezzi personalizzati.",
         customPiecesManage="Gestisci pezzi personalizzati", customPiecesEmpty="Non hai ancora pezzi personalizzati",
@@ -320,7 +344,11 @@ object AppStrings {
         statsSalmonPieces="%d tagli di salmone", statsSalmonPiecesSingular="%d taglio di salmone", shareActionTitle="Condividi sessione", shareIntentText="🍣 La mia sessione di Sushi al %s! \n#SushiLog",
         shareWatermark="Sushi Log 🍣", rice="Riso", kcal="Kcal", explore="ESPLORA",
         catTrajectory="Traiettoria", catAccumulation="Accumulo", catFeats="Imprese", catSpecialist="Specialista", catExplorer="Esploratore",
-        duplicatePieceName="Esiste già un pezzo con questo nome"
+        duplicatePieceName="Esiste già un pezzo con questo nome",
+        appLogo="Logo dell'app",
+        logoChangeTitle="Cambiare logo?",
+        logoChangeMsg="L'app si chiuderà per applicare la nuova icona.",
+        logoChangeBtn="Cambiare"
     )
 
     fun get(language: AppLanguage): Strings = when (language) {
@@ -405,6 +433,44 @@ class AppSettingsManager(private val context: Context) {
 
     fun setLanguage(language: AppLanguage) {
         prefs.edit { putString("language", language.code) }
+    }
+
+    fun getLogo(): AppLogo {
+        val logoId = prefs.getString("logo", AppLogo.LOGO.id) ?: AppLogo.LOGO.id
+        return AppLogo.entries.find { it.id == logoId } ?: AppLogo.LOGO
+    }
+
+    fun setLogo(logo: AppLogo) {
+        prefs.edit { putString("logo", logo.id) }
+    }
+
+    fun applyLauncherIcon() {
+        try {
+            val logo = getLogo()
+            val pm = context.packageManager
+            val packageName = context.packageName
+
+            // Disable/enable MainActivity (default logo) as launcher
+            val mainComponent = ComponentName(packageName, "$packageName.MainActivity")
+            val mainState = if (logo == AppLogo.LOGO)
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+            else
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+            pm.setComponentEnabledSetting(mainComponent, mainState, PackageManager.DONT_KILL_APP)
+
+            // Toggle aliases for logo2 and logo3
+            AppLogo.entries.forEach { entry ->
+                val alias = entry.aliasName ?: return@forEach
+                val component = ComponentName(packageName, "$packageName$alias")
+                val desiredState = if (entry == logo)
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                else
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+                pm.setComponentEnabledSetting(component, desiredState, PackageManager.DONT_KILL_APP)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun getCustomPieces(): List<CustomPiece> {

@@ -397,7 +397,8 @@ fun CounterScreen(
                             },
                             shape = RoundedCornerShape(12.dp),
                             modifier = Modifier.fillMaxWidth().height(48.dp),
-                            colors = ButtonDefaults.outlinedButtonColors(contentColor = colors.primary)
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = colors.primary),
+                            border = androidx.compose.foundation.BorderStroke(1.dp, colors.border)
                         ) {
                             Icon(Icons.Filled.Share, contentDescription = null, modifier = Modifier.size(18.dp))
                             Spacer(modifier = Modifier.width(8.dp))

@@ -1,6 +1,7 @@
 package pls.dev.sushilog.ui.screens
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -32,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import pls.dev.sushilog.data.*
 import pls.dev.sushilog.ui.theme.*
 import java.util.UUID
+import androidx.compose.ui.res.painterResource
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DefaultLocale")
@@ -41,8 +43,10 @@ fun SettingsScreen(
     strings: AppStrings.Strings,
     currentTheme: AppTheme,
     currentLanguage: AppLanguage,
+    currentLogo: AppLogo,
     onThemeChange: (AppTheme) -> Unit,
     onLanguageChange: (AppLanguage) -> Unit,
+    onLogoChange: (AppLogo) -> Unit,
     onOpenCustomPieces: () -> Unit,
     onBack: () -> Unit
 ) {
@@ -51,6 +55,7 @@ fun SettingsScreen(
     val sessionManager = remember { SessionStorage(context) }
 
     var showResetDialog by remember { mutableStateOf(false) }
+    var pendingLogo by remember { mutableStateOf<AppLogo?>(null) }
 
     Column(
         modifier = Modifier
@@ -107,6 +112,22 @@ fun SettingsScreen(
                                     colors = colors,
                                     strings = strings,
                                     onClick = { onThemeChange(theme) },
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                        HorizontalDivider(color = colors.border)
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(strings.appLogo, color = colors.onSurface, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            AppLogo.entries.forEach { logo ->
+                                LogoOption(
+                                    logo = logo,
+                                    isSelected = currentLogo == logo,
+                                    colors = colors,
+                                    onClick = { if (logo != currentLogo) pendingLogo = logo },
                                     modifier = Modifier.weight(1f)
                                 )
                             }
@@ -204,6 +225,28 @@ fun SettingsScreen(
             }
         )
     }
+
+    if (pendingLogo != null) {
+        AlertDialog(
+            modifier = Modifier.shadow(8.dp, RoundedCornerShape(24.dp)),
+            onDismissRequest = { pendingLogo = null },
+            containerColor = colors.surface,
+            title = { Text(strings.logoChangeTitle, color = colors.onSurface, fontWeight = FontWeight.Bold) },
+            text = { Text(strings.logoChangeMsg, color = colors.mutedForeground) },
+            confirmButton = {
+                TextButton(onClick = {
+                    val newLogo = pendingLogo!!
+                    pendingLogo = null
+                    onLogoChange(newLogo)
+                    settingsManager.applyLauncherIcon()
+                    (context as? Activity)?.finishAffinity()
+                }) { Text(strings.logoChangeBtn, color = MaterialTheme.colorScheme.error) }
+            },
+            dismissButton = {
+                TextButton(onClick = { pendingLogo = null }) { Text(strings.cancel, color = colors.primary) }
+            }
+        )
+    }
 }
 
 @Composable
@@ -242,6 +285,41 @@ private fun ThemeOption(
         }
         Text(
             text = when (theme) { AppTheme.DARK -> strings.darkTheme; AppTheme.SALMON -> strings.salmonTheme; AppTheme.LIGHT -> strings.lightTheme },
+            color = if (isSelected) colors.primary else colors.onSurface,
+            fontSize = 12.sp,
+            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
+        )
+    }
+}
+
+@Composable
+private fun LogoOption(
+    logo: AppLogo, isSelected: Boolean, colors: SushiColors,
+    onClick: () -> Unit, modifier: Modifier = Modifier
+) {
+    val label = when (logo) {
+        AppLogo.LOGO -> "Logo 1"
+        AppLogo.LOGO2 -> "Logo 2"
+        AppLogo.LOGO3 -> "Logo 3"
+    }
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(12.dp))
+            .background(if (isSelected) colors.primary.copy(alpha = 0.1f) else colors.secondary)
+            .border(if (isSelected) 2.dp else 0.dp, if (isSelected) colors.primary else Color.Transparent, RoundedCornerShape(12.dp))
+            .clickable(onClick = onClick)
+            .padding(12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            painter = painterResource(id = logo.iconRes),
+            contentDescription = label,
+            tint = Color.Unspecified,
+            modifier = Modifier.size(48.dp)
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = label,
             color = if (isSelected) colors.primary else colors.onSurface,
             fontSize = 12.sp,
             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium

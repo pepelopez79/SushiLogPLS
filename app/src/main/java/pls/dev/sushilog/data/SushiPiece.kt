@@ -26,7 +26,7 @@ val SUSHI_PIECES = listOf(
 fun getPieceIconId(id: String, customPieces: List<CustomPiece> = emptyList()): Int {
     SUSHI_PIECES.find { it.id == id }?.let { return it.iconId }
     customPieces.find { it.id == id }?.let { return it.iconId }
-    if (id.startsWith("custom_")) return pls.dev.sushilog.R.drawable.nigiri
+    if (id.startsWith("custom_")) return pls.dev.sushilog.R.drawable.deletedpiece
     return pls.dev.sushilog.R.drawable.nigiri
 }
 
