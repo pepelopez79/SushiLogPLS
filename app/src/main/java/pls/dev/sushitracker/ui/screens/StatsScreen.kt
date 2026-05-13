@@ -128,7 +128,7 @@ fun StatsScreen(
                                 fontWeight = FontWeight.ExtraBold
                             )
                             Text(
-                                strings.totalPiecesLabel,
+                                if (stats.total == 1) strings.totalPiecesLabelSingular else strings.totalPiecesLabel,
                                 color = colors.mutedForeground,
                                 fontSize = 16.sp
                             )
@@ -143,7 +143,7 @@ fun StatsScreen(
                         StatCard(
                             Icons.Filled.DateRange,
                             stats.sessionCount.toString(),
-                            strings.sessionCount,
+                            if (stats.sessionCount == 1) strings.session.replaceFirstChar { if (it.isLowerCase()) it.titlecase(java.util.Locale.getDefault()) else it.toString() } else strings.sessionCount,
                             colors,
                             modifier = Modifier.weight(1f)
                         )
@@ -283,7 +283,7 @@ fun StatsScreen(
                                 } else if (salmonEst > 0) {
                                     CuriosityItem(
                                         "🐟",
-                                        strings.statsSalmonPieces.format(salmonEst),
+                                        if (salmonEst == 1) strings.statsSalmonPiecesSingular.format(salmonEst) else strings.statsSalmonPieces.format(salmonEst),
                                         colors
                                     )
                                 }

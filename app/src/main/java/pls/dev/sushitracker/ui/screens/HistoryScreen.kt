@@ -183,7 +183,7 @@ private fun SessionHistoryCard(
                             Text("🍚 ${strings.historyRiceLabel.format(totalRice)}", color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
                         }
                         if (totalSalmon > 0) {
-                            Text("🐟 ${strings.historySalmonLabel.format(totalSalmon)}", color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+                            Text("🐟 ${if (totalSalmon == 1) strings.historySalmonLabelSingular.format(totalSalmon) else strings.historySalmonLabel.format(totalSalmon)}", color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
                         }
                     }
                 }
@@ -194,7 +194,7 @@ private fun SessionHistoryCard(
                         color = colors.onSurface,
                         fontSize = 24.sp, fontWeight = FontWeight.ExtraBold
                     )
-                    Text(strings.pieces, color = colors.mutedForeground, fontSize = 11.sp)
+                    Text(if (totalPieces == 1) strings.piece else strings.pieces, color = colors.mutedForeground, fontSize = 11.sp)
                 }
 
                 Icon(

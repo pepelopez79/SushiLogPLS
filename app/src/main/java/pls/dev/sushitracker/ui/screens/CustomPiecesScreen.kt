@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.AlertDialog
@@ -150,8 +149,6 @@ fun CustomPiecesScreen(
                             .height(56.dp)
                     ) {
                         Text(strings.addCustomPiece, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Icon(Icons.Filled.Add, contentDescription = null, modifier = Modifier.size(20.dp))
                     }
                 }
 
@@ -267,9 +264,13 @@ fun CustomPiecesScreen(
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    CustomPieceDataChip(icon = "🔥", text = "${piece.kcal}", colors = colors)
-                                    CustomPieceDataChip(icon = "🐟", text = "${piece.salmonCount}", colors = colors)
-                                    CustomPieceDataChip(icon = "🍚", text = "${piece.riceGrams}g", colors = colors)
+                                    CustomPieceDataChip(icon = "🔥", text = strings.historyKcalLabel.format(piece.kcal), colors = colors)
+                                    if (piece.salmonCount > 0) {
+                                        CustomPieceDataChip(icon = "🐟", text = if (piece.salmonCount == 1) strings.historySalmonLabelSingular.format(piece.salmonCount) else strings.historySalmonLabel.format(piece.salmonCount), colors = colors)
+                                    }
+                                    if (piece.riceGrams > 0) {
+                                        CustomPieceDataChip(icon = "🍚", text = strings.historyRiceLabel.format(piece.riceGrams), colors = colors)
+                                    }
                                 }
                             }
                             Icon(
