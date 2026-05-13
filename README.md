@@ -1,4 +1,4 @@
-# Sushi Tracker
+# Sushi Log
 
 Aplicacion Android nativa para contabilizar piezas de sushi y comida japonesa consumidas en restaurantes de buffet libre o sesiones de sushi.
 
@@ -6,7 +6,7 @@ Aplicacion Android nativa para contabilizar piezas de sushi y comida japonesa co
 
 ## Descripcion
 
-**Sushi Tracker** es una app interactiva disenada para los amantes del sushi que quieren no solo llevar un registro exhaustivo de cuantās piezas consumen, sino tambien controlar sus estadisticas nutricionales, conseguir logros y compartir sus récords sociales. La app permite:
+**Sushi Log** es una app interactiva disenada para los amantes del sushi que quieren no solo llevar un registro exhaustivo de cuantās piezas consumen, sino tambien controlar sus estadisticas nutricionales, conseguir logros y compartir sus récords sociales. La app permite:
 
 - Contar piezas por tipo con un simple tap (sumar) o long-press (restar)
 - Guardar sesiones con fecha y nombre del restaurante
@@ -104,8 +104,8 @@ File > New > New Project > Empty Activity (Compose)
 ```
 
 Configuracion:
-- Name: `SushiTracker`
-- Package: `pls.dev.sushitracker`
+- Name: `SushiLog`
+- Package: `pls.dev.sushilog`
 - Language: Kotlin
 - Minimum SDK: API 26
 
@@ -132,7 +132,7 @@ implementation("androidx.compose.animation:animation")
 Estructura de carpetas:
 
 ```
-app/src/main/java/pls.dev.sushitracker/
+app/src/main/java/pls.dev.sushilog/
 ├── data/
 │   ├── SushiPiece.kt
 │   ├── SessionRecord.kt

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Sushi Tracker</string>
+    <string name="app_name">Sushi Log</string>
     
-    <string name="splash_title">SUSHI\nTRACKER</string>
+    <string name="splash_title">SUSHI\nLOG</string>
 
     <string name="btn_start">COMENZAR SESION</string>
     <string name="btn_history">HISTORIAL</string>

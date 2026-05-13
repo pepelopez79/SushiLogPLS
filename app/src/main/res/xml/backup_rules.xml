@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <full-backup-content>
-    <include domain="sharedpref" path="sushi_tracker_prefs.xml"/>
+    <include domain="sharedpref" path="sushi_log_prefs.xml"/>
 </full-backup-content>

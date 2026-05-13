@@ -12,7 +12,7 @@ def remove_comments_from_file(filepath):
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(new_content)
         print(f"Cleaned {filepath}")
-for root, _, files in os.walk('/Users/pepelopez/Desktop/GitHub/SushiTracker/app/src/main/java'):
+for root, _, files in os.walk('/Users/pepelopez/Desktop/GitHub/SushiLog/app/src/main/java'):
     for file in files:
         if file.endswith('.kt'):
             remove_comments_from_file(os.path.join(root, file))

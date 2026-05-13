@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "pls.dev.sushitracker"
+    namespace = "pls.dev.sushilog"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "pls.dev.sushitracker"
+        applicationId = "pls.dev.sushilog"
         minSdk = 24
         targetSdk = 36
         versionCode = 1

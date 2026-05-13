@@ -1,4 +1,4 @@
-package pls.dev.sushitracker
+package pls.dev.sushilog
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import org.junit.Before
@@ -6,7 +6,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.junit.Assert.*
-import pls.dev.sushitracker.data.*
+import pls.dev.sushilog.data.*
 @RunWith(RobolectricTestRunner::class)
 class AndroidSessionTest {
     private lateinit var context: Context

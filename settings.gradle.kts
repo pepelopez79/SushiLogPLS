@@ -22,5 +22,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "SushiTracker"
+rootProject.name = "SushiLog"
 include(":app")
