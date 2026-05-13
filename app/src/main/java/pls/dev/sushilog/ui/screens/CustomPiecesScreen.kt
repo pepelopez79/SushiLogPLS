@@ -63,7 +63,7 @@ fun CustomPiecesScreen(
     var isAddingNew by remember { mutableStateOf(false) }
 
     var newName by remember { mutableStateOf("") }
-    var newEmoji by remember { mutableStateOf("🍣") }
+    var newIconId by remember { mutableStateOf<Int>(pls.dev.sushilog.R.drawable.nigiri) }
     var newKcal by remember { mutableIntStateOf(0) }
     var newSalmonCount by remember { mutableIntStateOf(0) }
     var newRiceGrams by remember { mutableIntStateOf(0) }
@@ -71,10 +71,8 @@ fun CustomPiecesScreen(
     var showDuplicateError by remember { mutableStateOf(false) }
     var deleteTarget by remember { mutableStateOf<CustomPiece?>(null) }
 
-    val emojiOptions = remember {
-        listOf("🍣", "🍱", "🐟", "🍙", "🥟", "🍜", "🥗", "🍤", "🍢", "🍘", "🍵",
-               "🫔", "🥣", "🥡", "🫛", "🍚", "🥢", "🍲", "🍛", "🍶", "🍡")
-            .filter { android.graphics.Paint().hasGlyph(it) }
+    val imageOptions = remember {
+        listOf(pls.dev.sushilog.R.drawable.nigiri, pls.dev.sushilog.R.drawable.sashimi, pls.dev.sushilog.R.drawable.onigiri, pls.dev.sushilog.R.drawable.gyoza, pls.dev.sushilog.R.drawable.shrimp, pls.dev.sushilog.R.drawable.uramaki, pls.dev.sushilog.R.drawable.gunkan, pls.dev.sushilog.R.drawable.edamame, pls.dev.sushilog.R.drawable.maki, pls.dev.sushilog.R.drawable.temaki, pls.dev.sushilog.R.drawable.takoyaki, pls.dev.sushilog.R.drawable.rice, pls.dev.sushilog.R.drawable.wasabi, pls.dev.sushilog.R.drawable.bowl, pls.dev.sushilog.R.drawable.mochis)
     }
 
     Column(
@@ -135,7 +133,7 @@ fun CustomPiecesScreen(
                             isAddingNew = true
                             editingPiece = null
                             newName = ""
-                            newEmoji = "🍣"
+                            newIconId = pls.dev.sushilog.R.drawable.nigiri
                             newKcal = 0
                             newSalmonCount = 0
                             newRiceGrams = 0
@@ -161,9 +159,9 @@ fun CustomPiecesScreen(
                         CustomPieceForm(
                             colors = colors,
                             strings = strings,
-                            emojiOptions = emojiOptions,
+                            imageOptions = imageOptions,
                             newName = newName,
-                            newEmoji = newEmoji,
+                            newIconId = newIconId,
                             newKcal = newKcal,
                             newSalmonCount = newSalmonCount,
                             newRiceGrams = newRiceGrams,
@@ -175,7 +173,7 @@ fun CustomPiecesScreen(
                                 if (it.isNotBlank()) showNameError = false
                                 showDuplicateError = false
                             },
-                            onEmojiChange = { newEmoji = it },
+                            onIconIdChange = { newIconId = it },
                             onKcalChange = { newKcal = it },
                             onSalmonChange = { newSalmonCount = it },
                             onRiceChange = { newRiceGrams = it },
@@ -190,7 +188,7 @@ fun CustomPiecesScreen(
                                     settingsManager.addCustomPiece(CustomPiece(
                                         id = "custom_${UUID.randomUUID()}",
                                         name = newName.trim(),
-                                        emoji = newEmoji,
+                                        iconId = newIconId,
                                         kcal = newKcal,
                                         salmonCount = newSalmonCount,
                                         riceGrams = newRiceGrams
@@ -230,7 +228,7 @@ fun CustomPiecesScreen(
                                         isAddingNew = false
                                         editingPiece = piece
                                         newName = piece.name
-                                        newEmoji = piece.emoji
+                                        newIconId = piece.iconId
                                         newKcal = piece.kcal
                                         newSalmonCount = piece.salmonCount
                                         newRiceGrams = piece.riceGrams
@@ -241,15 +239,7 @@ fun CustomPiecesScreen(
                                 .padding(16.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Box(
-                                modifier = Modifier
-                                    .size(48.dp)
-                                    .clip(CircleShape)
-                                    .background(colors.secondary),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(piece.emoji, fontSize = 24.sp)
-                            }
+                            Icon(painter = androidx.compose.ui.res.painterResource(id = piece.iconId), contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(40.dp))
 
                             Spacer(modifier = Modifier.width(16.dp))
 
@@ -266,7 +256,7 @@ fun CustomPiecesScreen(
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                     CustomPieceDataChip(icon = "🔥", text = strings.historyKcalLabel.format(piece.kcal), colors = colors)
                                     if (piece.salmonCount > 0) {
-                                        CustomPieceDataChip(icon = "🐟", text = if (piece.salmonCount == 1) strings.historySalmonLabelSingular.format(piece.salmonCount) else strings.historySalmonLabel.format(piece.salmonCount), colors = colors)
+                                        CustomPieceDataChip(icon = pls.dev.sushilog.R.drawable.sashimi, text = if (piece.salmonCount == 1) strings.historySalmonLabelSingular.format(piece.salmonCount) else strings.historySalmonLabel.format(piece.salmonCount), colors = colors)
                                     }
                                     if (piece.riceGrams > 0) {
                                         CustomPieceDataChip(icon = "🍚", text = strings.historyRiceLabel.format(piece.riceGrams), colors = colors)
@@ -290,9 +280,9 @@ fun CustomPiecesScreen(
                                     CustomPieceForm(
                                         colors = colors,
                                         strings = strings,
-                                        emojiOptions = emojiOptions,
+                                        imageOptions = imageOptions,
                                         newName = newName,
-                                        newEmoji = newEmoji,
+                                        newIconId = newIconId,
                                         newKcal = newKcal,
                                         newSalmonCount = newSalmonCount,
                                         newRiceGrams = newRiceGrams,
@@ -304,7 +294,7 @@ fun CustomPiecesScreen(
                                             if (it.isNotBlank()) showNameError = false
                                             showDuplicateError = false
                                         },
-                                        onEmojiChange = { newEmoji = it },
+                                        onIconIdChange = { newIconId = it },
                                         onKcalChange = { newKcal = it },
                                         onSalmonChange = { newSalmonCount = it },
                                         onRiceChange = { newRiceGrams = it },
@@ -319,7 +309,7 @@ fun CustomPiecesScreen(
                                             } else {
                                                 settingsManager.updateCustomPiece(editingPiece!!.copy(
                                                     name = newName.trim(),
-                                                    emoji = newEmoji,
+                                                    iconId = newIconId,
                                                     kcal = newKcal,
                                                     salmonCount = newSalmonCount,
                                                     riceGrams = newRiceGrams
@@ -381,6 +371,18 @@ private fun CustomPieceDataChip(icon: String, text: String, colors: SushiColors)
 }
 
 @Composable
+private fun CustomPieceDataChip(icon: Int, text: String, colors: SushiColors) {
+    Row(
+        modifier = Modifier.padding(end = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Icon(painter = androidx.compose.ui.res.painterResource(id = icon), contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(20.dp))
+        Text(text, color = colors.mutedForeground, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+    }
+}
+
+@Composable
 private fun NumericStepper(
     label: String,
     value: Int,
@@ -428,9 +430,9 @@ private fun NumericStepper(
 private fun CustomPieceForm(
     colors: SushiColors,
     strings: AppStrings.Strings,
-    emojiOptions: List<String>,
+    imageOptions: List<Int>,
     newName: String,
-    newEmoji: String,
+    newIconId: Int,
     newKcal: Int,
     newSalmonCount: Int,
     newRiceGrams: Int,
@@ -438,7 +440,7 @@ private fun CustomPieceForm(
     showDuplicateError: Boolean,
     isEditing: Boolean,
     onNameChange: (String) -> Unit,
-    onEmojiChange: (String) -> Unit,
+    onIconIdChange: (Int) -> Unit,
     onKcalChange: (Int) -> Unit,
     onSalmonChange: (Int) -> Unit,
     onRiceChange: (Int) -> Unit,
@@ -530,21 +532,21 @@ private fun CustomPieceForm(
                         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        emojiOptions.forEach { emoji ->
+                        imageOptions.forEach { emojiIcon ->
                             Box(
                                 modifier = Modifier
                                     .size(36.dp)
                                     .clip(CircleShape)
-                                    .background(if (newEmoji == emoji) colors.primary.copy(alpha = 0.2f) else colors.surface)
+                                    .background(if (newIconId == emojiIcon) colors.primary.copy(alpha = 0.2f) else colors.surface)
                                     .border(
-                                        if (newEmoji == emoji) 2.dp else 0.dp,
-                                        if (newEmoji == emoji) colors.primary else Color.Transparent,
+                                        if (newIconId == emojiIcon) 2.dp else 0.dp,
+                                        if (newIconId == emojiIcon) colors.primary else Color.Transparent,
                                         CircleShape
                                     )
-                                    .clickable { onEmojiChange(emoji) },
+                                    .clickable { onIconIdChange(emojiIcon) },
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text(emoji, fontSize = 18.sp)
+                                Icon(painter = androidx.compose.ui.res.painterResource(id = emojiIcon), contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(28.dp))
                             }
                         }
                     }

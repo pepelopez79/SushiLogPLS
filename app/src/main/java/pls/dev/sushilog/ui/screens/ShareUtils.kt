@@ -14,7 +14,7 @@ import pls.dev.sushilog.data.AppLanguage
 import pls.dev.sushilog.data.AppStrings
 import pls.dev.sushilog.data.CustomPiece
 import pls.dev.sushilog.data.SessionRecord
-import pls.dev.sushilog.data.getPieceEmoji
+import pls.dev.sushilog.data.getPieceIconId
 import pls.dev.sushilog.data.getPieceName
 import pls.dev.sushilog.ui.theme.SushiColors
 import java.io.File
@@ -125,13 +125,22 @@ fun shareSessionAsImage(
     val listPadding = 200f
     
     for ((id, count) in displayPieces) {
-        val emoji = if (id == "rest_others") "🍱" else getPieceEmoji(id, customPieces)
+        val iconId = if (id == "rest_others") pls.dev.sushilog.R.drawable.nigiri else getPieceIconId(id, customPieces)
         val name = if (id == "rest_others") strings.others else getPieceName(id, customPieces, strings)
+
+        val drawable = androidx.core.content.ContextCompat.getDrawable(context, iconId)
+        drawable?.setBounds(
+            listPadding.toInt(),
+            (currentY - 50).toInt(),
+            (listPadding + 64).toInt(),
+            (currentY + 14).toInt()
+        )
+        drawable?.draw(canvas)
 
         paint.textAlign = Paint.Align.LEFT
         paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-        canvas.drawText("$emoji  $name", listPadding, currentY, paint)
-        
+        canvas.drawText(name, listPadding + 100f, currentY, paint)
+
         paint.textAlign = Paint.Align.RIGHT
         paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
         paint.color = colors.primary.toArgb()

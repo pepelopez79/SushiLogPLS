@@ -16,8 +16,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,6 +44,15 @@ fun AchievementsScreen(
     val unlockedCount = achievements.count { it.isUnlocked }
     val totalCount = achievements.size
 
+    val categoryOrder = listOf(
+        AchievementCategory.SESSIONS_COUNT,
+        AchievementCategory.TOTAL_PIECES,
+        AchievementCategory.SESSION_PIECES,
+        AchievementCategory.SPECIFIC_PIECE,
+        AchievementCategory.VARIETY
+    )
+    val grouped = achievements.groupBy { it.achievement.category }
+
     Column(modifier = Modifier.fillMaxSize().background(colors.background)) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 16.dp),
@@ -61,7 +71,7 @@ fun AchievementsScreen(
             colors = CardDefaults.cardColors(containerColor = colors.primary.copy(alpha = 0.1f))
         ) {
             Column(modifier = Modifier.fillMaxWidth().padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(Icons.Filled.Star, contentDescription = null, tint = colors.primary, modifier = Modifier.size(48.dp))
+                Icon(painter = painterResource(id = pls.dev.sushilog.R.drawable.achievements), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.size(48.dp))
                 Spacer(modifier = Modifier.height(8.dp))
                 Text("$unlockedCount / $totalCount", color = colors.primary, fontSize = 32.sp, fontWeight = FontWeight.ExtraBold)
                 Text(strings.achievementsUnlocked, color = colors.mutedForeground, fontSize = 14.sp)
@@ -78,11 +88,40 @@ fun AchievementsScreen(
 
         LazyColumn(
             modifier = Modifier.padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(bottom = 24.dp)
         ) {
-            items(achievements) { item ->
-                AchievementCard(item = item, colors = colors, strings = strings)
+            categoryOrder.forEach { category ->
+                val itemsInCategory = grouped[category] ?: return@forEach
+                val categoryUnlocked = itemsInCategory.count { it.isUnlocked }
+
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 12.dp, bottom = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = getCategoryLabel(category, strings),
+                            color = colors.onBackground,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            letterSpacing = 0.5.sp
+                        )
+                        Text(
+                            text = "$categoryUnlocked/${itemsInCategory.size}",
+                            color = colors.mutedForeground,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+
+                items(itemsInCategory) { item ->
+                    AchievementCard(item = item, colors = colors, strings = strings)
+                }
             }
         }
     }
@@ -107,14 +146,12 @@ fun AchievementCard(item: AchievementWithStatus, colors: SushiColors, strings: A
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Box(modifier = Modifier.size(52.dp).clip(CircleShape).background(iconBgColor), contentAlignment = Alignment.Center) {
-                Icon(
-                    imageVector = getAchievementIcon(item.achievement.category),
-                    contentDescription = null,
-                    tint = if (item.isUnlocked) colors.background else colors.mutedForeground,
-                    modifier = Modifier.size(26.dp)
-                )
-            }
+            Icon(
+                painter = painterResource(id = item.achievement.iconRes),
+                contentDescription = null,
+                tint = Color.Unspecified,
+                modifier = Modifier.size(48.dp)
+            )
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
@@ -138,19 +175,16 @@ fun AchievementCard(item: AchievementWithStatus, colors: SushiColors, strings: A
                     )
                 }
             }
-
-            if (item.isUnlocked) {
-                Icon(Icons.Filled.CheckCircle, contentDescription = strings.unlocked, tint = colors.primary, modifier = Modifier.size(28.dp))
-            }
         }
     }
 }
 
-private fun getAchievementIcon(category: AchievementCategory): ImageVector = when (category) {
-    AchievementCategory.TOTAL_PIECES   -> Icons.Filled.AddCircle
-    AchievementCategory.SESSION_PIECES -> Icons.Filled.Star
-    AchievementCategory.SPECIFIC_PIECE -> Icons.Filled.Favorite
-    AchievementCategory.SESSIONS_COUNT -> Icons.Filled.DateRange
-    AchievementCategory.VARIETY        -> Icons.Filled.Search
-    AchievementCategory.SPECIAL        -> Icons.Filled.CheckCircle
+private fun getCategoryLabel(category: AchievementCategory, strings: AppStrings.Strings): String {
+    return when (category) {
+        AchievementCategory.SESSIONS_COUNT -> strings.catTrajectory.uppercase()
+        AchievementCategory.TOTAL_PIECES   -> strings.catAccumulation.uppercase()
+        AchievementCategory.SESSION_PIECES -> strings.catFeats.uppercase()
+        AchievementCategory.SPECIFIC_PIECE -> strings.catSpecialist.uppercase()
+        AchievementCategory.VARIETY        -> strings.catExplorer.uppercase()
+    }
 }

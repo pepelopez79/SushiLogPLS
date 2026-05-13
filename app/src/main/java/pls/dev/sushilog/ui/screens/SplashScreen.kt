@@ -54,10 +54,11 @@ fun SplashScreen(
                 .scale(scale)
                 .alpha(alpha)
         ) {
-            Text(
-                text = "🍣",
-                fontSize = 100.sp,
-                modifier = Modifier.padding(bottom = 16.dp)
+            androidx.compose.material3.Icon(
+                painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.nigiri),
+                contentDescription = null,
+                tint = androidx.compose.ui.graphics.Color.Unspecified,
+                modifier = Modifier.size(140.dp).padding(bottom = 16.dp)
             )
 
             Column(horizontalAlignment = Alignment.Start) {

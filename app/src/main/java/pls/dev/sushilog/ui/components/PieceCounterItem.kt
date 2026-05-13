@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -102,16 +103,14 @@ fun PieceCounterItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(14.dp)
     ) {
+
         // ── Icono del plato ──────────────────────────────────────────────
-        Box(
-            modifier = Modifier
-                .size(48.dp)
-                .clip(CircleShape)
-                .background(colors.secondary),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(text = piece.emoji, fontSize = 24.sp)
-        }
+        Icon(
+            painter = androidx.compose.ui.res.painterResource(id = piece.iconId),
+            contentDescription = null,
+            tint = androidx.compose.ui.graphics.Color.Unspecified,
+            modifier = Modifier.size(40.dp)
+        )
 
         // ── Nombre ───────────────────────────────────────────────────────
         Column(modifier = Modifier.weight(1f)) {

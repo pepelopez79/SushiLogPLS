@@ -29,7 +29,7 @@ data class AchievementWithStatus(
 )
 
 enum class AchievementCategory {
-    TOTAL_PIECES, SESSION_PIECES, SPECIFIC_PIECE, SESSIONS_COUNT, VARIETY, SPECIAL
+    SESSIONS_COUNT, TOTAL_PIECES, SESSION_PIECES, SPECIFIC_PIECE, VARIETY
 }
 
 sealed class AchievementRequirement {
@@ -44,9 +44,43 @@ sealed class AchievementRequirement {
 
 val ACHIEVEMENTS = listOf(
     Achievement(
+        id = "first_session",
+        titleKey = "achievement_first_session_title",
+        descriptionKey = "achievement_first_session_desc",
+        iconRes = R.drawable.achievement20,
+        category = AchievementCategory.SESSIONS_COUNT,
+        requirement = AchievementRequirement.SessionsCompleted(1)
+    ),
+    Achievement(
+        id = "sessions_5",
+        titleKey = "achievement_sessions_5_title",
+        descriptionKey = "achievement_sessions_5_desc",
+        iconRes = R.drawable.achievement14,
+        category = AchievementCategory.SESSIONS_COUNT,
+        requirement = AchievementRequirement.SessionsCompleted(5)
+    ),
+    Achievement(
+        id = "sessions_25",
+        titleKey = "achievement_sessions_25_title",
+        descriptionKey = "achievement_sessions_25_desc",
+        iconRes = R.drawable.achievement15,
+        category = AchievementCategory.SESSIONS_COUNT,
+        requirement = AchievementRequirement.SessionsCompleted(25)
+    ),
+    Achievement(
+        id = "sessions_50",
+        titleKey = "achievement_sessions_50_title",
+        descriptionKey = "achievement_sessions_50_desc",
+        iconRes = R.drawable.achievement16,
+        category = AchievementCategory.SESSIONS_COUNT,
+        requirement = AchievementRequirement.SessionsCompleted(50)
+    ),
+
+    Achievement(
         id = "total_100",
         titleKey = "achievement_total_100_title",
         descriptionKey = "achievement_total_100_desc",
+        iconRes = R.drawable.achievement1,
         category = AchievementCategory.TOTAL_PIECES,
         requirement = AchievementRequirement.TotalPieces(100)
     ),
@@ -54,6 +88,7 @@ val ACHIEVEMENTS = listOf(
         id = "total_500",
         titleKey = "achievement_total_500_title",
         descriptionKey = "achievement_total_500_desc",
+        iconRes = R.drawable.achievement2,
         category = AchievementCategory.TOTAL_PIECES,
         requirement = AchievementRequirement.TotalPieces(500)
     ),
@@ -61,6 +96,7 @@ val ACHIEVEMENTS = listOf(
         id = "total_1000",
         titleKey = "achievement_total_1000_title",
         descriptionKey = "achievement_total_1000_desc",
+        iconRes = R.drawable.achievement3,
         category = AchievementCategory.TOTAL_PIECES,
         requirement = AchievementRequirement.TotalPieces(1000)
     ),
@@ -68,6 +104,7 @@ val ACHIEVEMENTS = listOf(
         id = "total_5000",
         titleKey = "achievement_total_5000_title",
         descriptionKey = "achievement_total_5000_desc",
+        iconRes = R.drawable.achievement4,
         category = AchievementCategory.TOTAL_PIECES,
         requirement = AchievementRequirement.TotalPieces(5000)
     ),
@@ -76,6 +113,7 @@ val ACHIEVEMENTS = listOf(
         id = "session_30",
         titleKey = "achievement_session_30_title",
         descriptionKey = "achievement_session_30_desc",
+        iconRes = R.drawable.achievement5,
         category = AchievementCategory.SESSION_PIECES,
         requirement = AchievementRequirement.SessionPieces(30)
     ),
@@ -83,6 +121,7 @@ val ACHIEVEMENTS = listOf(
         id = "session_50",
         titleKey = "achievement_session_50_title",
         descriptionKey = "achievement_session_50_desc",
+        iconRes = R.drawable.achievement6,
         category = AchievementCategory.SESSION_PIECES,
         requirement = AchievementRequirement.SessionPieces(50)
     ),
@@ -90,14 +129,40 @@ val ACHIEVEMENTS = listOf(
         id = "session_100",
         titleKey = "achievement_session_100_title",
         descriptionKey = "achievement_session_100_desc",
+        iconRes = R.drawable.achievement7,
         category = AchievementCategory.SESSION_PIECES,
         requirement = AchievementRequirement.SessionPieces(100)
     ),
 
     Achievement(
+        id = "sashimi_session_20",
+        titleKey = "achievement_sashimi_session_20_title",
+        descriptionKey = "achievement_sashimi_session_20_desc",
+        iconRes = R.drawable.achievement13,
+        category = AchievementCategory.SPECIFIC_PIECE,
+        requirement = AchievementRequirement.SpecificPieceSession("sashimi", 20)
+    ),
+    Achievement(
+        id = "nigiri_session_30",
+        titleKey = "achievement_nigiri_session_30_title",
+        descriptionKey = "achievement_nigiri_session_30_desc",
+        iconRes = R.drawable.achievement12,
+        category = AchievementCategory.SPECIFIC_PIECE,
+        requirement = AchievementRequirement.SpecificPieceSession("nigiri", 30)
+    ),
+    Achievement(
+        id = "gyoza_50",
+        titleKey = "achievement_gyoza_50_title",
+        descriptionKey = "achievement_gyoza_50_desc",
+        iconRes = R.drawable.achievement11,
+        category = AchievementCategory.SPECIFIC_PIECE,
+        requirement = AchievementRequirement.SpecificPieceTotal("gyoza", 50)
+    ),
+    Achievement(
         id = "nigiri_100",
         titleKey = "achievement_nigiri_100_title",
         descriptionKey = "achievement_nigiri_100_desc",
+        iconRes = R.drawable.achievement8,
         category = AchievementCategory.SPECIFIC_PIECE,
         requirement = AchievementRequirement.SpecificPieceTotal("nigiri", 100)
     ),
@@ -105,6 +170,7 @@ val ACHIEVEMENTS = listOf(
         id = "sashimi_100",
         titleKey = "achievement_sashimi_100_title",
         descriptionKey = "achievement_sashimi_100_desc",
+        iconRes = R.drawable.achievement9,
         category = AchievementCategory.SPECIFIC_PIECE,
         requirement = AchievementRequirement.SpecificPieceTotal("sashimi", 100)
     ),
@@ -112,58 +178,16 @@ val ACHIEVEMENTS = listOf(
         id = "maki_100",
         titleKey = "achievement_maki_100_title",
         descriptionKey = "achievement_maki_100_desc",
+        iconRes = R.drawable.achievement10,
         category = AchievementCategory.SPECIFIC_PIECE,
         requirement = AchievementRequirement.SpecificPieceTotal("maki", 100)
-    ),
-    Achievement(
-        id = "gyoza_50",
-        titleKey = "achievement_gyoza_50_title",
-        descriptionKey = "achievement_gyoza_50_desc",
-        category = AchievementCategory.SPECIFIC_PIECE,
-        requirement = AchievementRequirement.SpecificPieceTotal("gyoza", 50)
-    ),
-
-    Achievement(
-        id = "nigiri_session_30",
-        titleKey = "achievement_nigiri_session_30_title",
-        descriptionKey = "achievement_nigiri_session_30_desc",
-        category = AchievementCategory.SPECIFIC_PIECE,
-        requirement = AchievementRequirement.SpecificPieceSession("nigiri", 30)
-    ),
-    Achievement(
-        id = "sashimi_session_20",
-        titleKey = "achievement_sashimi_session_20_title",
-        descriptionKey = "achievement_sashimi_session_20_desc",
-        category = AchievementCategory.SPECIFIC_PIECE,
-        requirement = AchievementRequirement.SpecificPieceSession("sashimi", 20)
-    ),
-
-    Achievement(
-        id = "sessions_5",
-        titleKey = "achievement_sessions_5_title",
-        descriptionKey = "achievement_sessions_5_desc",
-        category = AchievementCategory.SESSIONS_COUNT,
-        requirement = AchievementRequirement.SessionsCompleted(5)
-    ),
-    Achievement(
-        id = "sessions_25",
-        titleKey = "achievement_sessions_25_title",
-        descriptionKey = "achievement_sessions_25_desc",
-        category = AchievementCategory.SESSIONS_COUNT,
-        requirement = AchievementRequirement.SessionsCompleted(25)
-    ),
-    Achievement(
-        id = "sessions_50",
-        titleKey = "achievement_sessions_50_title",
-        descriptionKey = "achievement_sessions_50_desc",
-        category = AchievementCategory.SESSIONS_COUNT,
-        requirement = AchievementRequirement.SessionsCompleted(50)
     ),
 
     Achievement(
         id = "variety_6",
         titleKey = "achievement_variety_6_title",
         descriptionKey = "achievement_variety_6_desc",
+        iconRes = R.drawable.achievement17,
         category = AchievementCategory.VARIETY,
         requirement = AchievementRequirement.PieceVariety(6)
     ),
@@ -171,22 +195,16 @@ val ACHIEVEMENTS = listOf(
         id = "variety_all",
         titleKey = "achievement_variety_all_title",
         descriptionKey = "achievement_variety_all_desc",
+        iconRes = R.drawable.achievement18,
         category = AchievementCategory.VARIETY,
         requirement = AchievementRequirement.PieceVariety(12)
     ),
-
     Achievement(
         id = "all_in_one",
         titleKey = "achievement_all_in_one_title",
         descriptionKey = "achievement_all_in_one_desc",
-        category = AchievementCategory.SPECIAL,
+        iconRes = R.drawable.achievement19,
+        category = AchievementCategory.VARIETY,
         requirement = AchievementRequirement.AllPiecesInSession(1)
-    ),
-    Achievement(
-        id = "first_session",
-        titleKey = "achievement_first_session_title",
-        descriptionKey = "achievement_first_session_desc",
-        category = AchievementCategory.SESSIONS_COUNT,
-        requirement = AchievementRequirement.SessionsCompleted(1)
     ),
 )

@@ -13,11 +13,11 @@ enum class AppTheme(val id: String, val displayName: Map<AppLanguage, String>) {
     SALMON("salmon", mapOf(AppLanguage.SPANISH to "Salmón", AppLanguage.ENGLISH to "Salmon", AppLanguage.FRENCH to "Saumon", AppLanguage.ITALIAN to "Salmone"))
 }
 
-enum class AppLanguage(val code: String, val displayName: String, val flag: String) {
-    SPANISH("es", "Español", "🇪🇸"),
-    ENGLISH("en", "English", "🇬🇧"),
-    FRENCH("fr", "Français", "🇫🇷"),
-    ITALIAN("it", "Italiano", "🇮🇹");
+enum class AppLanguage(val code: String, val displayName: String, val flag: String, val flagRes: Int) {
+    SPANISH("es", "Español", "🇪🇸", pls.dev.sushilog.R.drawable.spanish),
+    ENGLISH("en", "English", "🇬🇧", pls.dev.sushilog.R.drawable.english),
+    FRENCH("fr", "Français", "🇫🇷", pls.dev.sushilog.R.drawable.french),
+    ITALIAN("it", "Italiano", "🇮🇹", pls.dev.sushilog.R.drawable.italian);
 
     companion object {
         fun fromDeviceLocale(): AppLanguage {
@@ -95,6 +95,7 @@ object AppStrings {
         val historyRiceLabel: String, val historySalmonLabel: String, val historySalmonLabelSingular: String, val statsWholeSalmon: String,
         val statsSalmonPieces: String, val statsSalmonPiecesSingular: String, val shareActionTitle: String, val shareIntentText: String,
         val shareWatermark: String, val rice: String, val kcal: String, val explore: String,
+        val catTrajectory: String, val catAccumulation: String, val catFeats: String, val catSpecialist: String, val catExplorer: String,
         val duplicatePieceName: String
     )
 
@@ -150,6 +151,7 @@ object AppStrings {
         historyRiceLabel="%dg", historySalmonLabel="%d cortes", historySalmonLabelSingular="%d corte", statsWholeSalmon="Aprox. %.1f salmones enteros (%d cortes)",
         statsSalmonPieces="%d cortes de salmón", statsSalmonPiecesSingular="%d corte de salmón", shareActionTitle="Compartir sesión", shareIntentText="🍣 ¡Mi sesión de Sushi en %s! \n#SushiLog",
         shareWatermark="Sushi Log 🍣", rice="Arroz", kcal="Kcal", explore="EXPLORA",
+        catTrajectory="Trayectoria", catAccumulation="Acumulación", catFeats="Hazañas", catSpecialist="Especialista", catExplorer="Explorador",
         duplicatePieceName="Ya existe una pieza con ese nombre"
     )
 
@@ -205,6 +207,7 @@ object AppStrings {
         historyRiceLabel="%dg", historySalmonLabel="%d cuts", historySalmonLabelSingular="%d cut", statsWholeSalmon="Approx. %.1f whole salmons (%d cuts)",
         statsSalmonPieces="%d salmon cuts", statsSalmonPiecesSingular="%d salmon cut", shareActionTitle="Share session", shareIntentText="🍣 My Sushi session at %s! \n#SushiLog",
         shareWatermark="Sushi Log 🍣", rice="Rice", kcal="Kcal", explore="EXPLORE",
+        catTrajectory="Trajectory", catAccumulation="Accumulation", catFeats="Feats", catSpecialist="Specialist", catExplorer="Explorer",
         duplicatePieceName="A piece with this name already exists"
     )
 
@@ -260,6 +263,7 @@ object AppStrings {
         historyRiceLabel="%dg", historySalmonLabel="%d tranches", historySalmonLabelSingular="%d tranche", statsWholeSalmon="Env. %.1f saumons entiers (%d coupes)",
         statsSalmonPieces="%d coupes de saumon", statsSalmonPiecesSingular="%d coupe de saumon", shareActionTitle="Partager la session", shareIntentText="🍣 Ma session de Sushi chez %s! \n#SushiLog",
         shareWatermark="Sushi Log 🍣", rice="Riz", kcal="Kcal", explore="EXPLORER",
+        catTrajectory="Parcours", catAccumulation="Accumulation", catFeats="Exploits", catSpecialist="Spécialiste", catExplorer="Explorateur",
         duplicatePieceName="Une pièce avec ce nom existe déjà"
     )
 
@@ -315,6 +319,7 @@ object AppStrings {
         historyRiceLabel="%dg", historySalmonLabel="%d tagli", historySalmonLabelSingular="%d taglio", statsWholeSalmon="Circa %.1f salmoni interi (%d tagli)",
         statsSalmonPieces="%d tagli di salmone", statsSalmonPiecesSingular="%d taglio di salmone", shareActionTitle="Condividi sessione", shareIntentText="🍣 La mia sessione di Sushi al %s! \n#SushiLog",
         shareWatermark="Sushi Log 🍣", rice="Riso", kcal="Kcal", explore="ESPLORA",
+        catTrajectory="Traiettoria", catAccumulation="Accumulo", catFeats="Imprese", catSpecialist="Specialista", catExplorer="Esploratore",
         duplicatePieceName="Esiste già un pezzo con questo nome"
     )
 
@@ -361,7 +366,7 @@ object AppStrings {
 data class CustomPiece(
     val id: String,
     val name: String,
-    val emoji: String = "🍣",
+    val iconId: Int = pls.dev.sushilog.R.drawable.nigiri,
     val kcal: Int = 0,
     val salmonCount: Int = 0,
     val riceGrams: Int = 0

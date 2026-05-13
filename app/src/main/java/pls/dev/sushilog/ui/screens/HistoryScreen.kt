@@ -79,7 +79,12 @@ fun HistoryScreen(
         if (sessions.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize().padding(32.dp), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    Icon(Icons.Filled.Delete, contentDescription = null, tint = colors.mutedForeground, modifier = Modifier.size(64.dp))
+                    Icon(
+                        painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.delete),
+                        contentDescription = null,
+                        tint = androidx.compose.ui.graphics.Color.Unspecified,
+                        modifier = Modifier.size(64.dp)
+                    )
                     Text(strings.noHistory, color = colors.onBackground, fontSize = 20.sp, fontWeight = FontWeight.Bold)
                     Text(strings.noHistoryDesc, color = colors.mutedForeground, fontSize = 14.sp, textAlign = TextAlign.Center)
                 }
@@ -149,7 +154,7 @@ private fun SessionHistoryCard(
     val totalSalmon = session.pieces.entries.sumOf { getPieceSalmonCount(it.key, customPieces) * it.value }
 
     val mostConsumedPieceId = session.pieces.filter { it.value > 0 }.maxByOrNull { it.value }?.key
-    val mainEmoji = mostConsumedPieceId?.let { getPieceEmoji(it, customPieces) } ?: "🍣"
+    val mainEmoji = mostConsumedPieceId?.let { getPieceIconId(it, customPieces) } ?: pls.dev.sushilog.R.drawable.nigiri
 
     val cardColor = colors.surface
 
@@ -164,11 +169,7 @@ private fun SessionHistoryCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Box(
-                    modifier = Modifier.size(48.dp).clip(CircleShape)
-                        .background(colors.secondary),
-                    contentAlignment = Alignment.Center
-                ) { Text(mainEmoji, fontSize = 24.sp) }
+                Icon(painter = androidx.compose.ui.res.painterResource(id = mainEmoji), contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(40.dp))
 
                 Column(modifier = Modifier.weight(1f)) {
                     Text(formatDateLocalized(session.date, currentLanguage), color = colors.onSurface, fontSize = 16.sp, fontWeight = FontWeight.Bold)
@@ -210,7 +211,7 @@ private fun SessionHistoryCard(
                         session.pieces.filter { it.value > 0 }.forEach { (id, count) ->
                             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                                    Text(getPieceEmoji(id, customPieces), fontSize = 16.sp)
+                                    Icon(painter = androidx.compose.ui.res.painterResource(id = getPieceIconId(id, customPieces)), contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(24.dp))
                                     Text(getPieceName(id, customPieces, strings), color = colors.onSurface, fontSize = 14.sp)
                                 }
                                 Text("$count", color = colors.primary, fontSize = 14.sp, fontWeight = FontWeight.Bold)

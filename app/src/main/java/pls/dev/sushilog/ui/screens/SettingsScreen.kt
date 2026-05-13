@@ -146,7 +146,7 @@ fun SettingsScreen(
                 ) {
                     Column {
                         SettingsItem(
-                            icon = Icons.Filled.Add,
+                            iconRes = pls.dev.sushilog.R.drawable.add,
                             title = strings.customPiecesManage,
                             subtitle = strings.customPiecesSubtitle,
                             colors = colors,
@@ -154,11 +154,10 @@ fun SettingsScreen(
                         )
                         HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = colors.border)
                         SettingsItem(
-                            icon = Icons.Filled.Delete,
+                            iconRes = pls.dev.sushilog.R.drawable.delete,
                             title = strings.deleteAll,
                             subtitle = strings.deleteAllSubtitle,
                             colors = colors,
-                            isDestructive = true,
                             onClick = { showResetDialog = true }
                         )
                     }
@@ -262,15 +261,22 @@ private fun LanguageOption(
             .border(if (isSelected) 2.dp else 0.dp, if (isSelected) colors.primary else Color.Transparent, RoundedCornerShape(12.dp))
             .clickable(onClick = onClick)
             .padding(vertical = 10.dp, horizontal = 4.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Text(language.flag, fontSize = 22.sp)
-        Spacer(modifier = Modifier.height(4.dp))
+        Icon(
+            painter = androidx.compose.ui.res.painterResource(id = language.flagRes),
+            contentDescription = language.displayName,
+            tint = androidx.compose.ui.graphics.Color.Unspecified,
+            modifier = Modifier.size(36.dp)
+        )
         Text(
             text = language.displayName,
             color = if (isSelected) colors.primary else colors.onSurface,
             fontSize = 11.sp,
-            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
+            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
@@ -297,6 +303,38 @@ private fun SettingsItem(
             Text(
                 text = title,
                 color = if (isDestructive) MaterialTheme.colorScheme.error else colors.onSurface,
+                fontSize = 16.sp, fontWeight = FontWeight.Medium
+            )
+            Text(text = subtitle, color = colors.mutedForeground, fontSize = 13.sp)
+        }
+        if (onClick != null) {
+            Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null, tint = colors.mutedForeground, modifier = Modifier.size(20.dp))
+        }
+    }
+}
+
+@Composable
+private fun SettingsItem(
+    iconRes: Int, title: String, subtitle: String, colors: SushiColors, onClick: (() -> Unit)? = null
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Icon(
+            painter = androidx.compose.ui.res.painterResource(id = iconRes),
+            contentDescription = null,
+            tint = androidx.compose.ui.graphics.Color.Unspecified,
+            modifier = Modifier.size(28.dp)
+        )
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = title,
+                color = colors.onSurface,
                 fontSize = 16.sp, fontWeight = FontWeight.Medium
             )
             Text(text = subtitle, color = colors.mutedForeground, fontSize = 13.sp)

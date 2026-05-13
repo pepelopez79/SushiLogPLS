@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,10 +38,12 @@ fun HomeScreen(
             .background(colors.background)
     ) {
         
-        Text(
-            text = "🍣",
-            fontSize = 300.sp,
+        Icon(
+            painter = painterResource(id = pls.dev.sushilog.R.drawable.nigiri),
+            contentDescription = null,
+            tint = androidx.compose.ui.graphics.Color.Unspecified,
             modifier = Modifier
+                .size(300.dp)
                 .align(Alignment.TopEnd)
                 .offset(x = 100.dp, y = (-80).dp)
                 .alpha(0.04f)
@@ -82,7 +85,12 @@ fun HomeScreen(
                         .clickable(onClick = onOpenSettings),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Filled.Settings, contentDescription = strings.settings, tint = colors.onSurface)
+                    Icon(
+                        painter = painterResource(id = pls.dev.sushilog.R.drawable.settings),
+                        contentDescription = strings.settings,
+                        tint = androidx.compose.ui.graphics.Color.Unspecified,
+                        modifier = Modifier.size(36.dp)
+                    )
                 }
             }
 
@@ -165,7 +173,7 @@ fun HomeScreen(
             ) {
                 DashboardCard(
                     title = strings.history,
-                    icon = Icons.Filled.List,
+                    icon = pls.dev.sushilog.R.drawable.history,
                     color = colors.surface,
                     iconColor = colors.onSurface,
                     textColor = colors.onSurface,
@@ -179,7 +187,7 @@ fun HomeScreen(
                 ) {
                     DashboardCard(
                         title = strings.stats,
-                        icon = Icons.Filled.Info,
+                        icon = pls.dev.sushilog.R.drawable.stats,
                         color = colors.surface,
                         iconColor = colors.onSurface,
                         textColor = colors.onSurface,
@@ -189,7 +197,7 @@ fun HomeScreen(
                     )
                     DashboardCard(
                         title = strings.achievements,
-                        icon = Icons.Filled.Star,
+                        icon = pls.dev.sushilog.R.drawable.achievements,
                         color = colors.surface,
                         iconColor = colors.onSurface,
                         textColor = colors.onSurface,
@@ -208,7 +216,7 @@ fun HomeScreen(
 @Composable
 fun DashboardCard(
     title: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: Int,
     color: androidx.compose.ui.graphics.Color,
     iconColor: androidx.compose.ui.graphics.Color,
     textColor: androidx.compose.ui.graphics.Color,
@@ -227,12 +235,12 @@ fun DashboardCard(
                 modifier = Modifier.fillMaxSize().padding(24.dp),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Box(
-                    modifier = Modifier.size(48.dp).clip(CircleShape).background(iconColor.copy(alpha = 0.1f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(icon, contentDescription = null, tint = iconColor, modifier = Modifier.size(24.dp))
-                }
+                Icon(
+                    painter = painterResource(id = icon),
+                    contentDescription = null,
+                    tint = androidx.compose.ui.graphics.Color.Unspecified,
+                    modifier = Modifier.size(40.dp)
+                )
                 Text(
                     title,
                     color = textColor,
@@ -248,12 +256,12 @@ fun DashboardCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Box(
-                    modifier = Modifier.size(40.dp).clip(CircleShape).background(iconColor.copy(alpha = 0.1f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(icon, contentDescription = null, tint = iconColor, modifier = Modifier.size(20.dp))
-                }
+                Icon(
+                    painter = painterResource(id = icon),
+                    contentDescription = null,
+                    tint = androidx.compose.ui.graphics.Color.Unspecified,
+                    modifier = Modifier.size(32.dp)
+                )
                 Text(
                     title,
                     color = textColor,

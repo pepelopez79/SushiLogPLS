@@ -106,7 +106,7 @@ fun StatsScreen(
                 contentPadding = PaddingValues(bottom = 24.dp)
             ) {
                 item {
-                    val fullList = SUSHI_PIECES + customPieces.map { SushiPiece(id = it.id, name = it.name, emoji = it.emoji, kcal = it.kcal, salmonCount = it.salmonCount, riceGrams = it.riceGrams) }
+                    val fullList = SUSHI_PIECES + customPieces.map { SushiPiece(id = it.id, name = it.name, iconId = it.iconId, kcal = it.kcal, salmonCount = it.salmonCount, riceGrams = it.riceGrams) }
                     val totalCalories = stats.pieceStats.entries.sumOf { (id, count) ->
                         val pieceOpt = fullList.find { p -> p.id == id }
                         (pieceOpt?.kcal ?: 0) * count
@@ -120,7 +120,7 @@ fun StatsScreen(
                             modifier = Modifier.fillMaxWidth().padding(24.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text("🍣", fontSize = 48.sp)
+                            Icon(painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.nigiri), contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(64.dp))
                             Text(
                                 stats.total.toString(),
                                 color = colors.primary,
@@ -231,7 +231,7 @@ fun StatsScreen(
                                 modifier = Modifier.padding(16.dp),
                                 verticalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
-                                val fullList = SUSHI_PIECES + customPieces.map { SushiPiece(id = it.id, name = it.name, emoji = it.emoji, kcal = it.kcal, salmonCount = it.salmonCount, riceGrams = it.riceGrams) }
+                                val fullList = SUSHI_PIECES + customPieces.map { SushiPiece(id = it.id, name = it.name, iconId = it.iconId, kcal = it.kcal, salmonCount = it.salmonCount, riceGrams = it.riceGrams) }
                                 
                                 val totalCalories = stats.pieceStats.entries.sumOf { (id, count) ->
                                     val pieceOpt = fullList.find { p -> p.id == id }
@@ -239,7 +239,7 @@ fun StatsScreen(
                                 }
                                 if (totalCalories > 0) {
                                     CuriosityItem(
-                                        "🔥",
+                                        pls.dev.sushilog.R.drawable.stats,
                                         strings.caloriesApprox.format(totalCalories),
                                         colors
                                     )
@@ -251,14 +251,14 @@ fun StatsScreen(
                                 }
                                 if (riceGrams > 0) {
                                     CuriosityItem(
-                                        emoji = "🍚",
+                                        iconId = pls.dev.sushilog.R.drawable.rice,
                                         text = strings.riceApprox.format(riceGrams),
                                         colors = colors
                                     )
                                 }
                                 stats.pieceStats.maxByOrNull { it.value }?.let {
                                         CuriosityItem(
-                                            getPieceEmoji(it.key, customPieces),
+                                            getPieceIconId(it.key, customPieces),
                                             strings.favoritePiece.format(
                                                 getPieceName(
                                                     it.key,
@@ -276,13 +276,13 @@ fun StatsScreen(
                                 val wholeSalmons = salmonEst / 40.0
                                 if (wholeSalmons >= 1.0) {
                                     CuriosityItem(
-                                        "🐟",
+                                        pls.dev.sushilog.R.drawable.sashimi,
                                         strings.statsWholeSalmon.format(wholeSalmons, salmonEst),
                                         colors
                                     )
                                 } else if (salmonEst > 0) {
                                     CuriosityItem(
-                                        "🐟",
+                                        pls.dev.sushilog.R.drawable.sashimi,
                                         if (salmonEst == 1) strings.statsSalmonPiecesSingular.format(salmonEst) else strings.statsSalmonPieces.format(salmonEst),
                                         colors
                                     )
@@ -319,7 +319,7 @@ private fun PieceTypeRow(
     Column {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                Text(getPieceEmoji(id, customPieces), fontSize = 20.sp)
+                Icon(painter = androidx.compose.ui.res.painterResource(id = getPieceIconId(id, customPieces)), contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(28.dp))
                 Text(getPieceName(id, customPieces, strings), color = colors.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
             }
             Text(count.toString(), color = colors.primary, fontSize = 16.sp, fontWeight = FontWeight.Bold)
@@ -338,7 +338,7 @@ private fun PieceTypeRowOthers(
     Column {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                Text("🍱", fontSize = 20.sp)
+                Icon(painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.nigiri), contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(28.dp))
                 Text(label, color = colors.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
             }
             Text(count.toString(), color = colors.primary, fontSize = 16.sp, fontWeight = FontWeight.Bold)
@@ -351,11 +351,9 @@ private fun PieceTypeRowOthers(
 }
 
 @Composable
-private fun CuriosityItem(emoji: String, text: String, colors: SushiColors) {
+private fun CuriosityItem(iconId: Int, text: String, colors: SushiColors) {
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        Box(modifier = Modifier.size(40.dp).clip(CircleShape).background(colors.secondary), contentAlignment = Alignment.Center) {
-            Text(emoji, fontSize = 20.sp)
-        }
+        Icon(painter = androidx.compose.ui.res.painterResource(id = iconId), contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(32.dp))
         Text(text, color = colors.onSurface, fontSize = 14.sp)
     }
 }
