@@ -196,7 +196,7 @@ private fun SessionHistoryCard(
                     }
                 }
 
-                Column(horizontalAlignment = Alignment.End) {
+                Column(horizontalAlignment = Alignment.End, modifier = Modifier.padding(end = 4.dp)) {
                     Text(
                         text = totalPieces.toString(),
                         color = colors.onSurface,

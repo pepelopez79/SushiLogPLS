@@ -2,6 +2,7 @@ package pls.dev.sushilog.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import androidx.core.content.edit
@@ -21,12 +22,17 @@ class AchievementManager(context: Context) {
 
     fun getUnlockedIds(): Set<String> {
         val json = prefs.getString(unlockedKey, null) ?: return emptySet()
-        val type = object : TypeToken<Set<String>>() {}.type
-        return gson.fromJson(json, type)
+        return try {
+            val type = object : TypeToken<Set<String>>() {}.type
+            gson.fromJson(json, type) ?: emptySet()
+        } catch (e: Exception) {
+            Log.e("AchievementManager", "Error leyendo logros desbloqueados", e)
+            emptySet()
+        }
     }
 
     private fun saveUnlockedIds(ids: Set<String>) {
-        prefs.edit { putString(unlockedKey, gson.toJson(ids)) }
+        prefs.edit(commit = true) { putString(unlockedKey, gson.toJson(ids)) }
     }
 
     fun getProgress(achievement: Achievement): AchievementProgress {

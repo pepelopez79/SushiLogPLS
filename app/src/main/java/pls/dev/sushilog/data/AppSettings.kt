@@ -424,12 +424,16 @@ class AppSettingsManager(private val context: Context) {
 
     fun getCustomPieces(): List<CustomPiece> {
         val json = prefs.getString("custom_pieces", null) ?: return emptyList()
-        val type = object : TypeToken<List<CustomPiece>>() {}.type
-        return gson.fromJson(json, type)
+        return try {
+            val type = object : TypeToken<List<CustomPiece>>() {}.type
+            gson.fromJson(json, type) ?: emptyList()
+        } catch (e: Exception) {
+            emptyList()
+        }
     }
 
     fun saveCustomPieces(pieces: List<CustomPiece>) {
-        prefs.edit { putString("custom_pieces", gson.toJson(pieces)) }
+        prefs.edit(commit = true) { putString("custom_pieces", gson.toJson(pieces)) }
     }
 
     fun addCustomPiece(piece: CustomPiece) {
