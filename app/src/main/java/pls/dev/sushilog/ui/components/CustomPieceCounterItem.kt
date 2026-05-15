@@ -58,23 +58,25 @@ fun CustomPieceCounterItem(
             .shadow(4.dp, RoundedCornerShape(24.dp))
             .clip(RoundedCornerShape(24.dp))
             .background(if (isPressing) colors.secondary else colors.surface)
-            .pointerInput(Unit) {
+            .pointerInput(count) {
                 detectTapGestures(
                     onPress = {
                         isPressing = true
                         var didDecrement = false
-                        val pressJob = coroutineScope.launch {
-                            val startTime = System.currentTimeMillis()
-                            while (isActive) {
-                                val elapsed = System.currentTimeMillis() - startTime
-                                val pct = (elapsed / 5000f).coerceIn(0f, 1f)
-                                progress = pct
-                                if (pct >= 1f) { didDecrement = true; onDecrement(); bounceScale = 1.3f; break }
-                                delay(50)
+                        val pressJob = if (count > 0) {
+                            coroutineScope.launch {
+                                val startTime = System.currentTimeMillis()
+                                while (isActive) {
+                                    val elapsed = System.currentTimeMillis() - startTime
+                                    val pct = (elapsed / 2000f).coerceIn(0f, 1f)
+                                    progress = pct
+                                    if (pct >= 1f) { didDecrement = true; onDecrement(); bounceScale = 1.3f; progress = 0f; isPressing = false; break }
+                                    delay(50)
+                                }
                             }
-                        }
+                        } else null
                         val released = tryAwaitRelease()
-                        pressJob.cancel(); isPressing = false; progress = 0f
+                        pressJob?.cancel(); isPressing = false; progress = 0f
                         if (released && !didDecrement) { onIncrement(); bounceScale = 1.3f }
                     }
                 )

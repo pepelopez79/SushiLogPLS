@@ -40,10 +40,10 @@ fun HomeScreen(
             contentDescription = null,
             tint = androidx.compose.ui.graphics.Color.Unspecified,
             modifier = Modifier
-                .size(300.dp)
-                .align(Alignment.TopEnd)
-                .offset(x = 100.dp, y = (-80).dp)
-                .alpha(0.04f)
+                .size(350.dp)
+                .align(Alignment.BottomStart)
+                .offset(x = (-60).dp, y = 100.dp)
+                .alpha(0.07f)
         )
 
         Column(
@@ -64,11 +64,11 @@ fun HomeScreen(
                         painter = painterResource(id = pls.dev.sushilog.R.drawable.logo),
                         contentDescription = null,
                         tint = androidx.compose.ui.graphics.Color.Unspecified,
-                        modifier = Modifier.size(60.dp)
+                        modifier = Modifier.size(66.dp)
                     )
                     SushiLogTitle(
                         colors = colors,
-                        sushiFontSize = 32,
+                        sushiFontSize = 38,
                         logFontSize = 16,
                         style = 1
                     )
