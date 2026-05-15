@@ -41,6 +41,8 @@ import androidx.compose.ui.unit.sp
 import pls.dev.sushilog.data.AppSettingsManager
 import pls.dev.sushilog.data.AppStrings
 import pls.dev.sushilog.data.CustomPiece
+import pls.dev.sushilog.data.DRAWABLE_NAME_TO_ID
+import pls.dev.sushilog.data.resolveDrawableName
 import pls.dev.sushilog.ui.theme.SushiColors
 import java.util.UUID
 
@@ -59,7 +61,7 @@ fun CustomPiecesScreen(
     var isAddingNew by remember { mutableStateOf(false) }
 
     var newName by remember { mutableStateOf("") }
-    var newIconId by remember { mutableStateOf<Int>(pls.dev.sushilog.R.drawable.nigiri) }
+    var newIconName by remember { mutableStateOf("nigiri") }
     var newKcal by remember { mutableIntStateOf(0) }
     var newSalmonCount by remember { mutableIntStateOf(0) }
     var newRiceGrams by remember { mutableIntStateOf(0) }
@@ -67,35 +69,7 @@ fun CustomPiecesScreen(
     var showDuplicateError by remember { mutableStateOf(false) }
     var deleteTarget by remember { mutableStateOf<CustomPiece?>(null) }
 
-    val imageOptions = remember {
-        listOf(
-            pls.dev.sushilog.R.drawable.nigiri,
-            pls.dev.sushilog.R.drawable.nigiri2,
-            pls.dev.sushilog.R.drawable.nigiri3,
-            pls.dev.sushilog.R.drawable.nigiri4,
-            pls.dev.sushilog.R.drawable.sashimi,
-            pls.dev.sushilog.R.drawable.salmon,
-            pls.dev.sushilog.R.drawable.maki,
-            pls.dev.sushilog.R.drawable.maki2,
-            pls.dev.sushilog.R.drawable.uramaki,
-            pls.dev.sushilog.R.drawable.uramaki2,
-            pls.dev.sushilog.R.drawable.temaki,
-            pls.dev.sushilog.R.drawable.gunkan,
-            pls.dev.sushilog.R.drawable.gunkan2,
-            pls.dev.sushilog.R.drawable.onigiri,
-            pls.dev.sushilog.R.drawable.gyoza,
-            pls.dev.sushilog.R.drawable.shrimp,
-            pls.dev.sushilog.R.drawable.edamame,
-            pls.dev.sushilog.R.drawable.takoyaki,
-            pls.dev.sushilog.R.drawable.rice,
-            pls.dev.sushilog.R.drawable.mochis,
-            pls.dev.sushilog.R.drawable.bowl,
-            pls.dev.sushilog.R.drawable.bowl2,
-            pls.dev.sushilog.R.drawable.bowl3,
-            pls.dev.sushilog.R.drawable.wasabi,
-            pls.dev.sushilog.R.drawable.soja
-        )
-    }
+    val imageOptions = remember { DRAWABLE_NAME_TO_ID.toList() }
 
     Column(
         modifier = Modifier
@@ -155,7 +129,7 @@ fun CustomPiecesScreen(
                             isAddingNew = true
                             editingPiece = null
                             newName = ""
-                            newIconId = pls.dev.sushilog.R.drawable.nigiri
+                            newIconName = "nigiri"
                             newKcal = 0
                             newSalmonCount = 0
                             newRiceGrams = 0
@@ -183,7 +157,7 @@ fun CustomPiecesScreen(
                             strings = strings,
                             imageOptions = imageOptions,
                             newName = newName,
-                            newIconId = newIconId,
+                            newIconName = newIconName,
                             newKcal = newKcal,
                             newSalmonCount = newSalmonCount,
                             newRiceGrams = newRiceGrams,
@@ -196,7 +170,7 @@ fun CustomPiecesScreen(
                                 if (capitalized.isNotBlank()) showNameError = false
                                 showDuplicateError = false
                             },
-                            onIconIdChange = { newIconId = it },
+                            onIconNameChange = { newIconName = it },
                             onKcalChange = { newKcal = it },
                             onSalmonChange = { newSalmonCount = it },
                             onRiceChange = { newRiceGrams = it },
@@ -211,7 +185,7 @@ fun CustomPiecesScreen(
                                     settingsManager.addCustomPiece(CustomPiece(
                                         id = "custom_${UUID.randomUUID()}",
                                         name = newName.trim().replaceFirstChar { it.uppercase() },
-                                        iconId = newIconId,
+                                        iconName = newIconName,
                                         kcal = newKcal,
                                         salmonCount = newSalmonCount,
                                         riceGrams = newRiceGrams
@@ -251,7 +225,7 @@ fun CustomPiecesScreen(
                                         isAddingNew = false
                                         editingPiece = piece
                                         newName = piece.name
-                                        newIconId = piece.iconId
+                                        newIconName = piece.iconName
                                         newKcal = piece.kcal
                                         newSalmonCount = piece.salmonCount
                                         newRiceGrams = piece.riceGrams
@@ -305,7 +279,7 @@ fun CustomPiecesScreen(
                                         strings = strings,
                                         imageOptions = imageOptions,
                                         newName = newName,
-                                        newIconId = newIconId,
+                                        newIconName = newIconName,
                                         newKcal = newKcal,
                                         newSalmonCount = newSalmonCount,
                                         newRiceGrams = newRiceGrams,
@@ -318,7 +292,7 @@ fun CustomPiecesScreen(
                                             if (capitalized.isNotBlank()) showNameError = false
                                             showDuplicateError = false
                                         },
-                                        onIconIdChange = { newIconId = it },
+                                        onIconNameChange = { newIconName = it },
                                         onKcalChange = { newKcal = it },
                                         onSalmonChange = { newSalmonCount = it },
                                         onRiceChange = { newRiceGrams = it },
@@ -333,7 +307,7 @@ fun CustomPiecesScreen(
                                             } else {
                                                 settingsManager.updateCustomPiece(editingPiece!!.copy(
                                                     name = newName.trim().replaceFirstChar { it.uppercase() },
-                                                    iconId = newIconId,
+                                                    iconName = newIconName,
                                                     kcal = newKcal,
                                                     salmonCount = newSalmonCount,
                                                     riceGrams = newRiceGrams
@@ -443,9 +417,9 @@ private fun NumericStepper(
 private fun CustomPieceForm(
     colors: SushiColors,
     strings: AppStrings.Strings,
-    imageOptions: List<Int>,
+    imageOptions: List<Pair<String, Int>>,
     newName: String,
-    newIconId: Int,
+    newIconName: String,
     newKcal: Int,
     newSalmonCount: Int,
     newRiceGrams: Int,
@@ -453,7 +427,7 @@ private fun CustomPieceForm(
     showDuplicateError: Boolean,
     isEditing: Boolean,
     onNameChange: (String) -> Unit,
-    onIconIdChange: (Int) -> Unit,
+    onIconNameChange: (String) -> Unit,
     onKcalChange: (Int) -> Unit,
     onSalmonChange: (Int) -> Unit,
     onRiceChange: (Int) -> Unit,
@@ -545,21 +519,22 @@ private fun CustomPieceForm(
                         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        imageOptions.forEach { emojiIcon ->
+                        imageOptions.forEach { (drawableName, drawableId) ->
+                            val isSelected = newIconName == drawableName
                             Box(
                                 modifier = Modifier
                                     .size(36.dp)
                                     .clip(CircleShape)
-                                    .background(if (newIconId == emojiIcon) colors.primary.copy(alpha = 0.2f) else colors.surface)
+                                    .background(if (isSelected) colors.primary.copy(alpha = 0.2f) else colors.surface)
                                     .border(
-                                        if (newIconId == emojiIcon) 2.dp else 0.dp,
-                                        if (newIconId == emojiIcon) colors.primary else Color.Transparent,
+                                        if (isSelected) 2.dp else 0.dp,
+                                        if (isSelected) colors.primary else Color.Transparent,
                                         CircleShape
                                     )
-                                    .clickable { onIconIdChange(emojiIcon) },
+                                    .clickable { onIconNameChange(drawableName) },
                                 contentAlignment = Alignment.Center
                             ) {
-                                Icon(painter = androidx.compose.ui.res.painterResource(id = emojiIcon), contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(28.dp))
+                                Icon(painter = androidx.compose.ui.res.painterResource(id = drawableId), contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(28.dp))
                             }
                         }
                     }

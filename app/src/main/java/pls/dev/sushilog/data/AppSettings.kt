@@ -371,15 +371,58 @@ object AppStrings {
     }
 }
 
+/** Mapa de nombres de drawable a IDs de recurso para piezas personalizadas. */
+val DRAWABLE_NAME_TO_ID: Map<String, Int> = mapOf(
+    "nigiri" to pls.dev.sushilog.R.drawable.nigiri,
+    "nigiri2" to pls.dev.sushilog.R.drawable.nigiri2,
+    "nigiri3" to pls.dev.sushilog.R.drawable.nigiri3,
+    "nigiri4" to pls.dev.sushilog.R.drawable.nigiri4,
+    "sashimi" to pls.dev.sushilog.R.drawable.sashimi,
+    "salmon" to pls.dev.sushilog.R.drawable.salmon,
+    "maki" to pls.dev.sushilog.R.drawable.maki,
+    "maki2" to pls.dev.sushilog.R.drawable.maki2,
+    "uramaki" to pls.dev.sushilog.R.drawable.uramaki,
+    "uramaki2" to pls.dev.sushilog.R.drawable.uramaki2,
+    "temaki" to pls.dev.sushilog.R.drawable.temaki,
+    "gunkan" to pls.dev.sushilog.R.drawable.gunkan,
+    "gunkan2" to pls.dev.sushilog.R.drawable.gunkan2,
+    "onigiri" to pls.dev.sushilog.R.drawable.onigiri,
+    "gyoza" to pls.dev.sushilog.R.drawable.gyoza,
+    "shrimp" to pls.dev.sushilog.R.drawable.shrimp,
+    "edamame" to pls.dev.sushilog.R.drawable.edamame,
+    "takoyaki" to pls.dev.sushilog.R.drawable.takoyaki,
+    "rice" to pls.dev.sushilog.R.drawable.rice,
+    "mochis" to pls.dev.sushilog.R.drawable.mochis,
+    "bowl" to pls.dev.sushilog.R.drawable.bowl,
+    "bowl2" to pls.dev.sushilog.R.drawable.bowl2,
+    "bowl3" to pls.dev.sushilog.R.drawable.bowl3,
+    "wasabi" to pls.dev.sushilog.R.drawable.wasabi,
+    "soja" to pls.dev.sushilog.R.drawable.soja
+)
+
+/** Mapa inverso: ID de recurso → nombre de drawable. */
+val DRAWABLE_ID_TO_NAME: Map<Int, String> = DRAWABLE_NAME_TO_ID.entries.associate { it.value to it.key }
+
+/** Resuelve el nombre de un drawable a su ID de recurso actual. */
+fun resolveDrawableId(iconName: String): Int =
+    DRAWABLE_NAME_TO_ID[iconName] ?: pls.dev.sushilog.R.drawable.nigiri
+
+/** Obtiene el nombre de drawable a partir de un ID de recurso. */
+fun resolveDrawableName(iconId: Int): String =
+    DRAWABLE_ID_TO_NAME[iconId] ?: "nigiri"
+
 /** Pieza de sushi personalizada creada por el usuario. */
 data class CustomPiece(
     val id: String,
     val name: String,
-    val iconId: Int = pls.dev.sushilog.R.drawable.nigiri,
+    val iconName: String = "nigiri",
     val kcal: Int = 0,
     val salmonCount: Int = 0,
     val riceGrams: Int = 0
-)
+) {
+    /** ID de recurso drawable resuelto en tiempo de ejecución. */
+    val iconId: Int get() = resolveDrawableId(iconName)
+}
 
 /**
  * Gestiona preferencias del usuario: tema, idioma y piezas personalizadas.
@@ -425,8 +468,30 @@ class AppSettingsManager(private val context: Context) {
     fun getCustomPieces(): List<CustomPiece> {
         val json = prefs.getString("custom_pieces", null) ?: return emptyList()
         return try {
-            val type = object : TypeToken<List<CustomPiece>>() {}.type
-            gson.fromJson(json, type) ?: emptyList()
+            // Migración: si los datos antiguos tienen iconId (Int) pero no iconName,
+            // convertimos el iconId al nombre de drawable correspondiente.
+            val jsonArray = com.google.gson.JsonParser.parseString(json).asJsonArray
+            val pieces = jsonArray.map { element ->
+                val obj = element.asJsonObject
+                val id = obj.get("id")?.asString ?: ""
+                val name = obj.get("name")?.asString ?: ""
+                val kcal = obj.get("kcal")?.asInt ?: 0
+                val salmonCount = obj.get("salmonCount")?.asInt ?: 0
+                val riceGrams = obj.get("riceGrams")?.asInt ?: 0
+                val iconName = if (obj.has("iconName") && obj.get("iconName")?.isJsonNull == false) {
+                    obj.get("iconName").asString
+                } else {
+                    // Migrar desde iconId antiguo
+                    val oldIconId = obj.get("iconId")?.asInt ?: 0
+                    resolveDrawableName(oldIconId)
+                }
+                CustomPiece(id = id, name = name, iconName = iconName, kcal = kcal, salmonCount = salmonCount, riceGrams = riceGrams)
+            }
+            // Re-guardar con el nuevo formato para futuras cargas
+            if (jsonArray.any { el -> !el.asJsonObject.has("iconName") }) {
+                saveCustomPieces(pieces)
+            }
+            pieces
         } catch (e: Exception) {
             emptyList()
         }
