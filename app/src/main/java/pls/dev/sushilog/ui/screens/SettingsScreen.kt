@@ -198,7 +198,15 @@ fun SettingsScreen(
                     Column {
                         SettingsItem(icon = Icons.Filled.Info, title = strings.version, subtitle = versionName, colors = colors)
                         HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = colors.border)
-                        SettingsItem(icon = Icons.Filled.Edit, title = strings.developedBy, subtitle = "PLS", colors = colors)
+                        SettingsItem(icon = Icons.Filled.Edit, title = strings.developedBy, subtitle = "CodeByPLS", colors = colors)
+                        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = colors.border)
+                        SettingsItem(icon = Icons.Filled.Email, title = strings.contact, subtitle = "codebypls+sushilog@gmail.com", colors = colors, onClick = {
+                            val intent = android.content.Intent(android.content.Intent.ACTION_SENDTO).apply {
+                                data = android.net.Uri.parse("mailto:codebypls+sushilog@gmail.com")
+                                putExtra(android.content.Intent.EXTRA_SUBJECT, "SushiLog - $versionName")
+                            }
+                            runCatching { context.startActivity(intent) }
+                        })
                     }
                 }
             }

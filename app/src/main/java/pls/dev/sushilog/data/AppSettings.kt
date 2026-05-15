@@ -108,7 +108,8 @@ object AppStrings {
         val appLogo: String,
         val logoChangeTitle: String,
         val logoChangeMsg: String,
-        val logoChangeBtn: String
+        val logoChangeBtn: String,
+        val contact: String
     )
 
     private val spanish = Strings(
@@ -168,7 +169,8 @@ object AppStrings {
         appLogo="Logo de la app",
         logoChangeTitle="¿Cambiar logo?",
         logoChangeMsg="La aplicación se cerrará para aplicar el nuevo icono.",
-        logoChangeBtn="Cambiar"
+        logoChangeBtn="Cambiar",
+        contact="Contacto"
     )
 
     private val english = Strings(
@@ -228,7 +230,8 @@ object AppStrings {
         appLogo="App logo",
         logoChangeTitle="Change logo?",
         logoChangeMsg="The app will close to apply the new icon.",
-        logoChangeBtn="Change"
+        logoChangeBtn="Change",
+        contact="Contact"
     )
 
     private val french = Strings(
@@ -288,7 +291,8 @@ object AppStrings {
         appLogo="Logo de l'app",
         logoChangeTitle="Changer le logo ?",
         logoChangeMsg="L'application se fermera pour appliquer le nouveau icône.",
-        logoChangeBtn="Changer"
+        logoChangeBtn="Changer",
+        contact="Contact"
     )
 
     private val italian = Strings(
@@ -348,7 +352,8 @@ object AppStrings {
         appLogo="Logo dell'app",
         logoChangeTitle="Cambiare logo?",
         logoChangeMsg="L'app si chiuderà per applicare la nuova icona.",
-        logoChangeBtn="Cambiare"
+        logoChangeBtn="Cambiare",
+        contact="Contatto"
     )
 
     fun get(language: AppLanguage): Strings = when (language) {

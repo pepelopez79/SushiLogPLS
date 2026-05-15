@@ -141,10 +141,15 @@ class MainActivity : ComponentActivity() {
                                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                                     ) {
                                         Box(
-                                            modifier = Modifier.size(40.dp).background(colors.onPrimary.copy(alpha = 0.2f), CircleShape),
+                                            modifier = Modifier.size(45.dp),
                                             contentAlignment = Alignment.Center
                                         ) {
-                                            Icon(Icons.Filled.Star, contentDescription = null, tint = colors.onPrimary)
+                                            Icon(
+                                                painter = androidx.compose.ui.res.painterResource(id = achievement.iconRes),
+                                                contentDescription = null,
+                                                tint = androidx.compose.ui.graphics.Color.Unspecified,
+                                                modifier = Modifier.size(45.dp)
+                                            )
                                         }
                                         Column {
                                             Text(strings.unlocked, color = colors.onPrimary.copy(alpha = 0.8f), fontSize = 12.sp, fontWeight = FontWeight.Bold)
