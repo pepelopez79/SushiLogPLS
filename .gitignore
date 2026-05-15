@@ -17,6 +17,7 @@ local.properties
 
 # Python virtual environment
 .venv/
+venv/
 
 # Python utility scripts
 *.pyc
