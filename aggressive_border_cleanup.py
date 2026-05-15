@@ -11,7 +11,7 @@ import glob
 from PIL import Image
 
 DRAWABLE_DIR = "app/src/main/res/drawable"
-LIGHT_THRESHOLD = 150  # Aggressive: any pixel with R,G,B all >= 150
+LIGHT_THRESHOLD = 120  # Even more aggressive
 MAX_PASSES = 30        # Enough to erode deep halos
 
 def has_transparent_neighbor(pixels, x, y, w, h):
@@ -69,4 +69,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
