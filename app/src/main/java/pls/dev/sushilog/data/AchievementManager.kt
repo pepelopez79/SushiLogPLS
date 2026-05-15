@@ -6,6 +6,10 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import androidx.core.content.edit
 
+/**
+ * Gestiona el estado de logros desbloqueados y calcula el progreso.
+ * Persiste los IDs desbloqueados en SharedPreferences.
+ */
 class AchievementManager(context: Context) {
 
     private val prefs: SharedPreferences =
@@ -114,9 +118,7 @@ class AchievementManager(context: Context) {
     }
 
     fun syncAchievements() {
-        val currentUnlocked = getUnlockedIds().toMutableSet()
         val validUnlocked = mutableSetOf<String>()
-        val sessions = sessionStorage.getSessions()
 
         saveUnlockedIds(emptySet())
         for (achievement in ACHIEVEMENTS) {

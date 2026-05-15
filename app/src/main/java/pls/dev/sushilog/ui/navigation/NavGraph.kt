@@ -17,6 +17,7 @@ import pls.dev.sushilog.data.AppTheme
 import pls.dev.sushilog.ui.screens.*
 import pls.dev.sushilog.ui.theme.SushiColors
 
+/** Rutas de navegación de la app. */
 sealed class Screen(val route: String) {
     data object Splash : Screen("splash")
     data object Home : Screen("home")
@@ -28,6 +29,7 @@ sealed class Screen(val route: String) {
     data object CustomPieces : Screen("custom_pieces")
 }
 
+/** Grafo de navegación principal con transiciones de fade+scale entre pantallas. */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SushiNavGraph(

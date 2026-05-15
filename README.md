@@ -1,236 +1,194 @@
-# Sushi Log
+# 🍣 Sushi Log
 
-Aplicacion Android nativa para contabilizar piezas de sushi y comida japonesa consumidas en restaurantes de buffet libre o sesiones de sushi.
+Aplicación Android nativa para registrar y analizar tu consumo de sushi en restaurantes de buffet libre.
 
 ---
 
-## Descripcion
+## Descripción
 
-**Sushi Log** es una app interactiva disenada para los amantes del sushi que quieren no solo llevar un registro exhaustivo de cuantās piezas consumen, sino tambien controlar sus estadisticas nutricionales, conseguir logros y compartir sus récords sociales. La app permite:
+**Sushi Log** es una app diseñada para los amantes del sushi que quieren llevar un registro completo de sus sesiones. Cuenta piezas, analiza estadísticas nutricionales, desbloquea logros y comparte tus récords.
 
-- Contar piezas por tipo con un simple tap (sumar) o long-press (restar)
-- Guardar sesiones con fecha y nombre del restaurante
-- Crear piezas de sushi personalizadas (con nombre, emoji, kcals, arroz y cantidad de salmón)
-- Gestionar un perfil multidioma (español, inglés, francés e italiano) y multitema (Dark, Light, Salmon)
-- Exportar y compartir una captura nativa atractiva de tus sesiones para Stories en redes sociales
-- Sistema lúdico de logros con notificaciones pop-up animadas y sonido
-- Analizar estadisticas por periodo (semana, mes, ano, total) e información curiosa como las calorías aproximadas, gramos de arroz y salmones enteros consumidos.
+### Características principales
+
+- 🔢 **Contador rápido** — Tap para sumar, long-press para restar piezas
+- 📊 **Estadísticas detalladas** — Filtros por semana, mes, año y total con curiosidades nutricionales
+- 🏆 **20 logros desbloqueables** — Con notificaciones animadas y sonido
+- 🎨 **3 temas visuales** — Dark, Light y Salmon
+- 🌍 **4 idiomas** — Español, English, Français, Italiano (detección automática)
+- 🍱 **Piezas personalizadas** — Crea hasta 12 tipos propios con kcal, arroz y pescado
+- 📤 **Compartir sesiones** — Genera imagen nativa para redes sociales
+- 📋 **Historial expandible** — Con chips de kcal, arroz y pescado por sesión
+- 🎯 **70+ iconos PNG personalizados** — Sin Material Icons, estética propia y consistente
 
 ---
 
 ## Pantallas
 
-### 1. Splash Screen
-Pantalla de bienvenida con el logo de la app y animacion de entrada.
-
-### 2. Home Screen (Pantalla Principal)
-Menu principal con cuatro botones e interacciones clave:
-- **Comenzar Sesion**: Inicia una nueva sesion de conteo
-- **Historial**: Accede al historial
-- **Estadisticas**: Consulta estadisticas acumuladas y récords nutricionales
-- **Logros**: Consulta qué retos has superado
-- Además cuenta con enlace rápido a **Configuración**
-
-### 3. Counter Screen (Contador)
-Flujo dinámico:
-1. **Fase 1 - Restaurante**: Ingresar el nombre del restaurante (autocapitalizado)
-2. **Fase 2 - Conteo**: Cuadricula con los tipos de piezas integradas y tus piezas personalizadas. Tap para sumar, long-press para restar
-3. **Fase 3 - Confirmacion y Compartir**: Resumen de totales, opción instantánea para generar la captura de pantalla (`ShareSessionAsImage`) y botón para guardar la sesion de manera persistente.
-
-### 4. History Screen (Historial)
-- Lista cronologica inteligente que muestra totales e íconos destcando macro-nutrientes clave (Kcal consumidas, arroces y tipo de salmones).
-- Al pulsar permite expandir el total desgajado, así como borrar o re-compartir la sesión al momento, reconectando con los datos históricos y recalculando los logros automáticamente.
-
-### 5. Stats Screen (Estadisticas)
-- Filtros temporales (Todos, Ano, Mes, Semana).
-- Sección interactiva de `Curiosidades` con estimación calórica (Kcal), total de gramos de arroz ingeridos y el equivalente en salmones enteros consumidos en relación a los cortes/láminas.
-
-### 6. Achievements Screen
-- Visor de trofeos y retos disponibles desbloqueados de forma local según varíen tus estadísticas.
-
-### 7. Settings Screen
-- Sección de personalización de temas (Dark, Light, Salmon).
-- Selección de idioma on-the-fly.
-- Gestión CRUD de **Piezas Personalizadas** para añadir nuevos elementos adaptados a tu dieta, con asignación calórica y nutricional.
-- Borrado completo de datos.
+| Pantalla | Descripción |
+|---|---|
+| **Splash** | Logo animado con fade+scale |
+| **Home** | Menú principal con logo, título y acceso a todas las secciones |
+| **Counter** | 3 fases: restaurante → conteo con cuadrícula → resumen y compartir |
+| **History** | Lista cronológica expandible con chips nutricionales y opción de borrar |
+| **Stats** | Piezas totales, promedio, récord, desglose por tipo y curiosidades |
+| **Achievements** | 20 logros en 5 categorías con barras de progreso |
+| **Settings** | Tema, idioma, piezas personalizadas, borrado de datos y contacto |
+| **Custom Pieces** | Crear/editar/eliminar piezas con nombre, icono, kcal, arroz y pescado |
 
 ---
 
-## Tipos de Piezas Incluidas
+## Piezas integradas
 
-| ID | Nombre | Descripcion | Kcal Base | Salmón / Arroz |
-|---|---|---|---|---|
-| nigiri | Nigiri | Arroz prensado con pescado encima | 50 | 1 lámina / 10g |
-| sashimi | Sashimi | Loncha de pescado crudo | 35 | 1 lámina / 0g  |
-| maki | Maki | Rollo con alga por fuera | 40 | 0 láminas / 15g |
-| uramaki | Uramaki | Rollo con arroz por fuera | 45 | 0 láminas / 15g |
-| gunkan | Gunkan | "Barco" de arroz envuelto con alga | 60 | 0 láminas / 15g |
-| temaki | Temaki | Cono de alga relleno | 100 | 0 láminas / 30g |
-| gyoza | Gyoza | Empanadilla japonesa | 45 | 0 láminas / 0g  |
-| tempura | Tempura | Langostino rebozado | 60 | 0 láminas / 0g |
-| edamame | Edamame | Vainas de soja | 15 | 0 láminas / 0g |
-| takoyaki| Takoyaki | Bolitas de pulpo | 55 | 0 láminas / 0g |
-* Y un máximo de *12 piezas personalizables* extras por el usuario.
+| Pieza | Kcal | Pescado | Arroz |
+|---|---|---|---|
+| Nigiri | 50 | 1 corte | 10g |
+| Sashimi | 35 | 1 corte | 0g |
+| Maki | 40 | — | 15g |
+| Onigiri | 120 | — | 80g |
+| Uramaki | 45 | — | 15g |
+| Gunkan | 60 | — | 15g |
+| Temaki | 100 | — | 30g |
+| Gyoza | 45 | — | — |
+| Tempura | 60 | — | — |
+| Edamame | 15 | — | — |
+| Takoyaki | 55 | — | — |
 
----
-
-## Tecnologias
-
-- **Lenguaje**: Kotlin
-- **UI Framework**: Jetpack Compose
-- **Navegacion**: Navigation Compose
-- **Android Nativas**: `FileProvider` con Intents y `Canvas/Bitmap` render generator, `RingtoneManager`
-- **Estados Reactivos**: StateFlow / MutableSharedFlow inyectados a `GlobalAchievementNotifier` para animaciones y UI global
-- **Persistencia**: SharedPreferences + Gson para estado del usuario, ajustes y almacenamiento de historial
-- **Minimo SDK**: 26 (Android 8.0)
-- **Target SDK**: 34 (Android 14)
+Más hasta **12 piezas personalizables** por el usuario.
 
 ---
 
-## Requisitos Previos
+## Tecnologías
 
-- Android Studio Hedgehog (2023.1.1) o superior
+| Tecnología | Uso |
+|---|---|
+| **Kotlin** | Lenguaje principal |
+| **Jetpack Compose** | UI declarativa |
+| **Navigation Compose** | Navegación entre pantallas con transiciones animadas |
+| **SharedPreferences + Gson** | Persistencia local de sesiones, ajustes y logros |
+| **Canvas/Bitmap** | Generación nativa de imágenes para compartir |
+| **FileProvider** | Compartir imágenes generadas vía Intent |
+| **MutableSharedFlow** | Notificaciones globales de logros desbloqueados |
+| **RingtoneManager** | Sonido de notificación al desbloquear logros |
+
+---
+
+## Requisitos
+
+- Android Studio Ladybug (2024.2) o superior
 - JDK 17
-- Gradle 8.x
+- Gradle 8.13+
+- Min SDK: 24 (Android 7.0)
+- Target SDK: 36
 
 ---
 
-## Instalacion
-
-### 1. Crear nuevo proyecto en Android Studio
+## Estructura del proyecto
 
 ```
-File > New > New Project > Empty Activity (Compose)
-```
-
-Configuracion:
-- Name: `SushiLog`
-- Package: `pls.dev.sushilog`
-- Language: Kotlin
-- Minimum SDK: API 26
-
-### 2. Configurar build.gradle (app level)
-
-Agregar las dependencias en `dependencies {}`:
-
-```kotlin
-implementation("androidx.core:core-ktx:1.12.0")
-implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-implementation("androidx.activity:activity-compose:1.8.2")
-implementation(platform("androidx.compose:compose-bom:2024.02.00"))
-implementation("androidx.compose.ui:ui")
-implementation("androidx.compose.ui:ui-graphics")
-implementation("androidx.compose.ui:ui-tooling-preview")
-implementation("androidx.compose.material3:material3")
-implementation("androidx.navigation:navigation-compose:2.7.7")
-implementation("com.google.code.gson:gson:2.10.1")
-implementation("androidx.compose.animation:animation")
-```
-
-### 3. Copiar los archivos de codigo
-
-Estructura de carpetas:
-
-```
-app/src/main/java/pls.dev.sushilog/
+app/src/main/java/pls/dev/sushilog/
+├── MainActivity.kt                    # Activity principal y notificador de logros
 ├── data/
-│   ├── SushiPiece.kt
-│   ├── SessionRecord.kt
-│   └── SessionStorage.kt
+│   ├── Achievement.kt                 # Modelo de logros y requisitos
+│   ├── AchievementManager.kt          # Lógica de progreso y desbloqueo
+│   ├── AppSettings.kt                 # Temas, idiomas, strings i18n, piezas custom
+│   ├── SessionRecord.kt               # Modelo de sesión guardada
+│   ├── SessionStorage.kt              # Persistencia y estadísticas
+│   └── SushiPiece.kt                  # Catálogo de piezas y funciones nutricionales
 ├── ui/
-│   ├── theme/
-│   │   ├── Color.kt
-│   │   ├── Type.kt
-│   │   └── Theme.kt
-│   ├── screens/
-│   │   ├── SplashScreen.kt
-│   │   ├── HomeScreen.kt
-│   │   ├── CounterScreen.kt
-│   │   ├── HistoryScreen.kt
-│   │   ├── SessionDetailScreen.kt
-│   │   └── StatsScreen.kt
 │   ├── components/
-│   │   └── PieceCounterItem.kt
-│   └── navigation/
-│       └── NavGraph.kt
-└── MainActivity.kt
+│   │   ├── PieceCounterItem.kt        # Botón de pieza en el contador
+│   │   ├── CustomPieceCounterItem.kt  # Botón de pieza personalizada
+│   │   └── SushiIcon.kt               # Componente de icono con glow en dark mode
+│   ├── navigation/
+│   │   └── NavGraph.kt                # Rutas y transiciones
+│   ├── screens/
+│   │   ├── SplashScreen.kt            # Pantalla de bienvenida animada
+│   │   ├── HomeScreen.kt              # Pantalla principal
+│   │   ├── CounterScreen.kt           # Contador de piezas (3 fases)
+│   │   ├── HistoryScreen.kt           # Historial de sesiones
+│   │   ├── StatsScreen.kt             # Estadísticas y curiosidades
+│   │   ├── AchievementsScreen.kt      # Visor de logros
+│   │   ├── SettingsScreen.kt          # Configuración de la app
+│   │   ├── CustomPiecesScreen.kt      # Gestión de piezas personalizadas
+│   │   └── ShareUtils.kt              # Generación de imagen para compartir
+│   └── theme/
+│       ├── Color.kt                   # Constantes de color
+│       ├── Theme.kt                   # Tema Material3
+│       ├── ThemeColors.kt             # Paletas por tema (Dark/Light/Salmon)
+│       └── Type.kt                    # Tipografía
+└── res/drawable/                      # 70 iconos PNG personalizados
 ```
-
-### 4. Copiar imagenes de sushi
-
-Copiar las 12 imagenes de `public/sushi/*.jpg` a:
-
-```
-app/src/main/res/drawable/
-├── nigiri.jpg
-├── sashimi.jpg
-├── maki.jpg
-├── uramaki.jpg
-├── gunkan.jpg
-├── temaki.jpg
-├── gyoza.jpg
-├── tempura.jpg
-├── california.jpg
-├── dragon.jpg
-├── edamame.jpg
-└── takoyaki.jpg
-```
-
-### 5. Sync y Build
-
-```
-Build > Rebuild Project
-```
-
-### 6. Ejecutar
-
-Conectar un dispositivo o usar un emulador y ejecutar la app.
 
 ---
 
-## Uso
+## Assets
 
-### Contar piezas
-1. Desde Home, pulsa "Comenzar Sesion"
-2. Escribe el nombre del restaurante y pulsa "Comenzar"
-3. Tap en una pieza para sumar (+1)
-4. Long-press 5 segundos en una pieza para restar (-1). Aparece un anillo de progreso
-5. Pulsa "Terminar Sesion" cuando hayas acabado
-6. Confirma para guardar
+Todos los iconos son **PNG personalizados** sin dependencia de Material Icons:
 
-### Ver historial
-1. Desde Home, pulsa "Historial"
-2. En la pestana "Historial" ves todas las sesiones
-3. Pulsa una sesion para ver el desglose
-
-### Ver estadisticas
-1. Desde Home, pulsa "Estadisticas"
-2. Selecciona el filtro temporal: Todos, Ano, Mes, Semana
-3. Consulta el total de cada tipo de pieza
+- **Piezas de sushi**: nigiri, sashimi, maki, uramaki, gunkan, temaki, gyoza, edamame, takoyaki, onigiri, etc.
+- **UI**: back, right, up, down, share, delete, add, settings, info, email, devby
+- **Estadísticas**: history, stats, all, kcal, rice, salmon
+- **Logros**: 20 iconos únicos (achievement1–achievement20)
+- **Banderas**: spanish, english, french, italian
+- **Otros**: logo, start, calendar, bowl, bowl2, bowl3
 
 ---
 
-## Paleta de Colores
+## Paleta de colores
 
+### Dark (por defecto)
 | Color | Hex | Uso |
 |---|---|---|
 | Background | `#1B2838` | Fondo principal |
-| Card | `#2A3A4A` | Tarjetas |
-| Primary | `#4ECDC4` | Botones, acentos |
-| Secondary | `#3D4D5C` | Botones secundarios |
+| Surface | `#2A3A4A` | Tarjetas |
+| Primary | `#4ECDC4` | Acentos, botones |
+| Border | `#5A6A7A` | Bordes |
 | Foreground | `#FFFFFF` | Texto principal |
-| Muted | `#94A3B3` | Texto secundario |
+
+### Light
+| Color | Hex | Uso |
+|---|---|---|
+| Background | `#F8F9FA` | Fondo principal |
+| Surface | `#FFFFFF` | Tarjetas |
+| Primary | `#2B9D94` | Acentos |
+
+### Salmon
+| Color | Hex | Uso |
+|---|---|---|
+| Background | `#FFF5F0` | Fondo principal |
+| Surface | `#FFFFFF` | Tarjetas |
+| Primary | `#E8734A` | Acentos |
 
 ---
 
-## Tipografia
+## Tests
 
-- **Fuente**: Inter (o system sans-serif)
-- **Titulos grandes**: 48sp, ExtraBold
-- **Titulos pantalla**: 20sp, ExtraBold
-- **Nombres piezas**: 18sp, Bold, UPPERCASE
-- **Cuerpo**: 14-16sp, Regular/Medium
-- **Caption**: 12-14sp, Regular
+```bash
+./gradlew testDebugUnitTest
+```
+
+| Test | Descripción |
+|---|---|
+| `CustomPieceTest` | Valores nutricionales de piezas personalizadas |
+| `StatsLogicTest` | Cálculos de kcal, arroz y pescado |
+| `SettingsTest` | Enums de temas, idiomas y strings i18n |
+| `AchievementTest` | IDs únicos, progreso y cobertura de strings |
+
+---
+
+## Instalación
+
+1. Clonar el repositorio
+2. Abrir en Android Studio
+3. Sync Gradle
+4. Ejecutar en dispositivo/emulador (API 24+)
+
+---
+
+## Contacto
+
+- **Desarrollador**: CodeByPLS
+- **Email**: codebypls+sushilog@gmail.com
 
 ---
 
@@ -240,6 +198,4 @@ Este proyecto es de uso personal y educativo.
 
 ---
 
-## Autor
-
-Pepe López
+**Pepe López** — 2026

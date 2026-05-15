@@ -14,3 +14,10 @@
 .cxx
 local.properties
 /.idea/copilotDiffState.xml
+
+# Python virtual environment
+.venv/
+
+# Python utility scripts
+*.pyc
+__pycache__/

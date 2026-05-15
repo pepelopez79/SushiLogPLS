@@ -3,6 +3,7 @@ package pls.dev.sushilog.data
 import androidx.annotation.DrawableRes
 import pls.dev.sushilog.R
 
+/** Definición de un logro con su icono, categoría y requisito de desbloqueo. */
 data class Achievement(
     val id: String,
     val titleKey: String,
@@ -12,6 +13,7 @@ data class Achievement(
     val requirement: AchievementRequirement
 )
 
+/** Progreso actual del usuario hacia un logro específico. */
 data class AchievementProgress(
     val current: Int,
     val target: Int,
@@ -22,16 +24,19 @@ data class AchievementProgress(
     val percentage: Float get() = (displayCurrent.toFloat() / target).coerceIn(0f, 1f)
 }
 
+/** Logro con su estado de desbloqueo y progreso actual. */
 data class AchievementWithStatus(
     val achievement: Achievement,
     val isUnlocked: Boolean,
     val progress: AchievementProgress
 )
 
+/** Categorías de logros para agrupar en la UI. */
 enum class AchievementCategory {
     SESSIONS_COUNT, TOTAL_PIECES, SESSION_PIECES, SPECIFIC_PIECE, VARIETY
 }
 
+/** Tipos de requisitos para desbloquear logros. */
 sealed class AchievementRequirement {
     data class TotalPieces(val count: Int) : AchievementRequirement()
     data class SessionPieces(val count: Int) : AchievementRequirement()
@@ -42,6 +47,7 @@ sealed class AchievementRequirement {
     data class AllPiecesInSession(val minCount: Int) : AchievementRequirement()
 }
 
+/** Catálogo completo de logros disponibles en la app (20 logros). */
 val ACHIEVEMENTS = listOf(
     Achievement(
         id = "first_session",

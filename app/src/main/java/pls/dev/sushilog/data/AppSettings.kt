@@ -7,12 +7,14 @@ import com.google.gson.reflect.TypeToken
 import androidx.core.content.edit
 import java.util.Locale
 
+/** Temas visuales disponibles: Oscuro, Claro y Salmón. */
 enum class AppTheme(val id: String, val displayName: Map<AppLanguage, String>) {
     DARK("dark", mapOf(AppLanguage.SPANISH to "Oscuro", AppLanguage.ENGLISH to "Dark", AppLanguage.FRENCH to "Sombre", AppLanguage.ITALIAN to "Scuro")),
     LIGHT("light", mapOf(AppLanguage.SPANISH to "Claro", AppLanguage.ENGLISH to "Light", AppLanguage.FRENCH to "Clair", AppLanguage.ITALIAN to "Chiaro")),
     SALMON("salmon", mapOf(AppLanguage.SPANISH to "Salmón", AppLanguage.ENGLISH to "Salmon", AppLanguage.FRENCH to "Saumon", AppLanguage.ITALIAN to "Salmone"))
 }
 
+/** Idiomas soportados con detección automática del dispositivo. */
 enum class AppLanguage(val code: String, val displayName: String, val flag: String, val flagRes: Int) {
     SPANISH("es", "Español", "🇪🇸", pls.dev.sushilog.R.drawable.spanish),
     ENGLISH("en", "English", "🇬🇧", pls.dev.sushilog.R.drawable.english),
@@ -31,6 +33,7 @@ enum class AppLanguage(val code: String, val displayName: String, val flag: Stri
     }
 }
 
+/** Sistema de internacionalización con todos los textos en 4 idiomas. */
 object AppStrings {
 
     val monthNames: Map<AppLanguage, List<String>> = mapOf(
@@ -368,6 +371,7 @@ object AppStrings {
     }
 }
 
+/** Pieza de sushi personalizada creada por el usuario. */
 data class CustomPiece(
     val id: String,
     val name: String,
@@ -377,6 +381,10 @@ data class CustomPiece(
     val riceGrams: Int = 0
 )
 
+/**
+ * Gestiona preferencias del usuario: tema, idioma y piezas personalizadas.
+ * Máximo 12 piezas personalizadas.
+ */
 class AppSettingsManager(private val context: Context) {
 
     private val prefs: SharedPreferences =

@@ -1,5 +1,6 @@
 package pls.dev.sushilog.data
 
+/** Registro de una sesión de sushi completada. */
 data class SessionRecord(
     val id: String,
     val date: String,

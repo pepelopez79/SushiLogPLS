@@ -8,7 +8,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.*
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -17,22 +16,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import android.media.RingtoneManager
 import pls.dev.sushilog.data.*
 import pls.dev.sushilog.ui.navigation.SushiNavGraph
 import pls.dev.sushilog.ui.theme.SushiLogTheme
 import pls.dev.sushilog.ui.theme.getColorsForTheme
-import android.media.RingtoneManager
-import kotlinx.coroutines.delay
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
+/** Emisor global de logros desbloqueados para mostrar pop-ups animados desde cualquier pantalla. */
 object GlobalAchievementNotifier {
     private val _achievements = MutableSharedFlow<List<Achievement>>(extraBufferCapacity = 1)
     val achievements = _achievements.asSharedFlow()

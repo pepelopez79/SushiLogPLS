@@ -13,6 +13,10 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
 import androidx.core.content.edit
 
+/**
+ * Gestiona la persistencia de sesiones de sushi en SharedPreferences.
+ * Soporta CRUD y cálculo de estadísticas filtradas por periodo.
+ */
 class SessionStorage(context: Context) {
 
     private val prefs: SharedPreferences =
@@ -87,10 +91,12 @@ class SessionStorage(context: Context) {
     }
 }
 
+/** Filtros temporales para estadísticas. */
 enum class StatsFilter {
     ALL, YEAR, MONTH, WEEK
 }
 
+/** Resultado agregado de estadísticas por periodo. */
 data class StatsResult(
     val pieceStats: Map<String, Int>,
     val total: Int,
