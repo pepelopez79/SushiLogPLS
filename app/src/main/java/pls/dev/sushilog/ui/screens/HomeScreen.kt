@@ -59,11 +59,20 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Top
             ) {
-                Column {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = pls.dev.sushilog.R.drawable.logo),
+                        contentDescription = null,
+                        tint = androidx.compose.ui.graphics.Color.Unspecified,
+                        modifier = Modifier.size(55.dp)
+                    )
                     SushiLogTitle(
                         colors = colors,
-                        sushiFontSize = 42,
-                        logFontSize = 24,
+                        sushiFontSize = 35,
+                        logFontSize = 16,
                         style = 1
                     )
                 }

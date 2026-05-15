@@ -12,7 +12,7 @@ import glob
 DRAWABLE_DIR = "app/src/main/res/drawable"
 
 # Icons to skip (logos, flags, launcher icons)
-SKIP_NAMES = {"ic_launcher", "logo", "logo2", "logo3", "english", "spanish", "french", "italian"}
+SKIP_NAMES = {"ic_launcher", "logo", "english", "spanish", "french", "italian"}
 
 BORDER_WIDTH = 3  # pixels of white border
 

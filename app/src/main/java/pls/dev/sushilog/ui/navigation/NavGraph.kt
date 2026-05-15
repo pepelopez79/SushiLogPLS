@@ -12,7 +12,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import pls.dev.sushilog.data.AppLanguage
-import pls.dev.sushilog.data.AppLogo
 import pls.dev.sushilog.data.AppStrings
 import pls.dev.sushilog.data.AppTheme
 import pls.dev.sushilog.ui.screens.*
@@ -35,11 +34,9 @@ fun SushiNavGraph(
     navController: NavHostController,
     currentTheme: AppTheme,
     currentLanguage: AppLanguage,
-    currentLogo: AppLogo,
     strings: AppStrings.Strings,
     onThemeChange: (AppTheme) -> Unit,
     onLanguageChange: (AppLanguage) -> Unit,
-    onLogoChange: (AppLogo) -> Unit,
     colors: SushiColors
 ) {
     NavHost(
@@ -61,7 +58,6 @@ fun SushiNavGraph(
         composable(Screen.Splash.route) {
             SplashScreen(
                 colors = colors,
-                logoRes = currentLogo.iconRes,
                 onFinished = {
                     navController.navigate(Screen.Home.route) {
                         popUpTo(Screen.Splash.route) { inclusive = true }
@@ -120,10 +116,8 @@ fun SushiNavGraph(
                 strings = strings,
                 currentTheme = currentTheme,
                 currentLanguage = currentLanguage,
-                currentLogo = currentLogo,
                 onThemeChange = onThemeChange,
                 onLanguageChange = onLanguageChange,
-                onLogoChange = onLogoChange,
                 onOpenCustomPieces = { navController.navigate(Screen.CustomPieces.route) },
                 onBack = { navController.popBackStack() }
             )

@@ -2,8 +2,6 @@ package pls.dev.sushilog.data
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.ComponentName
-import android.content.pm.PackageManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import androidx.core.content.edit
@@ -13,12 +11,6 @@ enum class AppTheme(val id: String, val displayName: Map<AppLanguage, String>) {
     DARK("dark", mapOf(AppLanguage.SPANISH to "Oscuro", AppLanguage.ENGLISH to "Dark", AppLanguage.FRENCH to "Sombre", AppLanguage.ITALIAN to "Scuro")),
     LIGHT("light", mapOf(AppLanguage.SPANISH to "Claro", AppLanguage.ENGLISH to "Light", AppLanguage.FRENCH to "Clair", AppLanguage.ITALIAN to "Chiaro")),
     SALMON("salmon", mapOf(AppLanguage.SPANISH to "Salmón", AppLanguage.ENGLISH to "Salmon", AppLanguage.FRENCH to "Saumon", AppLanguage.ITALIAN to "Salmone"))
-}
-
-enum class AppLogo(val id: String, val iconRes: Int, val aliasName: String?) {
-    LOGO("logo", pls.dev.sushilog.R.drawable.logo, null),
-    LOGO2("logo2", pls.dev.sushilog.R.drawable.logo2, ".MainActivityLogo2"),
-    LOGO3("logo3", pls.dev.sushilog.R.drawable.logo3, ".MainActivityLogo3")
 }
 
 enum class AppLanguage(val code: String, val displayName: String, val flag: String, val flagRes: Int) {
@@ -105,10 +97,6 @@ object AppStrings {
         val shareWatermark: String, val rice: String, val kcal: String, val explore: String,
         val catTrajectory: String, val catAccumulation: String, val catFeats: String, val catSpecialist: String, val catExplorer: String,
         val duplicatePieceName: String,
-        val appLogo: String,
-        val logoChangeTitle: String,
-        val logoChangeMsg: String,
-        val logoChangeBtn: String,
         val contact: String
     )
 
@@ -166,10 +154,6 @@ object AppStrings {
         shareWatermark="Sushi Log 🍣", rice="Arroz", kcal="Kcal", explore="EXPLORA",
         catTrajectory="Trayectoria", catAccumulation="Acumulación", catFeats="Hazañas", catSpecialist="Especialista", catExplorer="Explorador",
         duplicatePieceName="Ya existe una pieza con ese nombre",
-        appLogo="Logo de la app",
-        logoChangeTitle="¿Cambiar logo?",
-        logoChangeMsg="La aplicación se cerrará para aplicar el nuevo icono.",
-        logoChangeBtn="Cambiar",
         contact="Contacto"
     )
 
@@ -227,10 +211,6 @@ object AppStrings {
         shareWatermark="Sushi Log 🍣", rice="Rice", kcal="Kcal", explore="EXPLORE",
         catTrajectory="Trajectory", catAccumulation="Accumulation", catFeats="Feats", catSpecialist="Specialist", catExplorer="Explorer",
         duplicatePieceName="A piece with this name already exists",
-        appLogo="App logo",
-        logoChangeTitle="Change logo?",
-        logoChangeMsg="The app will close to apply the new icon.",
-        logoChangeBtn="Change",
         contact="Contact"
     )
 
@@ -288,10 +268,6 @@ object AppStrings {
         shareWatermark="Sushi Log 🍣", rice="Riz", kcal="Kcal", explore="EXPLORER",
         catTrajectory="Parcours", catAccumulation="Accumulation", catFeats="Exploits", catSpecialist="Spécialiste", catExplorer="Explorateur",
         duplicatePieceName="Une pièce avec ce nom existe déjà",
-        appLogo="Logo de l'app",
-        logoChangeTitle="Changer le logo ?",
-        logoChangeMsg="L'application se fermera pour appliquer le nouveau icône.",
-        logoChangeBtn="Changer",
         contact="Contact"
     )
 
@@ -349,10 +325,6 @@ object AppStrings {
         shareWatermark="Sushi Log 🍣", rice="Riso", kcal="Kcal", explore="ESPLORA",
         catTrajectory="Traiettoria", catAccumulation="Accumulo", catFeats="Imprese", catSpecialist="Specialista", catExplorer="Esploratore",
         duplicatePieceName="Esiste già un pezzo con questo nome",
-        appLogo="Logo dell'app",
-        logoChangeTitle="Cambiare logo?",
-        logoChangeMsg="L'app si chiuderà per applicare la nuova icona.",
-        logoChangeBtn="Cambiare",
         contact="Contatto"
     )
 
@@ -440,43 +412,7 @@ class AppSettingsManager(private val context: Context) {
         prefs.edit { putString("language", language.code) }
     }
 
-    fun getLogo(): AppLogo {
-        val logoId = prefs.getString("logo", AppLogo.LOGO.id) ?: AppLogo.LOGO.id
-        return AppLogo.entries.find { it.id == logoId } ?: AppLogo.LOGO
-    }
 
-    fun setLogo(logo: AppLogo) {
-        prefs.edit { putString("logo", logo.id) }
-    }
-
-    fun applyLauncherIcon() {
-        try {
-            val logo = getLogo()
-            val pm = context.packageManager
-            val packageName = context.packageName
-
-            // Disable/enable MainActivity (default logo) as launcher
-            val mainComponent = ComponentName(packageName, "$packageName.MainActivity")
-            val mainState = if (logo == AppLogo.LOGO)
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-            else
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED
-            pm.setComponentEnabledSetting(mainComponent, mainState, PackageManager.DONT_KILL_APP)
-
-            // Toggle aliases for logo2 and logo3
-            AppLogo.entries.forEach { entry ->
-                val alias = entry.aliasName ?: return@forEach
-                val component = ComponentName(packageName, "$packageName$alias")
-                val desiredState = if (entry == logo)
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                else
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED
-                pm.setComponentEnabledSetting(component, desiredState, PackageManager.DONT_KILL_APP)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
 
     fun getCustomPieces(): List<CustomPiece> {
         val json = prefs.getString("custom_pieces", null) ?: return emptyList()

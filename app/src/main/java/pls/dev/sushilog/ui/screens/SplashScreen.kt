@@ -232,7 +232,6 @@ fun SushiLogTitle(
 @Composable
 fun SplashScreen(
     colors: SushiColors,
-    logoRes: Int = pls.dev.sushilog.R.drawable.logo,
     onFinished: () -> Unit
 ) {
     var visible by remember { mutableStateOf(false) }
@@ -267,7 +266,7 @@ fun SplashScreen(
                 .alpha(alpha)
         ) {
             androidx.compose.material3.Icon(
-                painter = androidx.compose.ui.res.painterResource(id = logoRes),
+                painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.logo),
                 contentDescription = null,
                 tint = androidx.compose.ui.graphics.Color.Unspecified,
                 modifier = Modifier.size(180.dp).padding(bottom = 16.dp)

@@ -46,6 +46,7 @@ object GlobalAchievementNotifier {
 }
 
 class MainActivity : ComponentActivity() {
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +58,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             var currentTheme by remember { mutableStateOf(settingsManager.getTheme()) }
             var currentLanguage by remember { mutableStateOf(settingsManager.getLanguage()) }
-            var currentLogo by remember { mutableStateOf(settingsManager.getLogo()) }
             val strings = remember(currentLanguage) { AppStrings.get(currentLanguage) }
 
             val colors = getColorsForTheme(currentTheme)
@@ -107,7 +107,6 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             currentTheme = currentTheme,
                             currentLanguage = currentLanguage,
-                            currentLogo = currentLogo,
                             strings = strings,
                             onThemeChange = { newTheme ->
                                 currentTheme = newTheme
@@ -116,10 +115,6 @@ class MainActivity : ComponentActivity() {
                             onLanguageChange = { newLang ->
                                 currentLanguage = newLang
                                 settingsManager.setLanguage(newLang)
-                            },
-                            onLogoChange = { newLogo ->
-                                currentLogo = newLogo
-                                settingsManager.setLogo(newLogo)
                             },
                             colors = colors
                         )
