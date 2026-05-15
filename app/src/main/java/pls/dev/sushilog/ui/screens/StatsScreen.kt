@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -18,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -53,9 +50,9 @@ fun StatsScreen(
                 modifier = Modifier.size(40.dp).clip(CircleShape).background(colors.secondary)
             ) {
                 Icon(
-                    Icons.AutoMirrored.Filled.ArrowBack,
+                    painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.back),
                     contentDescription = strings.back,
-                    tint = colors.onSecondary,
+                    tint = androidx.compose.ui.graphics.Color.Unspecified,
                     modifier = Modifier.size(20.dp)
                 )
             }
@@ -118,7 +115,7 @@ fun StatsScreen(
                             modifier = Modifier.fillMaxWidth().padding(24.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Icon(painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.nigiri), contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(64.dp))
+                            Icon(painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.all), contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(64.dp))
                             Text(
                                 stats.total.toString(),
                                 color = colors.primary,
@@ -139,7 +136,7 @@ fun StatsScreen(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         StatCard(
-                            iconRes = pls.dev.sushilog.R.drawable.history,
+                            iconRes = pls.dev.sushilog.R.drawable.calendar,
                             value = stats.sessionCount.toString(),
                             label = if (stats.sessionCount == 1) strings.session.replaceFirstChar { if (it.isLowerCase()) it.titlecase(java.util.Locale.getDefault()) else it.toString() } else strings.sessionCount,
                             colors = colors,
@@ -153,7 +150,7 @@ fun StatsScreen(
                             modifier = Modifier.weight(1f)
                         )
                         StatCard(
-                            iconRes = pls.dev.sushilog.R.drawable.stats,
+                            iconRes = pls.dev.sushilog.R.drawable.uramaki,
                             value = stats.maxInSession.toString(),
                             label = strings.record,
                             colors = colors,

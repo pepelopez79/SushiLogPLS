@@ -11,9 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -225,9 +222,9 @@ fun CounterScreen(
                                 .background(colors.secondary)
                         ) {
                             Icon(
-                                Icons.AutoMirrored.Filled.ArrowBack,
+                                painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.back),
                                 contentDescription = strings.back,
-                                tint = colors.onSecondary,
+                                tint = androidx.compose.ui.graphics.Color.Unspecified,
                                 modifier = Modifier.size(20.dp)
                             )
                         }
@@ -388,7 +385,7 @@ fun CounterScreen(
                         }
                         
                         Spacer(modifier = Modifier.height(16.dp))
-                        OutlinedButton(
+                        Button(
                             onClick = {
                                 val currentLang = AppSettingsManager(context).getLanguage()
                                 pls.dev.sushilog.ui.screens.shareSessionAsImage(
@@ -397,11 +394,8 @@ fun CounterScreen(
                             },
                             shape = RoundedCornerShape(12.dp),
                             modifier = Modifier.fillMaxWidth().height(48.dp),
-                            colors = ButtonDefaults.outlinedButtonColors(contentColor = colors.primary),
-                            border = androidx.compose.foundation.BorderStroke(1.dp, colors.border)
+                            colors = ButtonDefaults.buttonColors(containerColor = colors.primary, contentColor = colors.onPrimary)
                         ) {
-                            Icon(Icons.Filled.Share, contentDescription = null, modifier = Modifier.size(18.dp))
-                            Spacer(modifier = Modifier.width(8.dp))
                             Text(strings.share, fontWeight = FontWeight.Bold)
                         }
 

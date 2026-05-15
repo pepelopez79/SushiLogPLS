@@ -5,9 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,7 +36,7 @@ fun HomeScreen(
     ) {
         
         Icon(
-            painter = painterResource(id = pls.dev.sushilog.R.drawable.nigiri),
+            painter = painterResource(id = pls.dev.sushilog.R.drawable.all),
             contentDescription = null,
             tint = androidx.compose.ui.graphics.Color.Unspecified,
             modifier = Modifier
@@ -147,9 +144,9 @@ fun HomeScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                            painter = painterResource(id = pls.dev.sushilog.R.drawable.start),
                             contentDescription = null,
-                            tint = colors.onPrimary,
+                            tint = androidx.compose.ui.graphics.Color.Unspecified,
                             modifier = Modifier.size(36.dp)
                         )
                     }

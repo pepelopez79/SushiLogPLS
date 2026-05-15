@@ -12,9 +12,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -70,9 +66,9 @@ fun SettingsScreen(
                 modifier = Modifier.size(40.dp).clip(CircleShape).background(colors.secondary)
             ) {
                 Icon(
-                    Icons.AutoMirrored.Filled.ArrowBack,
+                    painter = painterResource(id = pls.dev.sushilog.R.drawable.back),
                     contentDescription = strings.back,
-                    tint = colors.onSecondary,
+                    tint = androidx.compose.ui.graphics.Color.Unspecified,
                     modifier = Modifier.size(20.dp)
                 )
             }
@@ -176,11 +172,11 @@ fun SettingsScreen(
                         context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "1.0.0"
                     }.getOrDefault("1.0.0")
                     Column {
-                        SettingsItem(icon = Icons.Filled.Info, title = strings.version, subtitle = versionName, colors = colors)
+                        SettingsItem(iconRes = pls.dev.sushilog.R.drawable.info, title = strings.version, subtitle = versionName, colors = colors)
                         HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = colors.border)
-                        SettingsItem(icon = Icons.Filled.Edit, title = strings.developedBy, subtitle = "CodeByPLS", colors = colors)
+                        SettingsItem(iconRes = pls.dev.sushilog.R.drawable.devby, title = strings.developedBy, subtitle = "CodeByPLS", colors = colors)
                         HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = colors.border)
-                        SettingsItem(icon = Icons.Filled.Email, title = strings.contact, subtitle = "codebypls+sushilog@gmail.com", colors = colors, onClick = {
+                        SettingsItem(iconRes = pls.dev.sushilog.R.drawable.email, title = strings.contact, subtitle = "codebypls+sushilog@gmail.com", colors = colors, onClick = {
                             val intent = android.content.Intent(android.content.Intent.ACTION_SENDTO).apply {
                                 data = android.net.Uri.parse("mailto:codebypls+sushilog@gmail.com")
                                 putExtra(android.content.Intent.EXTRA_SUBJECT, "SushiLog - $versionName")
@@ -290,37 +286,6 @@ private fun LanguageOption(
     }
 }
 
-@Composable
-private fun SettingsItem(
-    icon: ImageVector, title: String, subtitle: String, colors: SushiColors,
-    isDestructive: Boolean = false, onClick: (() -> Unit)? = null
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        Icon(
-            imageVector = icon, contentDescription = null,
-            tint = if (isDestructive) MaterialTheme.colorScheme.error else colors.mutedForeground,
-            modifier = Modifier.size(24.dp)
-        )
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = title,
-                color = if (isDestructive) MaterialTheme.colorScheme.error else colors.onSurface,
-                fontSize = 16.sp, fontWeight = FontWeight.Medium
-            )
-            Text(text = subtitle, color = colors.mutedForeground, fontSize = 13.sp)
-        }
-        if (onClick != null) {
-            Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null, tint = colors.mutedForeground, modifier = Modifier.size(20.dp))
-        }
-    }
-}
 
 @Composable
 private fun SettingsItem(
@@ -349,7 +314,7 @@ private fun SettingsItem(
             Text(text = subtitle, color = colors.mutedForeground, fontSize = 13.sp)
         }
         if (onClick != null) {
-            Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null, tint = colors.mutedForeground, modifier = Modifier.size(20.dp))
+            Icon(painter = painterResource(id = pls.dev.sushilog.R.drawable.right), contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(20.dp))
         }
     }
 }

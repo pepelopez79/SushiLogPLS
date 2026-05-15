@@ -7,9 +7,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -60,7 +57,7 @@ fun AchievementsScreen(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             IconButton(onClick = onBack, modifier = Modifier.size(40.dp).clip(CircleShape).background(colors.secondary)) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = strings.back, tint = colors.onSecondary, modifier = Modifier.size(20.dp))
+                Icon(painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.back), contentDescription = strings.back, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(20.dp))
             }
             Text(strings.achievementsTitle, color = colors.onBackground, fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, modifier = Modifier.weight(1f))
         }
