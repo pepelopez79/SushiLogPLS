@@ -203,7 +203,7 @@ fun shareSessionAsImage(
     val listPadding = 200f
     
     for ((id, count) in displayPieces) {
-        val iconId = if (id == "rest_others") pls.dev.sushilog.R.drawable.nigiri else getPieceIconId(id, customPieces)
+        val iconId = if (id == "rest_others") pls.dev.sushilog.R.drawable.all else getPieceIconId(id, customPieces)
         val name = if (id == "rest_others") strings.others else getPieceName(id, customPieces, strings)
 
         val drawable = androidx.core.content.ContextCompat.getDrawable(context, iconId)
