@@ -54,7 +54,7 @@ fun AchievementsScreen(
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             IconButton(onClick = onBack, modifier = Modifier.size(40.dp).clip(CircleShape).background(colors.secondary)) {
                 Icon(painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.back), contentDescription = strings.back, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(20.dp))

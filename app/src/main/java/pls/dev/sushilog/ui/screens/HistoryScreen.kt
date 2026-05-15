@@ -53,7 +53,7 @@ fun HistoryScreen(
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             IconButton(
                 onClick = onBack,
@@ -171,7 +171,10 @@ private fun SessionHistoryCard(
 
                 Column(modifier = Modifier.weight(1f)) {
                     Text(formatDateLocalized(session.date, currentLanguage), color = colors.onSurface, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                    Text(session.restaurant, color = colors.mutedForeground, fontSize = 12.sp)
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Icon(painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.restaurant), contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(18.dp))
+                        Text(session.restaurant, color = colors.mutedForeground, fontSize = 12.sp)
+                    }
                     Spacer(modifier = Modifier.height(4.dp))
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -207,7 +210,7 @@ private fun SessionHistoryCard(
 
                 Icon(
                     painter = androidx.compose.ui.res.painterResource(id = if (isExpanded) pls.dev.sushilog.R.drawable.up else pls.dev.sushilog.R.drawable.down),
-                    contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(24.dp)
+                    contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.padding(end = 4.dp).size(24.dp)
                 )
             }
 

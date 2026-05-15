@@ -212,7 +212,7 @@ fun CounterScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 16.dp),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         IconButton(
                             onClick = { handleBackAction() },
@@ -394,7 +394,7 @@ fun CounterScreen(
                             },
                             shape = RoundedCornerShape(12.dp),
                             modifier = Modifier.fillMaxWidth().height(48.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = colors.primary, contentColor = colors.onPrimary)
+                            colors = ButtonDefaults.buttonColors(containerColor = colors.primary.copy(alpha = 0.50f), contentColor = colors.onPrimary)
                         ) {
                             Text(strings.share, fontWeight = FontWeight.Bold)
                         }

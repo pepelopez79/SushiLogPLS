@@ -153,8 +153,8 @@ object AppStrings {
         deletedPiece="Pieza eliminada", customPieceKcalHint="aprox.", customPieceSalmonHint="cortes",
         customPieceRiceHint="gramos", customPieceSalmonLabel="Pescado", historyKcalLabel="%d kcal",
         historyRiceLabel="%dg", historySalmonLabel="%d cortes", historySalmonLabelSingular="%d corte", statsWholeSalmon="Aprox. %.1f pescados enteros (%d cortes)",
-        statsSalmonPieces="%d cortes de pescado", statsSalmonPiecesSingular="%d corte de pescado", shareActionTitle="Compartir sesión", shareIntentText="🍣 ¡Mi sesión de Sushi en %s! \n#SushiLog",
-        shareWatermark="Sushi Log 🍣", rice="Arroz", kcal="Kcal", explore="EXPLORA",
+        statsSalmonPieces="%d cortes de pescado", statsSalmonPiecesSingular="%d corte de pescado", shareActionTitle="Compartir sesión", shareIntentText="🍣 ¡Mi sesión de Sushi en %s! #SushiLog",
+        shareWatermark="#SushiLog", rice="Arroz", kcal="Kcal", explore="EXPLORA",
         catTrajectory="Trayectoria", catAccumulation="Acumulación", catFeats="Hazañas", catSpecialist="Especialista", catExplorer="Explorador",
         duplicatePieceName="Ya existe una pieza con ese nombre",
         contact="Contacto"
@@ -210,8 +210,8 @@ object AppStrings {
         deletedPiece="Deleted piece", customPieceKcalHint="approx.", customPieceSalmonHint="cuts",
         customPieceRiceHint="grams", customPieceSalmonLabel="Fish", historyKcalLabel="%d kcal",
         historyRiceLabel="%dg", historySalmonLabel="%d cuts", historySalmonLabelSingular="%d cut", statsWholeSalmon="Approx. %.1f whole fish (%d cuts)",
-        statsSalmonPieces="%d fish cuts", statsSalmonPiecesSingular="%d fish cut", shareActionTitle="Share session", shareIntentText="🍣 My Sushi session at %s! \n#SushiLog",
-        shareWatermark="Sushi Log 🍣", rice="Rice", kcal="Kcal", explore="EXPLORE",
+        statsSalmonPieces="%d fish cuts", statsSalmonPiecesSingular="%d fish cut", shareActionTitle="Share session", shareIntentText="🍣 My Sushi session at %s! #SushiLog",
+        shareWatermark="#SushiLog", rice="Rice", kcal="Kcal", explore="EXPLORE",
         catTrajectory="Trajectory", catAccumulation="Accumulation", catFeats="Feats", catSpecialist="Specialist", catExplorer="Explorer",
         duplicatePieceName="A piece with this name already exists",
         contact="Contact"
@@ -267,8 +267,8 @@ object AppStrings {
         deletedPiece="Pièce supprimée", customPieceKcalHint="env.", customPieceSalmonHint="coupes",
         customPieceRiceHint="grammes", customPieceSalmonLabel="Poisson", historyKcalLabel="%d kcal",
         historyRiceLabel="%dg", historySalmonLabel="%d tranches", historySalmonLabelSingular="%d tranche", statsWholeSalmon="Env. %.1f poissons entiers (%d coupes)",
-        statsSalmonPieces="%d coupes de poisson", statsSalmonPiecesSingular="%d coupe de poisson", shareActionTitle="Partager la session", shareIntentText="🍣 Ma session de Sushi chez %s! \n#SushiLog",
-        shareWatermark="Sushi Log 🍣", rice="Riz", kcal="Kcal", explore="EXPLORER",
+        statsSalmonPieces="%d coupes de poisson", statsSalmonPiecesSingular="%d coupe de poisson", shareActionTitle="Partager la session", shareIntentText="🍣 Ma session de Sushi chez %s! #SushiLog",
+        shareWatermark="#SushiLog", rice="Riz", kcal="Kcal", explore="EXPLORER",
         catTrajectory="Parcours", catAccumulation="Accumulation", catFeats="Exploits", catSpecialist="Spécialiste", catExplorer="Explorateur",
         duplicatePieceName="Une pièce avec ce nom existe déjà",
         contact="Contact"
@@ -324,8 +324,8 @@ object AppStrings {
         deletedPiece="Pezzo eliminato", customPieceKcalHint="circa", customPieceSalmonHint="tagli",
         customPieceRiceHint="grammi", customPieceSalmonLabel="Pesce", historyKcalLabel="%d kcal",
         historyRiceLabel="%dg", historySalmonLabel="%d tagli", historySalmonLabelSingular="%d taglio", statsWholeSalmon="Circa %.1f pesci interi (%d tagli)",
-        statsSalmonPieces="%d tagli di pesce", statsSalmonPiecesSingular="%d taglio di pesce", shareActionTitle="Condividi sessione", shareIntentText="🍣 La mia sessione di Sushi al %s! \n#SushiLog",
-        shareWatermark="Sushi Log 🍣", rice="Riso", kcal="Kcal", explore="ESPLORA",
+        statsSalmonPieces="%d tagli di pesce", statsSalmonPiecesSingular="%d taglio di pesce", shareActionTitle="Condividi sessione", shareIntentText="🍣 La mia sessione di Sushi al %s! #SushiLog",
+        shareWatermark="#SushiLog", rice="Riso", kcal="Kcal", explore="ESPLORA",
         catTrajectory="Traiettoria", catAccumulation="Accumulo", catFeats="Imprese", catSpecialist="Specialista", catExplorer="Esploratore",
         duplicatePieceName="Esiste già un pezzo con questo nome",
         contact="Contatto"

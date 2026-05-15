@@ -59,7 +59,7 @@ fun SettingsScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             IconButton(
                 onClick = onBack,
@@ -314,7 +314,7 @@ private fun SettingsItem(
             Text(text = subtitle, color = colors.mutedForeground, fontSize = 13.sp)
         }
         if (onClick != null) {
-            Icon(painter = painterResource(id = pls.dev.sushilog.R.drawable.right), contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(20.dp))
+            Icon(painter = painterResource(id = pls.dev.sushilog.R.drawable.right), contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.padding(end = 4.dp).size(20.dp))
         }
     }
 }

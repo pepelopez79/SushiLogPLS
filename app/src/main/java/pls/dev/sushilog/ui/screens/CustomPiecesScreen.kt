@@ -288,7 +288,7 @@ fun CustomPiecesScreen(
                             }
                             Icon(
                                 painter = androidx.compose.ui.res.painterResource(id = if (editingPiece?.id == piece.id) pls.dev.sushilog.R.drawable.up else pls.dev.sushilog.R.drawable.down),
-                                contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(24.dp)
+                                contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.padding(end = 4.dp).size(24.dp)
                             )
                         }
 

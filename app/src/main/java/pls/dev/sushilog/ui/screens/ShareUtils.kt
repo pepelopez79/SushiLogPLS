@@ -42,38 +42,111 @@ fun shareSessionAsImage(
     canvas.drawCircle(80f, 200f, 400f, decorPaint)
     canvas.drawCircle(950f, 1700f, 500f, decorPaint)
 
+    // --- Header: Logo + SUSHI / ── LOG ── (centrado, como el Home) ---
+    val logoDrawable = androidx.core.content.ContextCompat.getDrawable(context, pls.dev.sushilog.R.drawable.logo)
+    val logoSize = 150
+    val centerX = 540f
+
     val paint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
         color = colors.onBackground.toArgb()
-        textSize = 100f
+        textSize = 90f
         typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        textAlign = Paint.Align.CENTER
-        setShadowLayer(15f, 0f, 10f, android.graphics.Color.argb(40, 0, 0, 0))
+        textAlign = Paint.Align.LEFT
+        letterSpacing = -0.03f
     }
-    canvas.drawText("SUSHI", 540f, 200f, paint)
+    val sushiWidth = paint.measureText("SUSHI")
+    val totalHeaderWidth = logoSize + 24f + sushiWidth
+    val headerStartX = centerX - totalHeaderWidth / 2f
 
+    // Logo
+    val logoTop = 110
+    logoDrawable?.setBounds(
+        headerStartX.toInt(), logoTop,
+        headerStartX.toInt() + logoSize, logoTop + logoSize
+    )
+    logoDrawable?.draw(canvas)
+
+    // "SUSHI"
+    val textStartX = headerStartX + logoSize + 24f
+    canvas.drawText("SUSHI", textStartX, 200f, paint)
+
+    // "── LOG ──" con líneas a AMBOS lados
     paint.apply {
-        color = colors.primary.toArgb()
-        textSize = 60f
-        letterSpacing = 0.2f
+        textSize = 50f
+        letterSpacing = 0.08f
+        typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        color = colors.onBackground.toArgb()
     }
-    canvas.drawText("LOG", 540f, 280f, paint)
+    val logWidth = paint.measureText("LOG")
+    val lineLength = 60f
+    val lineGap = 16f
+    val logBlockWidth = lineLength + lineGap + logWidth + lineGap + lineLength
+    val logStartX = textStartX + (sushiWidth - logBlockWidth) / 2f
 
-    paint.clearShadowLayer()
+    val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = colors.primary.toArgb()
+        strokeWidth = 4f
+    }
+    val logY = 255f
+    // Línea izquierda
+    canvas.drawLine(logStartX, logY - 12f, logStartX + lineLength, logY - 12f, linePaint)
+    // "LOG"
+    canvas.drawText("LOG", logStartX + lineLength + lineGap, logY, paint)
+    // Línea derecha
+    val rightLineX = logStartX + lineLength + lineGap + logWidth + lineGap
+    canvas.drawLine(rightLineX, logY - 12f, rightLineX + lineLength, logY - 12f, linePaint)
+
+    // --- Fecha con icono calendar (centrado) ---
     paint.letterSpacing = 0f
-    paint.textSize = 45f
+    paint.textSize = 40f
     paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
     paint.color = colors.mutedForeground.toArgb()
-    
+    paint.textAlign = Paint.Align.LEFT
+
     val dateText = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
         formatDateLocalized(session.date, language)
     } else {
         session.date
     }
-    
-    canvas.drawText("📅 $dateText", 540f, 360f, paint)
+
+    val infoBoxSize = 44
+
+    val calendarDrawable = androidx.core.content.ContextCompat.getDrawable(context, pls.dev.sushilog.R.drawable.calendar)
+    val calIw = calendarDrawable?.intrinsicWidth ?: infoBoxSize
+    val calIh = calendarDrawable?.intrinsicHeight ?: infoBoxSize
+    val calScale = minOf(infoBoxSize.toFloat() / calIw, infoBoxSize.toFloat() / calIh)
+    val calW = (calIw * calScale).toInt()
+    val calH = (calIh * calScale).toInt()
+
+    val dateWidth = paint.measureText(dateText)
+    val dateBlockWidth = infoBoxSize + 12f + dateWidth
+    val dateStartX = centerX - dateBlockWidth / 2f
+    val calLeft = dateStartX.toInt() + (infoBoxSize - calW) / 2
+    val calTop = 330 + (infoBoxSize - calH) / 2
+
+    calendarDrawable?.setBounds(calLeft, calTop, calLeft + calW, calTop + calH)
+    calendarDrawable?.draw(canvas)
+    canvas.drawText(dateText, dateStartX + infoBoxSize + 12f, 367f, paint)
+
+    // --- Restaurante con icono restaurant (centrado) ---
     paint.color = colors.onBackground.toArgb()
     paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-    canvas.drawText("🏠 ${session.restaurant}", 540f, 440f, paint)
+    val restaurantDrawable = androidx.core.content.ContextCompat.getDrawable(context, pls.dev.sushilog.R.drawable.restaurant)
+    val restIw = restaurantDrawable?.intrinsicWidth ?: infoBoxSize
+    val restIh = restaurantDrawable?.intrinsicHeight ?: infoBoxSize
+    val restScale = minOf(infoBoxSize.toFloat() / restIw, infoBoxSize.toFloat() / restIh)
+    val restW = (restIw * restScale).toInt()
+    val restH = (restIh * restScale).toInt()
+
+    val restaurantWidth = paint.measureText(session.restaurant)
+    val restaurantBlockWidth = infoBoxSize + 12f + restaurantWidth
+    val restaurantStartX = centerX - restaurantBlockWidth / 2f
+    val restLeft = restaurantStartX.toInt() + (infoBoxSize - restW) / 2
+    val restTop = 405 + (infoBoxSize - restH) / 2
+
+    restaurantDrawable?.setBounds(restLeft, restTop, restLeft + restW, restTop + restH)
+    restaurantDrawable?.draw(canvas)
+    canvas.drawText(session.restaurant, restaurantStartX + infoBoxSize + 12f, 442f, paint)
 
     val cardPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = colors.surface.toArgb()
@@ -93,9 +166,14 @@ fun shareSessionAsImage(
         displayPieces.addAll(sortedPieces)
     }
 
-    val topContentY = 540f
+    val headerBottom = 470f
+    val watermarkY = 1820f
+    val watermarkAreaTop = watermarkY - 60f
 
     val listHeight = displayPieces.size * 110f
+    val cardContentHeight = 450f + listHeight + 80f
+    val availableSpace = watermarkAreaTop - headerBottom
+    val topContentY = headerBottom + (availableSpace - cardContentHeight) / 2f
     val mainCardBottom = topContentY + 450f + listHeight + 80f
 
     val mainCardRect = RectF(100f, topContentY, 980f, mainCardBottom)
@@ -129,12 +207,15 @@ fun shareSessionAsImage(
         val name = if (id == "rest_others") strings.others else getPieceName(id, customPieces, strings)
 
         val drawable = androidx.core.content.ContextCompat.getDrawable(context, iconId)
-        drawable?.setBounds(
-            listPadding.toInt(),
-            (currentY - 50).toInt(),
-            (listPadding + 64).toInt(),
-            (currentY + 14).toInt()
-        )
+        val boxSize = 64
+        val iw = drawable?.intrinsicWidth ?: boxSize
+        val ih = drawable?.intrinsicHeight ?: boxSize
+        val scale = minOf(boxSize.toFloat() / iw, boxSize.toFloat() / ih)
+        val drawW = (iw * scale).toInt()
+        val drawH = (ih * scale).toInt()
+        val iconLeft = listPadding.toInt() + (boxSize - drawW) / 2
+        val iconTop = (currentY - 50).toInt() + (boxSize - drawH) / 2
+        drawable?.setBounds(iconLeft, iconTop, iconLeft + drawW, iconTop + drawH)
         drawable?.draw(canvas)
 
         paint.textAlign = Paint.Align.LEFT
