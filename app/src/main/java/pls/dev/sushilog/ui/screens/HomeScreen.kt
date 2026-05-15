@@ -64,18 +64,18 @@ fun HomeScreen(
                         painter = painterResource(id = pls.dev.sushilog.R.drawable.logo),
                         contentDescription = null,
                         tint = androidx.compose.ui.graphics.Color.Unspecified,
-                        modifier = Modifier.size(55.dp)
+                        modifier = Modifier.size(60.dp)
                     )
                     SushiLogTitle(
                         colors = colors,
-                        sushiFontSize = 35,
+                        sushiFontSize = 32,
                         logFontSize = 16,
                         style = 1
                     )
                 }
                 Box(
                     modifier = Modifier
-                        .size(52.dp)
+                        .size(60.dp)
                         .shadow(4.dp, CircleShape)
                         .clip(CircleShape)
                         .background(colors.surface)
@@ -86,7 +86,7 @@ fun HomeScreen(
                         painter = painterResource(id = pls.dev.sushilog.R.drawable.settings),
                         contentDescription = strings.settings,
                         tint = androidx.compose.ui.graphics.Color.Unspecified,
-                        modifier = Modifier.size(36.dp)
+                        modifier = Modifier.size(40.dp)
                     )
                 }
             }
@@ -137,17 +137,14 @@ fun HomeScreen(
                     Box(
                         modifier = Modifier
                             .align(Alignment.CenterEnd)
-                            .padding(end = 24.dp)
-                            .size(64.dp)
-                            .clip(CircleShape)
-                            .background(colors.onPrimary.copy(alpha = 0.2f)),
+                            .padding(end = 24.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             painter = painterResource(id = pls.dev.sushilog.R.drawable.start),
                             contentDescription = null,
                             tint = androidx.compose.ui.graphics.Color.Unspecified,
-                            modifier = Modifier.size(36.dp)
+                            modifier = Modifier.size(70.dp)
                         )
                     }
                 }

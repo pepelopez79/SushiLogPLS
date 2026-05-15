@@ -143,14 +143,14 @@ fun StatsScreen(
                             modifier = Modifier.weight(1f)
                         )
                         StatCard(
-                            iconRes = pls.dev.sushilog.R.drawable.nigiri,
+                            iconRes = pls.dev.sushilog.R.drawable.average,
                             value = String.format("%.0f", stats.avgPerSession),
                             label = strings.average,
                             colors = colors,
                             modifier = Modifier.weight(1f)
                         )
                         StatCard(
-                            iconRes = pls.dev.sushilog.R.drawable.uramaki,
+                            iconRes = pls.dev.sushilog.R.drawable.record,
                             value = stats.maxInSession.toString(),
                             label = strings.record,
                             colors = colors,
