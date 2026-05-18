@@ -279,5 +279,25 @@ fun SplashScreen(
                 style = 1
             )
         }
+
+        Row(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 32.dp)
+                .alpha(alpha)
+        ) {
+            Text(
+                text = "CodeBy",
+                color = colors.onBackground,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "PLS",
+                color = colors.primary,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Black
+            )
+        }
     }
 }
