@@ -178,7 +178,7 @@ Todos los iconos son **PNG personalizados** sin dependencia de Material Icons:
 
 ## Instalación
 
-1. Clonar el repositorio
+1. Clonar el repositorio https://github.com/pepelopez79/SushiLogPLS.git
 2. Abrir en Android Studio
 3. Sync Gradle
 4. Ejecutar en dispositivo/emulador (API 24+)
