@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -44,6 +45,8 @@ fun SettingsScreen(
     onBack: () -> Unit
 ) {
     val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val isCompactWidth = configuration.screenWidthDp < 360
     val settingsManager = remember { AppSettingsManager(context) }
     val sessionManager = remember { SessionStorage(context) }
 
@@ -96,16 +99,41 @@ fun SettingsScreen(
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(strings.appTheme, color = colors.onSurface, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
                         Spacer(modifier = Modifier.height(12.dp))
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            AppTheme.entries.forEach { theme ->
+                        if (isCompactWidth) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    AppTheme.entries.take(2).forEach { theme ->
+                                        ThemeOption(
+                                            theme = theme,
+                                            isSelected = currentTheme == theme,
+                                            colors = colors,
+                                            strings = strings,
+                                            onClick = { onThemeChange(theme) },
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                    }
+                                }
                                 ThemeOption(
-                                    theme = theme,
-                                    isSelected = currentTheme == theme,
+                                    theme = AppTheme.entries.last(),
+                                    isSelected = currentTheme == AppTheme.entries.last(),
                                     colors = colors,
                                     strings = strings,
-                                    onClick = { onThemeChange(theme) },
-                                    modifier = Modifier.weight(1f)
+                                    onClick = { onThemeChange(AppTheme.entries.last()) },
+                                    modifier = Modifier.fillMaxWidth()
                                 )
+                            }
+                        } else {
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                AppTheme.entries.forEach { theme ->
+                                    ThemeOption(
+                                        theme = theme,
+                                        isSelected = currentTheme == theme,
+                                        colors = colors,
+                                        strings = strings,
+                                        onClick = { onThemeChange(theme) },
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                }
                             }
                         }
                     }
@@ -120,15 +148,42 @@ fun SettingsScreen(
                     colors = CardDefaults.cardColors(containerColor = colors.surface)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            AppLanguage.entries.forEach { lang ->
-                                LanguageOption(
-                                    language = lang,
-                                    isSelected = currentLanguage == lang,
-                                    colors = colors,
-                                    onClick = { onLanguageChange(lang) },
-                                    modifier = Modifier.weight(1f)
-                                )
+                        if (isCompactWidth) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    AppLanguage.entries.take(2).forEach { lang ->
+                                        LanguageOption(
+                                            language = lang,
+                                            isSelected = currentLanguage == lang,
+                                            colors = colors,
+                                            onClick = { onLanguageChange(lang) },
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                    }
+                                }
+                                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    AppLanguage.entries.drop(2).forEach { lang ->
+                                        LanguageOption(
+                                            language = lang,
+                                            isSelected = currentLanguage == lang,
+                                            colors = colors,
+                                            onClick = { onLanguageChange(lang) },
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                    }
+                                }
+                            }
+                        } else {
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                AppLanguage.entries.forEach { lang ->
+                                    LanguageOption(
+                                        language = lang,
+                                        isSelected = currentLanguage == lang,
+                                        colors = colors,
+                                        onClick = { onLanguageChange(lang) },
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                }
                             }
                         }
                     }

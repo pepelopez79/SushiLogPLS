@@ -20,6 +20,7 @@ import pls.dev.sushilog.ui.theme.SushiColors
 import java.io.File
 import java.io.FileOutputStream
 import androidx.core.graphics.createBitmap
+import kotlin.math.max
 
 fun shareSessionAsImage(
     context: Context,
@@ -138,7 +139,9 @@ fun shareSessionAsImage(
     val restW = (restIw * restScale).toInt()
     val restH = (restIh * restScale).toInt()
 
-    val restaurantWidth = paint.measureText(session.restaurant)
+    val maxRestaurantTextWidth = 1080f - 280f
+    val restaurantText = ellipsizeForWidth(session.restaurant, paint, maxRestaurantTextWidth)
+    val restaurantWidth = paint.measureText(restaurantText)
     val restaurantBlockWidth = infoBoxSize + 12f + restaurantWidth
     val restaurantStartX = centerX - restaurantBlockWidth / 2f
     val restLeft = restaurantStartX.toInt() + (infoBoxSize - restW) / 2
@@ -146,7 +149,7 @@ fun shareSessionAsImage(
 
     restaurantDrawable?.setBounds(restLeft, restTop, restLeft + restW, restTop + restH)
     restaurantDrawable?.draw(canvas)
-    canvas.drawText(session.restaurant, restaurantStartX + infoBoxSize + 12f, 442f, paint)
+    canvas.drawText(restaurantText, restaurantStartX + infoBoxSize + 12f, 442f, paint)
 
     val cardPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = colors.surface.toArgb()
@@ -220,7 +223,9 @@ fun shareSessionAsImage(
 
         paint.textAlign = Paint.Align.LEFT
         paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-        canvas.drawText(name, listPadding + 100f, currentY, paint)
+        val nameStartX = listPadding + 100f
+        val maxNameWidth = max(0f, (1080f - listPadding) - 120f - nameStartX)
+        canvas.drawText(ellipsizeForWidth(name, paint, maxNameWidth), nameStartX, currentY, paint)
 
         paint.textAlign = Paint.Align.RIGHT
         paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
@@ -261,4 +266,14 @@ fun shareSessionAsImage(
     } catch (e: Exception) {
         e.printStackTrace()
     }
+}
+
+private fun ellipsizeForWidth(text: String, paint: TextPaint, maxWidth: Float): String {
+    if (maxWidth <= 0f || paint.measureText(text) <= maxWidth) return text
+    val ellipsis = "..."
+    var end = text.length
+    while (end > 0 && paint.measureText(text.substring(0, end) + ellipsis) > maxWidth) {
+        end--
+    }
+    return if (end <= 0) ellipsis else text.substring(0, end) + ellipsis
 }

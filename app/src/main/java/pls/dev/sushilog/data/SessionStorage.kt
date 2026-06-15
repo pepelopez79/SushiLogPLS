@@ -6,8 +6,8 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.google.gson.JsonSyntaxException
-import com.google.gson.reflect.TypeToken
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.DayOfWeek
@@ -40,9 +40,7 @@ class SessionStorage(context: Context) {
         if (json.isBlank()) return emptyList()
 
         return try {
-            val type = object : TypeToken<List<SessionRecord>>() {}.type
-            val sessions: List<SessionRecord>? = gson.fromJson(json, type)
-            sessions ?: emptyList()
+            parseSessionsJson(json)
         } catch (e: JsonSyntaxException) {
             Log.e(TAG, "JSON corrupto en sesiones principales, intentando backup", e)
             restoreFromBackup()
@@ -58,18 +56,63 @@ class SessionStorage(context: Context) {
     private fun restoreFromBackup(): List<SessionRecord> {
         val backupJson = prefs.getString(backupKey, null) ?: return emptyList()
         return try {
-            val type = object : TypeToken<List<SessionRecord>>() {}.type
-            val sessions: List<SessionRecord>? = gson.fromJson(backupJson, type)
-            if (sessions != null && sessions.isNotEmpty()) {
+            val sessions = parseSessionsJson(backupJson)
+            if (sessions.isNotEmpty()) {
                 // Restaurar backup como datos principales
                 prefs.edit { putString(key, backupJson) }
                 Log.i(TAG, "Sesiones restauradas desde backup: ${sessions.size} sesiones")
             }
-            sessions ?: emptyList()
+            sessions
         } catch (e: Exception) {
             Log.e(TAG, "Backup también corrupto, datos perdidos", e)
             emptyList()
         }
+    }
+
+    private fun parseSessionsJson(json: String): List<SessionRecord> {
+        val jsonArray = com.google.gson.JsonParser.parseString(json).asJsonArray
+        val sessions = mutableListOf<SessionRecord>()
+
+        jsonArray.forEachIndexed { index, element ->
+            runCatching {
+                val obj = element.asJsonObject
+                obj.toSessionRecordOrNull()
+            }.onFailure {
+                Log.w(TAG, "Elemento de historial inválido en índice $index. Se omite.", it)
+            }.getOrNull()?.let { sessions.add(it) }
+        }
+
+        return sessions
+    }
+
+    private fun JsonObject.toSessionRecordOrNull(): SessionRecord? {
+        val id = get("id")?.asString?.takeIf { it.isNotBlank() } ?: return null
+        val date = get("date")?.asString?.takeIf { it.isNotBlank() } ?: return null
+        val restaurant = get("restaurant")?.asString?.ifBlank { "Sin nombre" } ?: "Sin nombre"
+        val piecesObj = getAsJsonObject("pieces") ?: return null
+
+        val pieces = mutableMapOf<String, Int>()
+        piecesObj.entrySet().forEach { (pieceId, countValue) ->
+            if (pieceId.isNotBlank()) {
+                val count = runCatching { countValue.asInt }.getOrDefault(0)
+                if (count > 0) {
+                    pieces[pieceId] = count
+                }
+            }
+        }
+        if (pieces.isEmpty()) return null
+
+        val totalPiecesFromMap = pieces.values.sum()
+        val rawTotal = runCatching { get("totalPieces")?.asInt ?: totalPiecesFromMap }.getOrDefault(totalPiecesFromMap)
+        val totalPieces = rawTotal.coerceAtLeast(totalPiecesFromMap)
+
+        return SessionRecord(
+            id = id,
+            date = date,
+            restaurant = restaurant,
+            pieces = pieces,
+            totalPieces = totalPieces
+        )
     }
 
     /**

@@ -39,6 +39,7 @@ class AchievementManager(context: Context) {
         val sessions = sessionStorage.getSessions()
         val unlockedIds = getUnlockedIds()
         val alreadyUnlocked = unlockedIds.contains(achievement.id)
+        val basePieceIds = SUSHI_PIECES.map { it.id }.toSet()
 
         val rawCurrent = when (val req = achievement.requirement) {
             is AchievementRequirement.TotalPieces -> {
@@ -58,12 +59,13 @@ class AchievementManager(context: Context) {
             }
             is AchievementRequirement.PieceVariety -> {
                 sessions.flatMap { it.pieces.keys }
+                    .filter { it in basePieceIds }
                     .filter { pieceId -> sessions.any { (it.pieces[pieceId] ?: 0) > 0 } }
                     .toSet().size
             }
             is AchievementRequirement.AllPiecesInSession -> {
                 sessions.maxOfOrNull { session ->
-                    session.pieces.count { (_, count) -> count >= req.minCount }
+                    session.pieces.count { (pieceId, count) -> pieceId in basePieceIds && count >= req.minCount }
                 } ?: 0
             }
         }

@@ -203,7 +203,7 @@ val ACHIEVEMENTS = listOf(
         descriptionKey = "achievement_variety_all_desc",
         iconRes = R.drawable.achievement18,
         category = AchievementCategory.VARIETY,
-        requirement = AchievementRequirement.PieceVariety(12)
+        requirement = AchievementRequirement.PieceVariety(11)
     ),
     Achievement(
         id = "all_in_one",

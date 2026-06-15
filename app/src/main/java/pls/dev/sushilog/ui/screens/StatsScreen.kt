@@ -16,9 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pls.dev.sushilog.data.*
@@ -34,6 +36,8 @@ fun StatsScreen(
     onBack: () -> Unit
 ) {
     val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val isCompactWidth = configuration.screenWidthDp < 360
     val sessionManager = remember { SessionStorage(context) }
     val settingsManager = remember { AppSettingsManager(context) }
     val customPieces = remember { settingsManager.getCustomPieces() }
@@ -61,6 +65,8 @@ fun StatsScreen(
                 color = colors.onBackground,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.ExtraBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -131,31 +137,62 @@ fun StatsScreen(
                     }
                 }
                 item {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        StatCard(
-                            iconRes = pls.dev.sushilog.R.drawable.calendar,
-                            value = stats.sessionCount.toString(),
-                            label = if (stats.sessionCount == 1) strings.session.replaceFirstChar { if (it.isLowerCase()) it.titlecase(java.util.Locale.getDefault()) else it.toString() } else strings.sessionCount,
-                            colors = colors,
-                            modifier = Modifier.weight(1f)
-                        )
-                        StatCard(
-                            iconRes = pls.dev.sushilog.R.drawable.average,
-                            value = String.format("%.0f", stats.avgPerSession),
-                            label = strings.average,
-                            colors = colors,
-                            modifier = Modifier.weight(1f)
-                        )
-                        StatCard(
-                            iconRes = pls.dev.sushilog.R.drawable.record,
-                            value = stats.maxInSession.toString(),
-                            label = strings.record,
-                            colors = colors,
-                            modifier = Modifier.weight(1f)
-                        )
+                    if (isCompactWidth) {
+                        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                StatCard(
+                                    iconRes = pls.dev.sushilog.R.drawable.calendar,
+                                    value = stats.sessionCount.toString(),
+                                    label = if (stats.sessionCount == 1) strings.session.replaceFirstChar { if (it.isLowerCase()) it.titlecase(java.util.Locale.getDefault()) else it.toString() } else strings.sessionCount,
+                                    colors = colors,
+                                    modifier = Modifier.weight(1f)
+                                )
+                                StatCard(
+                                    iconRes = pls.dev.sushilog.R.drawable.average,
+                                    value = String.format("%.0f", stats.avgPerSession),
+                                    label = strings.average,
+                                    colors = colors,
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
+                            StatCard(
+                                iconRes = pls.dev.sushilog.R.drawable.record,
+                                value = stats.maxInSession.toString(),
+                                label = strings.record,
+                                colors = colors,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                    } else {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            StatCard(
+                                iconRes = pls.dev.sushilog.R.drawable.calendar,
+                                value = stats.sessionCount.toString(),
+                                label = if (stats.sessionCount == 1) strings.session.replaceFirstChar { if (it.isLowerCase()) it.titlecase(java.util.Locale.getDefault()) else it.toString() } else strings.sessionCount,
+                                colors = colors,
+                                modifier = Modifier.weight(1f)
+                            )
+                            StatCard(
+                                iconRes = pls.dev.sushilog.R.drawable.average,
+                                value = String.format("%.0f", stats.avgPerSession),
+                                label = strings.average,
+                                colors = colors,
+                                modifier = Modifier.weight(1f)
+                            )
+                            StatCard(
+                                iconRes = pls.dev.sushilog.R.drawable.record,
+                                value = stats.maxInSession.toString(),
+                                label = strings.record,
+                                colors = colors,
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
                     }
                 }
                 item {
@@ -314,9 +351,9 @@ private fun PieceTypeRow(
 ) {
     Column {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+            Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                 Icon(painter = androidx.compose.ui.res.painterResource(id = getPieceIconId(id, customPieces)), contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(28.dp))
-                Text(getPieceName(id, customPieces, strings), color = colors.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                Text(getPieceName(id, customPieces, strings), color = colors.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
             Text(count.toString(), color = colors.primary, fontSize = 16.sp, fontWeight = FontWeight.Bold)
         }
@@ -350,6 +387,6 @@ private fun PieceTypeRowOthers(
 private fun CuriosityItem(iconId: Int, text: String, colors: SushiColors) {
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         Icon(painter = androidx.compose.ui.res.painterResource(id = iconId), contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(32.dp))
-        Text(text, color = colors.onSurface, fontSize = 14.sp)
+        Text(text, color = colors.onSurface, fontSize = 14.sp, maxLines = 2, overflow = TextOverflow.Ellipsis)
     }
 }

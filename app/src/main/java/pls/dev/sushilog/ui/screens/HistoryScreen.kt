@@ -15,14 +15,17 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pls.dev.sushilog.data.*
@@ -33,6 +36,7 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 @RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HistoryScreen(
     colors: SushiColors,
@@ -41,6 +45,8 @@ fun HistoryScreen(
     onBack: () -> Unit
 ) {
     val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val isCompactWidth = configuration.screenWidthDp < 360
     val sessionManager = remember { SessionStorage(context) }
     val settingsManager = remember { AppSettingsManager(context) }
     val customPieces = remember { settingsManager.getCustomPieces() }
@@ -61,7 +67,15 @@ fun HistoryScreen(
             ) {
                 Icon(painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.back), contentDescription = strings.back, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(20.dp))
             }
-            Text(strings.historyTitle, color = colors.onBackground, fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, modifier = Modifier.weight(1f))
+            Text(
+                strings.historyTitle,
+                color = colors.onBackground,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.ExtraBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f)
+            )
             if (sessions.isNotEmpty()) {
                 Box(modifier = Modifier.clip(RoundedCornerShape(20.dp)).background(colors.primary.copy(alpha = 0.2f)).padding(horizontal = 12.dp, vertical = 6.dp)) {
                     Text(
@@ -101,6 +115,7 @@ fun HistoryScreen(
                         strings = strings,
                         currentLanguage = currentLanguage,
                         customPieces = customPieces,
+                        isCompactWidth = isCompactWidth,
                         onToggleExpand = { expandedSessionId = if (expandedSessionId == session.id) null else session.id },
                         onShare = { pls.dev.sushilog.ui.screens.shareSessionAsImage(context, session, strings, currentLanguage, colors, customPieces) },
                         onDelete = { showDeleteDialog = session }
@@ -133,6 +148,7 @@ fun HistoryScreen(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun SessionHistoryCard(
     session: SessionRecord,
@@ -141,6 +157,7 @@ private fun SessionHistoryCard(
     strings: AppStrings.Strings,
     currentLanguage: AppLanguage,
     customPieces: List<CustomPiece>,
+    isCompactWidth: Boolean,
     onToggleExpand: () -> Unit,
     onShare: () -> Unit,
     onDelete: () -> Unit
@@ -173,28 +190,18 @@ private fun SessionHistoryCard(
                     Text(formatDateLocalized(session.date, currentLanguage), color = colors.onSurface, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                         Icon(painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.restaurant), contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(18.dp))
-                        Text(session.restaurant, color = colors.mutedForeground, fontSize = 12.sp)
+                        Text(session.restaurant, color = colors.mutedForeground, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     }
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Row(
+                    FlowRow(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                            Icon(painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.kcal), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.size(14.dp))
-                            Text(strings.historyKcalLabel.format(totalKcal), color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
-                        }
+                        HistoryMetricChip(iconRes = pls.dev.sushilog.R.drawable.kcal, text = strings.historyKcalLabel.format(totalKcal), colors = colors)
                         if (totalRice > 0) {
-                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                                Icon(painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.rice), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.size(14.dp))
-                                Text(strings.historyRiceLabel.format(totalRice), color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
-                            }
+                            HistoryMetricChip(iconRes = pls.dev.sushilog.R.drawable.rice, text = strings.historyRiceLabel.format(totalRice), colors = colors)
                         }
                         if (totalSalmon > 0) {
-                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                                Icon(painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.salmon), contentDescription = null, tint = Color.Unspecified, modifier = Modifier.size(14.dp))
-                                Text(if (totalSalmon == 1) strings.historySalmonLabelSingular.format(totalSalmon) else strings.historySalmonLabel.format(totalSalmon), color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
-                            }
+                            HistoryMetricChip(iconRes = pls.dev.sushilog.R.drawable.salmon, text = if (totalSalmon == 1) strings.historySalmonLabelSingular.format(totalSalmon) else strings.historySalmonLabel.format(totalSalmon), colors = colors)
                         }
                     }
                 }
@@ -203,7 +210,8 @@ private fun SessionHistoryCard(
                     Text(
                         text = totalPieces.toString(),
                         color = colors.onSurface,
-                        fontSize = 24.sp, fontWeight = FontWeight.ExtraBold
+                        fontSize = if (isCompactWidth) 20.sp else 24.sp,
+                        fontWeight = FontWeight.ExtraBold
                     )
                     Text(if (totalPieces == 1) strings.piece else strings.pieces, color = colors.mutedForeground, fontSize = 11.sp)
                 }
@@ -220,9 +228,9 @@ private fun SessionHistoryCard(
                     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         session.pieces.filter { it.value > 0 }.forEach { (id, count) ->
                             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                                     Icon(painter = androidx.compose.ui.res.painterResource(id = getPieceIconId(id, customPieces)), contentDescription = null, tint = androidx.compose.ui.graphics.Color.Unspecified, modifier = Modifier.size(24.dp))
-                                    Text(getPieceName(id, customPieces, strings), color = colors.onSurface, fontSize = 14.sp)
+                                    Text(getPieceName(id, customPieces, strings), color = colors.onSurface, fontSize = 14.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
                                 }
                                 Text("$count", color = colors.primary, fontSize = 14.sp, fontWeight = FontWeight.Bold)
                             }
@@ -249,6 +257,23 @@ private fun SessionHistoryCard(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun HistoryMetricChip(iconRes: Int, text: String, colors: SushiColors) {
+    Row(
+        modifier = Modifier.padding(end = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
+        Icon(
+            painter = androidx.compose.ui.res.painterResource(id = iconRes),
+            contentDescription = null,
+            tint = Color.Unspecified,
+            modifier = Modifier.size(14.dp)
+        )
+        Text(text = text, color = colors.mutedForeground, fontSize = 11.sp, fontWeight = FontWeight.Medium)
     }
 }
 

@@ -8,12 +8,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
@@ -75,6 +78,18 @@ class MainActivity : ComponentActivity() {
             }
 
             var visiblePopup by remember { mutableStateOf<Achievement?>(null) }
+            var displayedAchievement by remember { mutableStateOf<Achievement?>(null) }
+            var showPopup by remember { mutableStateOf(false) }
+
+            LaunchedEffect(visiblePopup) {
+                if (visiblePopup != null) {
+                    displayedAchievement = visiblePopup
+                    showPopup = true
+                } else {
+                    showPopup = false
+                }
+            }
+
             LaunchedEffect(Unit) {
                 GlobalAchievementNotifier.achievements.collect { unlockedList ->
                     for (achievement in unlockedList) {
@@ -86,7 +101,7 @@ class MainActivity : ComponentActivity() {
                         visiblePopup = achievement
                         delay(4000)
                         visiblePopup = null
-                        delay(500)
+                        delay(700)
                     }
                 }
             }
@@ -116,15 +131,22 @@ class MainActivity : ComponentActivity() {
                         )
 
                         AnimatedVisibility(
-                            visible = visiblePopup != null,
-                            enter = slideInVertically(initialOffsetY = { -it }) + fadeIn(),
-                            exit = slideOutVertically(targetOffsetY = { -it }) + fadeOut(),
+                            visible = showPopup,
+                            enter = slideInVertically(
+                                initialOffsetY = { -it },
+                                animationSpec = tween(400, easing = FastOutSlowInEasing)
+                            ) + fadeIn(animationSpec = tween(400)),
+                            exit = slideOutVertically(
+                                targetOffsetY = { -it },
+                                animationSpec = tween(400, easing = FastOutSlowInEasing)
+                            ) + fadeOut(animationSpec = tween(400)),
                             modifier = Modifier.align(Alignment.TopCenter).padding(horizontal = 16.dp, vertical = 24.dp)
                         ) {
-                            visiblePopup?.let { achievement ->
+                            displayedAchievement?.let { achievement ->
                                 Card(
                                     shape = RoundedCornerShape(16.dp),
                                     colors = CardDefaults.cardColors(containerColor = colors.primary),
+                                    modifier = Modifier.shadow(8.dp, RoundedCornerShape(16.dp))
                                     ) {
                                     Row(
                                         modifier = Modifier.padding(16.dp),

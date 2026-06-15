@@ -100,7 +100,9 @@ object AppStrings {
         val shareWatermark: String, val rice: String, val kcal: String, val explore: String,
         val catTrajectory: String, val catAccumulation: String, val catFeats: String, val catSpecialist: String, val catExplorer: String,
         val duplicatePieceName: String,
-        val contact: String
+        val contact: String,
+        val counterTutorialTitle: String,
+        val counterTutorialMessage: String
     )
 
     private val spanish = Strings(
@@ -157,7 +159,9 @@ object AppStrings {
         shareWatermark="#SushiLog", rice="Arroz", kcal="Kcal", explore="EXPLORA",
         catTrajectory="Trayectoria", catAccumulation="Acumulación", catFeats="Hazañas", catSpecialist="Especialista", catExplorer="Explorador",
         duplicatePieceName="Ya existe una pieza con ese nombre",
-        contact="Contacto"
+        contact="Contacto",
+        counterTutorialTitle="Tutorial",
+        counterTutorialMessage="Pulsa una vez sobre una pieza para añadir +1.\n\nMantén pulsada una pieza para eliminar -1."
     )
 
     private val english = Strings(
@@ -214,7 +218,9 @@ object AppStrings {
         shareWatermark="#SushiLog", rice="Rice", kcal="Kcal", explore="EXPLORE",
         catTrajectory="Trajectory", catAccumulation="Accumulation", catFeats="Feats", catSpecialist="Specialist", catExplorer="Explorer",
         duplicatePieceName="A piece with this name already exists",
-        contact="Contact"
+        contact="Contact",
+        counterTutorialTitle="Tutorial",
+        counterTutorialMessage="Tap once on a piece to add +1.\n\nLong-press a piece to remove -1."
     )
 
     private val french = Strings(
@@ -271,7 +277,9 @@ object AppStrings {
         shareWatermark="#SushiLog", rice="Riz", kcal="Kcal", explore="EXPLORER",
         catTrajectory="Parcours", catAccumulation="Accumulation", catFeats="Exploits", catSpecialist="Spécialiste", catExplorer="Explorateur",
         duplicatePieceName="Une pièce avec ce nom existe déjà",
-        contact="Contact"
+        contact="Contact",
+        counterTutorialTitle="Tutoriel",
+        counterTutorialMessage="Touchez une pièce une fois pour ajouter +1.\n\nMaintenez une pièce pour retirer -1."
     )
 
     private val italian = Strings(
@@ -328,7 +336,9 @@ object AppStrings {
         shareWatermark="#SushiLog", rice="Riso", kcal="Kcal", explore="ESPLORA",
         catTrajectory="Traiettoria", catAccumulation="Accumulo", catFeats="Imprese", catSpecialist="Specialista", catExplorer="Esploratore",
         duplicatePieceName="Esiste già un pezzo con questo nome",
-        contact="Contatto"
+        contact="Contatto",
+        counterTutorialTitle="Tutorial",
+        counterTutorialMessage="Tocca una volta un pezzo per aggiungere +1.\n\nTieni premuto un pezzo per rimuovere -1."
     )
 
     fun get(language: AppLanguage): Strings = when (language) {
@@ -429,6 +439,9 @@ data class CustomPiece(
  * Máximo 12 piezas personalizadas.
  */
 class AppSettingsManager(private val context: Context) {
+    companion object {
+        const val MAX_CUSTOM_PIECE_NAME_LENGTH = 24
+    }
 
     private val prefs: SharedPreferences =
         context.getSharedPreferences("sushi_app_settings", Context.MODE_PRIVATE)
@@ -461,6 +474,14 @@ class AppSettingsManager(private val context: Context) {
 
     fun setLanguage(language: AppLanguage) {
         prefs.edit { putString("language", language.code) }
+    }
+
+    fun isCounterTutorialShown(): Boolean {
+        return prefs.getBoolean("counter_tutorial_shown", false)
+    }
+
+    fun setCounterTutorialShown(shown: Boolean) {
+        prefs.edit { putBoolean("counter_tutorial_shown", shown) }
     }
 
 
@@ -503,7 +524,8 @@ class AppSettingsManager(private val context: Context) {
 
     fun addCustomPiece(piece: CustomPiece) {
         val current = getCustomPieces().toMutableList()
-        current.add(piece)
+        if (current.size >= 12) return
+        current.add(piece.copy(name = sanitizeCustomPieceName(piece.name)))
         saveCustomPieces(current)
     }
 
@@ -517,8 +539,16 @@ class AppSettingsManager(private val context: Context) {
         val current = getCustomPieces().toMutableList()
         val index = current.indexOfFirst { it.id == updated.id }
         if (index != -1) {
-            current[index] = updated
+            current[index] = updated.copy(name = sanitizeCustomPieceName(updated.name))
             saveCustomPieces(current)
         }
+    }
+
+    private fun sanitizeCustomPieceName(name: String): String {
+        return name.trim()
+            .take(MAX_CUSTOM_PIECE_NAME_LENGTH)
+            .replaceFirstChar { c ->
+                if (c.isLowerCase()) c.titlecase(Locale.getDefault()) else c.toString()
+            }
     }
 }

@@ -17,8 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,6 +54,9 @@ fun CounterScreen(
     val storage = remember { SessionStorage(context) }
     val settingsManager = remember { AppSettingsManager(context) }
     val customPieces = remember { settingsManager.getCustomPieces() }
+    val configuration = LocalConfiguration.current
+    val isCompactWidth = configuration.screenWidthDp < 360
+    val isCompactHeight = configuration.screenHeightDp < 700
 
     var phase by remember { mutableStateOf(CounterPhase.RESTAURANT_INPUT) }
     var restaurant by remember { mutableStateOf("") }
@@ -63,6 +68,7 @@ fun CounterScreen(
         )
     }
     var showExitDialog by remember { mutableStateOf(false) }
+    var showCounterTutorial by remember { mutableStateOf(false) }
 
     val totalPieces = counts.values.sum()
 
@@ -76,6 +82,12 @@ fun CounterScreen(
 
     BackHandler(enabled = true) {
         handleBackAction()
+    }
+
+    LaunchedEffect(phase) {
+        if (phase == CounterPhase.COUNTING && !settingsManager.isCounterTutorialShown()) {
+            showCounterTutorial = true
+        }
     }
 
     if (showExitDialog) {
@@ -104,6 +116,96 @@ fun CounterScreen(
             dismissButton = {
                 TextButton(onClick = { showExitDialog = false }) {
                     Text(strings.continueStr, color = colors.primary)
+                }
+            }
+        )
+    }
+
+    if (showCounterTutorial) {
+        AlertDialog(
+            modifier = Modifier.shadow(12.dp, RoundedCornerShape(28.dp)),
+            onDismissRequest = {},
+            containerColor = colors.surface,
+            title = {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        painter = androidx.compose.ui.res.painterResource(id = pls.dev.sushilog.R.drawable.all),
+                        contentDescription = null,
+                        tint = androidx.compose.ui.graphics.Color.Unspecified,
+                        modifier = Modifier.size(56.dp)
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        strings.counterTutorialTitle,
+                        color = colors.onSurface,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            },
+            text = {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(44.dp)
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(colors.primary.copy(alpha = 0.15f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("+1", color = colors.primary, fontWeight = FontWeight.ExtraBold, fontSize = 18.sp)
+                        }
+                        Text(
+                            strings.counterTutorialMessage.substringBefore("\n\n"),
+                            color = colors.onSurface,
+                            fontSize = 15.sp
+                        )
+                    }
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(44.dp)
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(MaterialTheme.colorScheme.error.copy(alpha = 0.15f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("-1", color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.ExtraBold, fontSize = 18.sp)
+                        }
+                        Text(
+                            strings.counterTutorialMessage.substringAfter("\n\n"),
+                            color = colors.onSurface,
+                            fontSize = 15.sp
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        settingsManager.setCounterTutorialShown(true)
+                        showCounterTutorial = false
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colors.primary,
+                        contentColor = colors.onPrimary
+                    ),
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.fillMaxWidth().height(48.dp)
+                ) {
+                    Text(strings.continueStr, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 }
             }
         )
@@ -231,8 +333,10 @@ fun CounterScreen(
                         Text(
                             text = restaurant.ifEmpty { strings.noName },
                             color = colors.onBackground,
-                            fontSize = 20.sp,
+                            fontSize = if (isCompactWidth) 18.sp else 20.sp,
                             fontWeight = FontWeight.ExtraBold,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
                             modifier = Modifier.weight(1f)
                         )
                         Box(
@@ -245,13 +349,13 @@ fun CounterScreen(
                                 Text(
                                     "${strings.total}: ",
                                     color = colors.primary,
-                                    fontSize = 14.sp,
+                                    fontSize = if (isCompactWidth) 12.sp else 14.sp,
                                     fontWeight = FontWeight.Bold
                                 )
                                 Text(
                                     "$totalPieces",
                                     color = colors.primary,
-                                    fontSize = 18.sp,
+                                    fontSize = if (isCompactWidth) 16.sp else 18.sp,
                                     fontWeight = FontWeight.ExtraBold
                                 )
                             }
@@ -263,7 +367,7 @@ fun CounterScreen(
                             .weight(1f)
                             .padding(horizontal = 16.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
-                        contentPadding = PaddingValues(bottom = 96.dp, top = 8.dp)
+                        contentPadding = PaddingValues(bottom = if (isCompactHeight) 88.dp else 96.dp, top = 8.dp)
                     ) {
                         items(SUSHI_PIECES) { piece ->
                             PieceCounterItem(

@@ -110,7 +110,9 @@ fun CustomPiecesScreen(
                 Text(
                     text = "${pieces.size}/12 • ${strings.customPiecesSubtitle}",
                     color = colors.mutedForeground,
-                    fontSize = 13.sp
+                    fontSize = 13.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }
@@ -165,7 +167,9 @@ fun CustomPiecesScreen(
                             showDuplicateError = showDuplicateError,
                             isEditing = false,
                             onNameChange = {
-                                val capitalized = it.replaceFirstChar { c -> c.uppercase() }
+                                val capitalized = it
+                                    .take(AppSettingsManager.MAX_CUSTOM_PIECE_NAME_LENGTH)
+                                    .replaceFirstChar { c -> c.uppercase() }
                                 newName = capitalized
                                 if (capitalized.isNotBlank()) showNameError = false
                                 showDuplicateError = false
@@ -182,9 +186,10 @@ fun CustomPiecesScreen(
                                 } else if (isDuplicate) {
                                     showDuplicateError = true
                                 } else {
+                                    val trimmedName = newName.trim()
                                     settingsManager.addCustomPiece(CustomPiece(
                                         id = "custom_${UUID.randomUUID()}",
-                                        name = newName.trim().replaceFirstChar { it.uppercase() },
+                                        name = trimmedName,
                                         iconName = newIconName,
                                         kcal = newKcal,
                                         salmonCount = newSalmonCount,
@@ -250,7 +255,10 @@ fun CustomPiecesScreen(
                                     overflow = TextOverflow.Ellipsis
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
-                                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                FlowRow(
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                                ) {
                                     CustomPieceDataChip(icon = pls.dev.sushilog.R.drawable.kcal, text = strings.historyKcalLabel.format(piece.kcal), colors = colors)
                                     if (piece.riceGrams > 0) {
                                         CustomPieceDataChip(icon = pls.dev.sushilog.R.drawable.rice, text = strings.historyRiceLabel.format(piece.riceGrams), colors = colors)
@@ -287,7 +295,9 @@ fun CustomPiecesScreen(
                                         showDuplicateError = showDuplicateError,
                                         isEditing = true,
                                         onNameChange = {
-                                            val capitalized = it.replaceFirstChar { c -> c.uppercase() }
+                                            val capitalized = it
+                                                .take(AppSettingsManager.MAX_CUSTOM_PIECE_NAME_LENGTH)
+                                                .replaceFirstChar { c -> c.uppercase() }
                                             newName = capitalized
                                             if (capitalized.isNotBlank()) showNameError = false
                                             showDuplicateError = false
@@ -305,8 +315,9 @@ fun CustomPiecesScreen(
                                             } else if (isDuplicate) {
                                                 showDuplicateError = true
                                             } else {
+                                                val trimmedName = newName.trim()
                                                 settingsManager.updateCustomPiece(editingPiece!!.copy(
-                                                    name = newName.trim().replaceFirstChar { it.uppercase() },
+                                                    name = trimmedName,
                                                     iconName = newIconName,
                                                     kcal = newKcal,
                                                     salmonCount = newSalmonCount,
