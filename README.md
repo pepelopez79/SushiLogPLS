@@ -4,11 +4,13 @@ Aplicación Android nativa para registrar y analizar tu consumo de sushi en rest
 
 ---
 
-## Descripción
+## Descripción general
 
-**Sushi Log** es una app diseñada para los amantes del sushi que quieren llevar un registro completo de sus sesiones. Cuenta piezas, analiza estadísticas nutricionales, desbloquea logros y comparte tus récords.
+**Sushi Log** es una app diseñada para los amantes del sushi que quieren llevar un registro completo de sus sesiones. Cuenta piezas, analiza estadísticas nutricionales, desbloquea logros y comparte tus récords. Toda la lógica corre en local (sin backend ni conexión a internet), con persistencia en el propio dispositivo.
 
-### Características principales
+---
+
+## Funcionalidades
 
 - 🔢 **Contador rápido** — Tap para sumar, long-press para restar piezas
 - 📊 **Estadísticas detalladas** — Filtros por semana, mes, año y total con curiosidades nutricionales
@@ -57,28 +59,43 @@ Más hasta **12 piezas personalizables** por el usuario.
 
 ---
 
-## Tecnologías
+## Stack tecnológico
 
 | Tecnología | Uso |
 |---|---|
 | **Kotlin** | Lenguaje principal |
 | **Jetpack Compose** | UI declarativa |
+| **Material3** | Sistema de diseño y componentes |
 | **Navigation Compose** | Navegación entre pantallas con transiciones animadas |
-| **SharedPreferences + Gson** | Persistencia local de sesiones, ajustes y logros |
+| **Gson + SharedPreferences** | Persistencia local de sesiones, ajustes y logros |
 | **Canvas/Bitmap** | Generación nativa de imágenes para compartir |
 | **FileProvider** | Compartir imágenes generadas vía Intent |
 | **MutableSharedFlow** | Notificaciones globales de logros desbloqueados |
 | **RingtoneManager** | Sonido de notificación al desbloquear logros |
+| **JUnit + Robolectric + Espresso** | Tests unitarios y de instrumentación |
+| **Gradle (Kotlin DSL) + Version Catalog** | Build system y gestión de dependencias (`libs.versions.toml`) |
 
----
-
-## Requisitos
+### Requisitos
 
 - Android Studio Ladybug (2024.2) o superior
 - JDK 17
-- Gradle 8.13+
+- Gradle 8.13+ (incluido via `gradlew`)
 - Min SDK: 24 (Android 7.0)
-- Target SDK: 36
+- Target SDK / Compile SDK: 36
+
+---
+
+## Arquitectura
+
+El proyecto sigue una arquitectura simple por capas, sin backend, orientada a Compose:
+
+- **`ui/screens`** — Pantallas (composables) de cada sección de la app. Contienen el estado local y la lógica de presentación.
+- **`ui/components`** — Componentes reutilizables (botones de pieza, iconos, etc.) usados por varias pantallas.
+- **`ui/navigation`** — Grafo de navegación (`NavGraph`) que define rutas y transiciones entre pantallas.
+- **`ui/theme`** — Temas Material3, paletas de color y tipografía.
+- **`data`** — Modelos de dominio (`SessionRecord`, `SushiPiece`, `Achievement`) y managers de lógica/persistencia (`SessionStorage`, `AchievementManager`, `AppSettings`) que actúan como fuente de verdad, leyendo/escribiendo en `SharedPreferences` mediante `Gson`.
+
+Flujo de datos: las pantallas leen y mutan el estado a través de los *managers* de `data/`, que persisten los cambios de forma síncrona en `SharedPreferences`. Los logros desbloqueados se comunican de forma global a la UI (p. ej. banners de notificación) mediante un `MutableSharedFlow` expuesto desde `AchievementManager` y observado en `MainActivity`.
 
 ---
 
@@ -163,9 +180,7 @@ Todos los iconos son **PNG personalizados** sin dependencia de Material Icons:
 
 ## Tests
 
-```bash
-./gradlew testDebugUnitTest
-```
+Ejecutados con `./gradlew testDebugUnitTest` (ver sección [Instalación y ejecución](#instalación-y-ejecución)):
 
 | Test | Descripción |
 |---|---|
@@ -176,12 +191,42 @@ Todos los iconos son **PNG personalizados** sin dependencia de Material Icons:
 
 ---
 
-## Instalación
+## Instalación y ejecución
 
-1. Clonar el repositorio https://github.com/pepelopez79/SushiLogPLS.git
-2. Abrir en Android Studio
-3. Sync Gradle
-4. Ejecutar en dispositivo/emulador (API 24+)
+### Clonar el repositorio
+
+```bash
+git clone https://github.com/pepelopez79/SushiLogPLS.git
+cd SushiLogPLS
+```
+
+### Opción A: Android Studio
+
+1. Abrir el proyecto en Android Studio (Ladybug o superior).
+2. Esperar el *Sync* automático de Gradle.
+3. Seleccionar un dispositivo/emulador con API 24+.
+4. Pulsar **Run ▶** para compilar e instalar la app.
+
+### Opción B: Línea de comandos (Gradle Wrapper)
+
+```bash
+# Dar permisos de ejecución (solo macOS/Linux)
+chmod +x gradlew
+
+# Compilar el proyecto
+./gradlew build
+
+# Generar un APK de debug
+./gradlew assembleDebug
+
+# Instalar el APK en un dispositivo/emulador conectado (adb)
+./gradlew installDebug
+
+# Ejecutar los tests unitarios
+./gradlew testDebugUnitTest
+```
+
+El APK generado se encuentra en `app/build/outputs/apk/debug/`.
 
 ---
 
